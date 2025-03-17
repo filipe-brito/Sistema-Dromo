@@ -1,0 +1,13 @@
+# Node.js
+node_modules/
+
+# Java
+target/
+*.jar
+
+# Ambiente
+.env
+.DS_Store
+
+# Sistema Operacional
+Thumbs.db
