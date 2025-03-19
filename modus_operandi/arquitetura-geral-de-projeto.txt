@@ -1,0 +1,82 @@
+# 💻 Arquitetura Geral do Projeto
+
+## 📌 🔹 Estrutura do Sistema
+
+Um sistema moderno geralmente segue essa estrutura de três camadas:
+
+1. **Frontend** → Interface gráfica que o usuário vê e interage.
+2. **Backend** → Processamento, regras de negócio e lógica do sistema.
+3. **Banco de Dados** → Armazena e gerencia os dados do sistema.
+
+🔹 Esse modelo é chamado de **Arquitetura Cliente-Servidor**.
+
+---
+
+## 📌 🔹 Checklist de Tarefas
+
+Um checklist ajuda a manter o controle do que precisa ser feito.
+
+### ✅ Backend:
+✔️ Criar o projeto **Spring Boot**
+✔️ Configurar conexão com **PostgreSQL**
+✔️ Criar entidades (**User, Company, Driver, etc.**)
+✔️ Criar **repositórios** e **serviços**
+✔️ Criar **controladores** e **endpoints REST**
+✔️ Implementar **autenticação JWT**
+
+### ✅ Frontend:
+✔️ Criar o projeto **React**
+✔️ Criar a **tela de login**
+✔️ Criar a **tela de cadastro de motoristas e empresas**
+✔️ Integrar com o **backend**
+
+### ✅ Infraestrutura:
+✔️ Configurar o **backend** no servidor
+✔️ Configurar o **frontend** no **Nginx**
+✔️ Implementar **HTTPS e segurança**
+✔️ Definir monitoramento de logs e desempenho
+
+---
+
+## 📌 🔹 Arquitetura do Projeto
+
+### 📌 Backend: **Spring Boot e Maven com arquitetura MVC**
+
+```
+/src/main/java/com/seuprojeto
+  ├── controller   # Controladores (lógica das requisições)
+  ├── model        # Modelos de dados (entidades do banco)
+  ├── repository   # Interfaces de acesso ao banco
+  ├── service      # Regras de negócio
+```
+
+**Padrão de API:** **REST**
+- Seguir convenções de boas práticas (verbos HTTP, status codes, estrutura JSON padronizada)
+- Exemplo de endpoints:
+  - `POST /auth/login` → Autenticação
+  - `GET /users/{id}` → Buscar usuário por ID
+  - `POST /drivers` → Cadastro de motorista
+
+**Segurança:**
+- Implementação de **autenticação JWT** para segurança das requisições
+- Proteção contra **ataques comuns** como SQL Injection e XSS
+
+### 📌 Frontend: **React (JS) e Bootstrap (CSS)**
+
+```
+/src
+  ├── components   # Componentes reutilizáveis
+  ├── pages        # Páginas do sistema
+  ├── services     # Comunicação com a API
+  ├── hooks        # Hooks customizados
+```
+
+- Organização do código modular para reuso e manutenção
+- Uso de **Axios** para chamadas à API REST
+- Rotas protegidas para áreas autenticadas
+
+### 📌 Banco de dados: **PostgreSQL**
+
+- Criado e gerenciado **no servidor**
+- Administração remota via **DBeaver**
+- Versionamento de migrações com **Fly

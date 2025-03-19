@@ -1,0 +1,93 @@
+Versionamento de Projeto - Monorepo
+
+📌 Estrutura de Diretórios
+
+	/meu-projeto
+	  ├── backend/   # Código do backend (Spring Boot)
+	  ├── frontend/  # Código do frontend (React)
+
+📌 Fluxo de Versionamento
+
+	🔹 Branches Principais
+
+		. main → Código estável e pronto para produção.
+
+		. dev → Para desenvolvimento e integração contínua.
+		
+		*Criar uma Branch release (Opcional)
+			📌 Por quê? Permite testar antes de colocar o código na main.
+			📌 Como funciona?
+
+			Quando as funcionalidades de dev estiverem estáveis, criamos a branch release/x.y.z.
+			Testamos nela antes de mesclar na main.
+			Isso ajuda a evitar que bugs cheguem em produção.
+			📝 Exemplo de fluxo com release
+
+				. git checkout dev
+				. git merge feature/nova-feature
+				. git checkout -b release/1.0.0  # Criando branch para testes antes do deploy
+				. git push origin release/1.0.0
+
+	🔹 Branches Temporárias
+		Branches temporárias são ramificações do código principal criadas para trabalhos específicos. Elas são descartáveis depois de concluídas.
+
+		. feature/nome-da-feature → Para novas funcionalidades.
+
+		. hotfix/nome-do-hotfix → Para correções urgentes.
+		
+		. bugfix/nome-do-bug → Para resolver bugs sem urgência.
+		
+	🔹 O que são feature, hotfix e bugfix?
+		. Feature → Uma nova funcionalidade (ex: adicionar login no sistema).
+		. Hotfix → Uma correção urgente (ex: erro crítico em produção).
+		. Bugfix → Correção de bugs que não precisam ser corrigidos imediatamente.
+		
+	
+
+📌 Fluxo de Trabalho no Git
+
+	1. Criar uma nova feature
+
+		. git checkout -b feature/nova-feature
+		. git add .
+		. git commit -m "Descrição da feature"
+		. git push origin feature/nova-feature
+
+	2. Criar um hotfix
+
+		. git checkout -b hotfix/corrigir-erro
+
+	3. Mesclar código na dev
+
+		. git checkout dev
+		. git merge feature/nova-feature
+
+	4. Mesclar código na main (Deploy) 
+	*Deploy é o processo de colocar o código em produção, ou seja, disponibilizar o sistema para os usuários finais.
+	*Mesclar (ou "merge") significa unir o código de uma branch dentro de outra. Exemplo:
+		Quando terminamos uma feature, precisamos mesclar na branch dev.
+		Quando dev está pronto para ir para produção, mesclamos na main.
+		
+		. checkout main
+		. git merge dev
+		. git push origin main
+
+📌 Tags e Releases
+
+	Criar uma nova tag para cada versão estável:
+
+		. git tag -a v1.0.0 -m "Primeira versão estável"
+		. git push origin v1.0.0
+
+📌 Automação e CI/CD
+
+	🔹 O que é automação e CI/CD?
+		CI/CD significa Continuous Integration / Continuous Deployment.
+			. CI (Integração Contínua) → Sempre que alguém faz uma mudança no código, ele é testado automaticamente.
+			. CD (Deploy Contínuo) → Depois dos testes, o código pode ser enviado automaticamente para produção.
+
+	Implementar GitHub Actions para testes e deploy automatizado.
+
+	Configurar um workflow para validar código antes de mesclar na main.
+
+	Esse fluxo garante um desenvolvimento organizado e alinhado com boas práticas do mercado. 🚀

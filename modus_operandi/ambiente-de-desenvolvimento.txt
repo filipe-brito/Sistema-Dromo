@@ -1,0 +1,36 @@
+# 💻 Ambiente de Trabalho
+
+## 📌 ⚙️ Backend
+
+	- 🚀 Desenvolvimento realizado fora do servidor com **Eclipse**, **Spring Boot** e **Maven**, adotando padrões arquiteturais para modularidade e desempenho.
+	- 🏗️ Estruturado conforme princípios de engenharia de software, facilitando escalabilidade e manutenção contínua.
+	- 📤 **Deploy:** Código versionado no **GitHub** e atualizado no servidor via **pull remoto**.
+
+## 📌 🎨 Frontend
+
+	- 🖥️ Implementação conduzida fora do servidor no **VSCode**, utilizando **Bootstrap** e **React** para uma experiência responsiva e dinâmica.
+	- 📦 Organização do código orientada a componentes reutilizáveis, promovendo eficiência e extensibilidade.
+	- 📤 **Deploy:** Servido via **Nginx**. Atualizações são feitas através do **build local** e envio dos arquivos estáticos para o servidor.
+
+## 📌 🗄️ Banco de Dados
+
+	- 🏛️ Criado e gerenciado no **servidor**, utilizando **PostgreSQL** para garantir confiabilidade e integridade dos dados.
+	- 🔌 Acesso remoto e administração realizados via **DBeaver**, proporcionando uma interface intuitiva para gestão eficiente.
+	- 🔄 **Versionamento e Migração:** Gerenciado com **Flyway** ou **Liquibase**, garantindo controle seguro da estrutura do banco de dados e evolução incremental.
+
+## 📌 🖥️ Servidor
+
+	- 🔧 Operado via **terminal Debian**, proporcionando controle direto e eficiente sobre os serviços.
+	- ⚙️ Configurado para automação de tarefas, garantindo resiliência e disponibilidade contínua.
+	- 📊 Monitoramento ativo para otimização de desempenho, segurança e resposta a incidentes.
+
+## 📌 🔄 Sistema de Versionamento
+
+	- 🗃️ Utilização de **GIT** e **GitHub** para controle de versões e colaboração eficiente no desenvolvimento.
+
+## 📌 🚀 Integração e Entrega Contínua (CI/CD)
+
+	- 🏗️ Implementação de **GitHub Actions** para automação de testes e processos de deploy.
+	- ✅ **Testes automatizados** antes da integração ao código principal, garantindo qualidade e estabilidade.
+	- 🔄 **Entrega Contínua**, reduzindo tempo entre desenvolvimento e disponibilização da aplicação ao usuário final.
+

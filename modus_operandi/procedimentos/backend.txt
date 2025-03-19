@@ -1,0 +1,158 @@
+# 📌 Plano de Ação: Configuração do Backend
+
+## **1. Configuração do Ambiente**
+
+	### **Dependências Necessárias:**
+	- **Java 17+** (Zulu/OpenJDK recomendado)
+	- **Maven**
+	- **Spring Boot**
+
+	### **Verificação da Instalação:**
+	Execute os comandos abaixo para confirmar que tudo está corretamente instalado:
+
+		java -version
+		mvn -version
+
+
+	### **Configuração das Variáveis de Ambiente:**
+	Caso necessário, adicionar Java e Maven ao `PATH` do sistema.
+
+---
+
+## **2. Criar o Projeto Spring Boot**
+
+Crie o projeto utilizando o **Spring Initializr** acessando [start.spring.io](https://start.spring.io/).
+
+	### **Passos:**
+		1. Selecione **Maven Project**.
+		2. Escolha a linguagem **Java**.
+		3. Defina o **Group** como `com.neofuga` e o **Artifact** como `backend`.
+		4. Escolha a versão do Spring Boot recomendada.
+		5. Selecione as dependências essenciais:
+		   - **Spring Web** (para criar APIs REST)
+		   - **Spring Data JPA** (para integração com banco de dados)
+
+		6. Clique em **Generate** e extraia o projeto no seu ambiente de desenvolvimento.
+
+
+---
+
+## **3. Definir a Estrutura de Pacotes (MVC)**
+
+Criar a estrutura no diretório `/src/main/java/com/projeto` dentro do Eclipse ou manualmente:
+
+	/backend/src/main/java/com/projeto
+	  ├── controller   # Controladores (APIs REST)
+	  ├── model        # Modelos de dados
+	  ├── repository   # Acesso a dados
+	  ├── service      # Regras de negócio
+	  ├── dto          # Objetos de transferência de dados
+	  ├── config       # Configurações do sistema
+
+
+No Eclipse, clique com o botão direito em `src/main/java`, selecione **Novo > Pacote** e crie os pacotes acima.
+
+---
+
+## **4. Criar as Entidades**
+
+Criar classes de modelo dentro do pacote `model` no Eclipse:
+
+	@Entity
+	@Table(name = "usuarios")
+	public class Usuario {
+		@Id
+		@GeneratedValue(strategy = GenerationType.IDENTITY)
+		private Long id;
+		private String nome;
+		private String email;
+	}
+
+
+---
+
+## **5. Criar os Repositórios e Serviços**
+
+Criar interface do repositório dentro de `repository`:
+
+	public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+	}
+
+
+Criar serviço correspondente dentro de `service`:
+
+	@Service
+	public class UsuarioService {
+		@Autowired
+		private UsuarioRepository usuarioRepository;
+
+		public List<Usuario> listarUsuarios() {
+			return usuarioRepository.findAll();
+		}
+	}
+
+Como o banco de dados não existe ainda, a compilação pode dar erro quando o Spring Boot tentar configurar o JPA. Então, o ideal é alterarmos o application.properties para simular um banco de dados na memória (H2):
+	spring.datasource.url=jdbc:h2:mem:testdb	# Cria um banco de dados H2 em memória chamado testdb.
+	spring.datasource.driverClassName=org.h2.Driver	# Define o driver do H2 para conectar ao banco de dados.
+	spring.datasource.username=sa	# Define o usuário padrão (sa) para acessar o banco de dados.
+	spring.datasource.password=password	# Define a senha padrão (password) para acessar o banco de dados.
+	spring.jpa.database-platform=org.hibernate.dialect.H2Dialect	# Configura o dialeto do H2 para o Hibernate.
+	spring.jpa.hibernate.ddl-auto=update	# Atualiza automaticamente o esquema do banco de dados com base nas entidades.
+	spring.h2.console.enabled=true	# Habilita o console do H2 para visualizar e gerenciar o banco de dados.
+
+Também é necessário adicionar a dependência do H2 no pom.xml:
+	<dependency>
+		<groupId>com.h2database</groupId>
+		<artifactId>h2</artifactId>
+		<scope>runtime</scope>
+	</dependency>
+
+---
+
+## **6. Criar os Endpoints REST**
+
+Criar um controlador REST em `controller`:
+
+	@RestController
+	@RequestMapping("/usuarios")
+	public class UsuarioController {
+		@Autowired
+		private UsuarioService usuarioService;
+
+		@GetMapping
+		public List<Usuario> listarUsuarios() {
+			return usuarioService.listarUsuarios();
+		}
+	}
+	
+No terminal, navegue até a pasta do projeto e compile:
+	cd backend
+	mvn clean install
+
+
+📌 **Testar com Postman ou CURL:**
+
+Execute o Spring Boot na pasta raiz do backend:
+	
+	mvn spring-boot:run
+	
+Teste a aplicação com o comando:
+
+	curl -X GET http://localhost:8080/users
+
+---
+
+## **7. Versionar no Git**
+
+Versionar o backend no GitHub:
+
+	git add .
+	git commit -m "Configuração inicial do backend"
+	git push origin main
+
+---
+
+## **📌 Conclusão**
+
+Este documento cobre **toda a configuração inicial do backend**, incluindo a criação do projeto pelo **Spring Initializr**, estrutura de pacotes, entidades, serviços e primeiros endpoints REST. Essa documentação pode ser usada como referência para futuros projetos.
+

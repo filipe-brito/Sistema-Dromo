@@ -1,0 +1,82 @@
+# ✨ Plano de Ação Geral para Projetos Full Stack
+
+Este documento serve como **referência fixa** para qualquer projeto full stack, garantindo um fluxo de desenvolvimento organizado e eficiente.
+
+---
+
+## **1. Inicialização do Projeto**
+✅ Criar um **repositório no GitHub**
+✅ Clonar o repositório no ambiente local
+✅ Criar a estrutura de pastas:
+   ```
+   /projeto
+     ├── backend
+     ├── frontend
+     ├── docs  (documentação)
+   ```  
+✅ Configurar o **.gitignore** para excluir arquivos desnecessários
+✅ Criar e documentar o **README.md**
+
+---
+
+## **2. Configuração do Backend**
+✅ Criar o projeto **Spring Boot** (com Maven ou Gradle)
+✅ Definir estrutura MVC do backend:
+
+   /backend/src/main/java/com/seuprojeto
+     ├── controller   # Controladores (REST APIs)
+     ├── model        # Modelos de dados
+     ├── repository   # Acesso ao banco de dados
+     ├── service      # Regras de negócio
+ 
+✅ Configurar **PostgreSQL** e conexão com o backend
+✅ Criar as **entidades** e relacionamentos no banco
+✅ Criar os **repositórios** e **serviços** para manipulação de dados
+✅ Implementar os primeiros **endpoints REST**
+✅ Configurar **autenticação JWT** (se necessário)
+
+---
+
+## **3. Configuração do Frontend**
+✅ Criar o projeto **React**
+✅ Configurar o ambiente com dependências essenciais (**React Router, Axios, etc.**)
+✅ Criar estrutura inicial do projeto:
+   ```
+   /frontend/src
+     ├── components   # Componentes reutilizáveis
+     ├── pages        # Páginas do sistema
+     ├── services     # Comunicação com a API
+     ├── hooks        # Hooks customizados
+   ```
+✅ Criar a **tela de login** e autenticação
+✅ Criar as **telas principais** e integrar com a API
+
+---
+
+## **4. Integração Frontend ↔ Backend**
+✅ Testar chamadas à API usando **Postman** ou **Insomnia**
+✅ Criar **serviços no frontend** para consumir a API
+✅ Configurar **rotas protegidas** para áreas autenticadas
+✅ Implementar **feedbacks visuais** para chamadas assíncronas (loaders, mensagens de erro)
+
+---
+
+## **5. Deploy Manual (Primeira Versão)**
+✅ Publicar código no **GitHub** (push final das features)
+✅ Configurar o **servidor (Debian) para rodar o backend**
+✅ Configurar o **Nginx para hospedar o frontend**
+✅ Criar um **banco de dados PostgreSQL no servidor**
+✅ Aplicar **migrações** e popular banco inicial
+✅ Testar o sistema em ambiente de produção
+
+---
+
+## **6. Versionamento e Melhoria Contínua**
+✅ Utilizar **branches** (`main`, `develop`, `feature/...`) no **GitHub**
+✅ Melhorar **logs e monitoramento** do sistema
+✅ Automatizar **deploys** (caso necessário no futuro)
+
+---
+
+Este plano de ação serve como base para qualquer projeto full stack, garantindo um desenvolvimento organizado e progressivo. ✨
+
