@@ -26,7 +26,7 @@ Crie o projeto utilizando o **Spring Initializr** acessando [start.spring.io](ht
 	### **Passos:**
 		1. Selecione **Maven Project**.
 		2. Escolha a linguagem **Java**.
-		3. Defina o **Group** como `com.neofuga` e o **Artifact** como `backend`.
+		3. Defina o **Group** como `com.projeto` e o **Artifact** como `backend`.
 		4. Escolha a versão do Spring Boot recomendada.
 		5. Selecione as dependências essenciais:
 		   - **Spring Web** (para criar APIs REST)
@@ -59,8 +59,8 @@ No Eclipse, clique com o botão direito em `src/main/java`, selecione **Novo > P
 Criar classes de modelo dentro do pacote `model` no Eclipse:
 
 	@Entity
-	@Table(name = "usuarios")
-	public class Usuario {
+	@Table(name = "users")
+	public class user {
 		@Id
 		@GeneratedValue(strategy = GenerationType.IDENTITY)
 		private Long id;
@@ -75,19 +75,19 @@ Criar classes de modelo dentro do pacote `model` no Eclipse:
 
 Criar interface do repositório dentro de `repository`:
 
-	public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+	public interface userRepository extends JpaRepository<user, Long> {
 	}
 
 
 Criar serviço correspondente dentro de `service`:
 
 	@Service
-	public class UsuarioService {
+	public class userService {
 		@Autowired
-		private UsuarioRepository usuarioRepository;
+		private userRepository userRepository;
 
-		public List<Usuario> listarUsuarios() {
-			return usuarioRepository.findAll();
+		public List<user> listarusers() {
+			return userRepository.findAll();
 		}
 	}
 
@@ -114,14 +114,14 @@ Também é necessário adicionar a dependência do H2 no pom.xml:
 Criar um controlador REST em `controller`:
 
 	@RestController
-	@RequestMapping("/usuarios")
-	public class UsuarioController {
+	@RequestMapping("/users")
+	public class userController {
 		@Autowired
-		private UsuarioService usuarioService;
+		private userService userService;
 
 		@GetMapping
-		public List<Usuario> listarUsuarios() {
-			return usuarioService.listarUsuarios();
+		public List<user> listUsers() {
+			return userService.listUsers();
 		}
 	}
 	
@@ -130,7 +130,7 @@ No terminal, navegue até a pasta do projeto e compile:
 	mvn clean install
 
 
-📌 **Testar com Postman ou CURL:**
+📌 **Testar no navegador ou CURL:**
 
 Execute o Spring Boot na pasta raiz do backend:
 	
