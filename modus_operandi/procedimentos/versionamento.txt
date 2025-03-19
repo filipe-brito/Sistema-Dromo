@@ -1,0 +1,130 @@
+# 📌 Git Tutorial - Guia de Requisições e Organização com Git & GitHub
+
+Este guia serve como referência para iniciar e gerenciar seus projetos com Git e GitHub, mantendo um fluxo organizado e eficiente.
+
+---
+
+## **1. Criando um Novo Projeto e Enviando ao GitHub**
+
+	### **Passo 1: Criar o Repositório no GitHub**
+		1. Acesse [GitHub](https://github.com/) e faça login.
+		2. Clique em **New Repository**.
+		3. Defina o **nome do repositório**, escolha a visibilidade (público ou privado) e clique em **Create repository**.
+		4. Copie a URL fornecida para clonar o repositório.
+
+	### **Passo 2: Clonar o Repositório para o Computador**
+		No terminal, navegue até a pasta onde deseja armazenar o projeto e execute:
+		
+		git clone https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git
+		cd SEU_REPOSITORIO
+		
+
+	### **Passo 3: Criar a Estrutura Inicial do Projeto**
+		Crie a estrutura de diretórios e arquivos básicos:
+		
+			mkdir backend frontend docs
+			touch README.md
+			echo "node_modules/" >> .gitignore
+		
+		*Observação:* As pastas serão versionadas somente se houver arquivos nelas. Para manter a estrutura, adicione um arquivo vazio, como `.gitkeep`, em pastas vazias.
+
+	### **Passo 4: Enviar ao GitHub**
+		Adicione os arquivos ao Git, faça um commit e envie para o repositório remoto:
+
+		git add .
+		git commit -m "Inicialização do projeto"
+		git push origin main
+
+
+---
+
+## **2.Atualizando um Projeto Existente**
+
+	### **Passo 1: Navegar até a Pasta do Projeto**
+
+		cd /caminho/do/projeto
+
+
+	### **Passo 2: Baixar as Últimas Atualizações**
+
+		git pull origin main
+
+
+	### **Passo 3: Fazer Alterações**
+		Edite os arquivos necessários ou adicione novos.
+
+	### **Passo 4: Commitar e Enviar ao GitHub**
+
+		git add .
+		git commit -m "Descrição da alteração"
+		git push origin main
+
+
+---
+
+## **3. Organizando Commits e Branches**
+
+	### **Abordagem 1: Identificação via Comentário de Commit**
+		Utilize mensagens de commit claras para identificar o tipo de alteração:
+
+		git commit -m "Adiciona sistema de autenticação JWT"
+		git commit -m "Corrige bug na validação do login"
+		git commit -m "Atualiza documentação do README"
+
+
+	### **Abordagem 2: Utilizando Branches Específicas**
+		Organize o desenvolvimento criando branches para tipos de alterações. Isso ajuda a manter o repositório organizado e isola as mudanças:
+
+		#### **Branches Principais:**
+			- **`main`** → Contém o código estável pronto para produção.
+			- **`develop`** → Branch de desenvolvimento, onde novas funcionalidades são integradas.
+
+		#### **Branches Temporárias:**
+			- **Feature:** Para novas funcionalidades.
+			
+				git checkout -b feature/nome-da-feature
+			  
+			  # Faça as alterações
+				  git add .
+				  git commit -m "Adiciona nova funcionalidade X"
+				  git push origin feature/nome-da-feature
+			  
+			- **Bugfix:** Para correções de bugs.
+			  
+				git checkout -b bugfix/nome-do-bug
+			  # Corrija o bug
+				  git add .
+				  git commit -m "Corrige bug Y"
+				  git push origin bugfix/nome-do-bug
+			  
+			- **Chore:** Para tarefas de manutenção ou refatoração.
+			  
+				git checkout -b chore/nome-da-tarefa
+			  # Realize as melhorias
+				  git add .
+				  git commit -m "Refatora código de Z"
+				  git push origin chore/nome-da-tarefa
+
+
+Após finalizar a alteração na branch específica, mescle com a branch de desenvolvimento (`develop`) ou com a branch principal (`main`) via Pull Request (PR) para revisão e integração.
+
+---
+
+## **4. Boas Práticas de Commits**
+
+	Cada commit deve ter uma mensagem clara e objetiva. Exemplos:
+
+		| Tipo de Alteração          | Exemplo de Mensagem de Commit                                      |
+		|----------------------------|--------------------------------------------------------------------|
+		| 🚀 Nova Funcionalidade      | `git commit -m "Adiciona tela de cadastro de usuários"`             |
+		| 🐛 Correção de Bug          | `git commit -m "Corrige erro na validação do login"`                |
+		| 🏧 Refatoração             | `git commit -m "Refatora serviço de envio de email"`                |
+		| 📄 Atualização Documental   | `git commit -m "Atualiza README com instruções de instalação"`       |
+		| 🛠️ Manutenção               | `git commit -m "Remove dependências não utilizadas"`                |
+
+		---
+
+Este guia é uma referência prática para lidar com as requisições ao Git, tanto na inicialização quanto na atualização de um projeto, e também para organizar os commits por meio de mensagens claras e branches específicas.
+
+Espero que este documento ajude sempre que precisar iniciar um novo projeto ou atualizar um existente. Se tiver dúvidas ou precisar de mais ajustes, estou à disposição!
+

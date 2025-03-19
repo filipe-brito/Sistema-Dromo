@@ -1,0 +1,16 @@
+Conceitos diversos que precisamos aprender
+
+	. Lembrar de ao criar e revisar o código do backend, sempre pontuar o que se refere ao Spring Boot e qual biblioteca está sendo chamada
+	. Entender melhor os conceitos das dependências que vamos usar no backend: Spring Web (para criar APIs REST) e Spring Data JPA (para integração com banco de dados)
+	.Entender os diretórios criados:
+		/backend/src/main/java/com/projeto
+	  ├── controller   # Controladores (APIs REST)
+	  ├── model        # Modelos de dados
+	  ├── repository   # Acesso a dados
+	  ├── service      # Regras de negócio
+	  ├── dto          # Objetos de transferência de dados
+	  ├── config       # Configurações do sistema
+	  
+	 . Entender as entidades criadas nos pacotes 
+	 
+	 . Entender o arquivo application.properties
