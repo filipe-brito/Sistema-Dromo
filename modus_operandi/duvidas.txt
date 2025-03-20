@@ -1,6 +1,5 @@
 Conceitos diversos que precisamos aprender
 
-	. Estudar o pacote Model e a classe User
 	. Entender melhor os conceitos das dependências que vamos usar no backend: Spring Web (para criar APIs REST) e Spring Data JPA (para integração com banco de dados)
 
 	. Entender as entidades criadas nos pacotes 
