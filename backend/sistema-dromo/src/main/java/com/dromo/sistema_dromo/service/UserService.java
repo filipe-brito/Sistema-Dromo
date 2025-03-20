@@ -9,6 +9,10 @@ import org.springframework.stereotype.Service;
 import com.dromo.sistema_dromo.model.User;
 import com.dromo.sistema_dromo.repository.UserRepository;
 
+/*
+ * Service é responsável pelas regras de negócio.
+ */
+
 @Service
 public class UserService {
 	@Autowired

@@ -1,0 +1,22 @@
+Percebi que as camadas do padrão MVC seguem um fluxo ordenado e bem definido. Cada camada interage com apenas duas outras camadas: com uma de forma ativa (chamando métodos e retornando dados) e com outra de forma passiva (sendo chamada por métodos e requisitando dados).
+
+O fluxo segue da seguinte forma:
+
+	1. View
+		Tudo começa por aqui. O usuário, por meio de uma interface gráfica, faz requisições ao controller.
+
+	2. Controller
+		O controller recebe as requisições da view e pede para o service processá-las.
+
+	3. Service
+		A camada Service não faz parte da trindade oficial do MVC, mas é uma evolução natural dela, oriunda do model. Ela é chamada pelo controller para processar os dados e executar a lógica de negócio da aplicação. Como lida com dados, instancia objetos das classes em model (que representam os dados da aplicação), processa essas informações e as retorna para o controller.
+
+	4. Repository
+		No caso de uma aplicação que utiliza banco de dados, é necessário criar essa outra camada não oficial do padrão MVC, também derivada do model. Ela se assemelha ao controller, pois recebe requisições do service, usa o model para definir o tipo de dados e busca as informações diretamente no banco de dados.
+
+	5. Model
+		Representa os dados da aplicação. O conceito de "criação de objetos" está diretamente ligado às classes dessa camada. O service normalmente instancia e manipula objetos do model, mas, em uma aplicação com banco de dados, o repository atua como intermediário. O model ajuda a "materializar" os dados. Em uma aplicação web, ele é a ponta da requisição do usuário, pois define as informações que devem ser retornadas.
+
+Representação do fluxo:
+	View → Controller → Service → Repository → Model
+	Depois, a resposta definida no model faz o caminho inverso.
