@@ -10,12 +10,14 @@ import com.dromo.sistema_dromo.model.User;
 import com.dromo.sistema_dromo.repository.UserRepository;
 
 /*
- * Service é responsável pelas regras de negócio.
+ * Ela é chamada pelo controller para processar os dados e executar a lógica de negócio da aplicação. 
+ * Como lida com dados, instancia objetos das classes em model (que representam os dados da aplicação), 
+ * processa essas informações e as retorna para o controller. 
  */
 
-@Service
+@Service // Anotação Spring Boot. Declarada na classe para que o Spring trate ela como um service.
 public class UserService {
-	@Autowired
+	@Autowired // Anotação Spring Boot. Faz a injção automática do objeto imediatamente abaixo.
 	private UserRepository userRepository;
 
 	public List<User> listUsers() {
