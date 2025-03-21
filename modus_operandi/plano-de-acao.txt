@@ -20,7 +20,7 @@ Este documento serve como **referência fixa** para qualquer projeto full stack,
 ---
 
 ## **2. Configuração do Backend**
-✅ Criar o projeto **Spring Boot** (com Maven ou Gradle)
+✅ Criar o projeto **Spring Boot** (com Maven)
 ✅ Definir estrutura MVC do backend:
 
    /backend/src/main/java/com/seuprojeto
@@ -29,7 +29,7 @@ Este documento serve como **referência fixa** para qualquer projeto full stack,
      ├── repository   # Acesso ao banco de dados
      ├── service      # Regras de negócio
  
-✅ Configurar **PostgreSQL** e conexão com o backend
+✅ Configurar um banco de dados provisório na memória (h2) no arquivo application.properties
 ✅ Criar as **entidades** e relacionamentos no banco
 ✅ Criar os **repositórios** e **serviços** para manipulação de dados
 ✅ Implementar os primeiros **endpoints REST**
@@ -37,7 +37,18 @@ Este documento serve como **referência fixa** para qualquer projeto full stack,
 
 ---
 
-## **3. Configuração do Frontend**
+## **3. Configuração do Banco de Dados**
+✅ Criar o schema inicial e definir tabelas principais
+✅ Configurar conexão no application.properties do Spring Boot
+✅ Implementar migrações automáticas com Flyway ou Liquibase
+✅ Criar usuários e definir permissões de acesso ao banco
+✅ Modelar os relacionamentos entre as entidades (1:1, 1:N, N:M)
+✅ Configurar a estratégia de geração de IDs (auto-incremento, UUID, sequência)
+✅ Testar conexões e rodar consultas iniciais
+
+---
+
+## **4. Configuração do Frontend**
 ✅ Criar o projeto **React**
 ✅ Configurar o ambiente com dependências essenciais (**React Router, Axios, etc.**)
 ✅ Criar estrutura inicial do projeto:
