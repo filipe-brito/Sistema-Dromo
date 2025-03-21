@@ -1,0 +1,143 @@
+# 📌 Plano de Ação: Configuração do Banco de Dados (PostgreSQL)
+
+## **1. Instalação do PostgreSQL no Servidor Debian**
+
+	### **Verificar se o PostgreSQL já está instalado:**
+	```sh
+	psql --version
+	```
+	Se o comando acima não funcionar, instale o PostgreSQL:
+	```sh
+	sudo apt update && sudo apt install postgresql postgresql-contrib
+	```
+
+	### **Iniciar e habilitar o PostgreSQL:**
+	```sh
+	sudo systemctl start postgresql
+	sudo systemctl enable postgresql
+	```
+
+---
+
+## **2. Configuração Inicial do Banco de Dados**
+
+	### **Acessar o PostgreSQL como superusuário:**
+	```sh
+	sudo -i -u postgres
+	psql
+	```
+
+	### **Criar um novo banco de dados para o projeto:**
+	```sql
+	CREATE DATABASE projeto_db;
+	```
+
+	### **Criar um usuário e definir permissões:**
+	```sql
+	CREATE USER projeto_user WITH ENCRYPTED PASSWORD 'senha_segura';
+	GRANT ALL PRIVILEGES ON DATABASE projeto_db TO projeto_user;
+	```
+
+	### **Sair do PostgreSQL:**
+	```sql
+	\q
+	```
+	E saia do modo superusuário:
+	```sh
+	exit
+	```
+
+---
+
+## **3. Configurar Acesso Remoto ao Banco de Dados**
+
+Por padrão, o PostgreSQL aceita conexões apenas locais. Para acessá-lo remotamente:
+
+	### **Editar o arquivo `postgresql.conf` para permitir conexões externas:**
+	```sh
+	sudo nano /etc/postgresql/15/main/postgresql.conf
+	```
+	(Altere "15" para a versão instalada do PostgreSQL caso necessário.)
+
+	Encontre a linha:
+	```conf
+	# listen_addresses = 'localhost'
+	```
+	E altere para:
+	```conf
+	listen_addresses = '*'
+	```
+	Salve e saia (`CTRL+X`, `Y`, `Enter`).
+
+	### **Configurar regras de acesso em `pg_hba.conf`:**
+	```sh
+	sudo nano /etc/postgresql/15/main/pg_hba.conf
+	```
+
+	Adicione no final:
+	```conf
+	host    projeto_db    projeto_user    0.0.0.0/0    md5
+	```
+
+	### **Reiniciar o PostgreSQL para aplicar as mudanças:**
+	```sh
+	sudo systemctl restart postgresql
+	```
+
+---
+
+## **4. Testar Conexão Remota no DBeaver**
+
+	1. Abra o **DBeaver**.
+	2. Clique em **Nova Conexão** e selecione **PostgreSQL**.
+	3. Preencha os seguintes campos:
+	   - **Host:** IP do servidor Debian
+	   - **Database:** `projeto_db`
+	   - **Usuário:** `projeto_user`
+	   - **Senha:** `senha_segura`
+	4. Clique em **Testar conexão** e verifique se está funcionando.
+
+	Se houver problemas, verifique se a porta 5432 está aberta:
+	```sh
+	sudo ufw allow 5432/tcp
+	```
+
+---
+
+## **5. Gerenciar Versionamento do Banco com Flyway**
+
+	### **Instalar Flyway:**
+	```sh
+	sudo apt install flyway
+	```
+
+	### **Configurar Flyway no projeto:**
+	Crie um arquivo `flyway.conf` na raiz do backend:
+	```properties
+	flyway.url=jdbc:postgresql://IP_DO_SERVIDOR:5432/projeto_db
+	flyway.user=projeto_user
+	flyway.password=senha_segura
+	flyway.locations=filesystem:src/main/resources/db/migration
+	```
+
+	Crie o diretório `src/main/resources/db/migration/` e adicione arquivos SQL com as migrações:
+	```sql
+	-- V1__Criar_tabela_usuarios.sql
+	CREATE TABLE users (
+		id SERIAL PRIMARY KEY,
+		nome VARCHAR(100) NOT NULL,
+		email VARCHAR(150) UNIQUE NOT NULL
+	);
+	```
+
+	Para aplicar as migrações:
+	```sh
+	flyway migrate
+	```
+
+---
+
+## **📌 Conclusão**
+
+Agora o banco de dados PostgreSQL está configurado e pronto para ser usado no backend. Ele pode ser gerenciado remotamente pelo DBeaver, e suas migrações serão controladas pelo Flyway, garantindo consistência e versionamento adequado.
+
