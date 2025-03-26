@@ -11,7 +11,7 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "individuals")
+@Table(name = "individuals", schema = "records")
 @SequenceGenerator(name = "individual_seq",sequenceName = "individuals_id_seq",allocationSize = 1)
 public class Individual {
 	@Id
