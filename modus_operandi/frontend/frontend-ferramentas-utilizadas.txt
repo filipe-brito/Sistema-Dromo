@@ -1,0 +1,135 @@
+# **Categorização das Ferramentas e Conceitos do Projeto**
+
+	## **1. Ambiente de Desenvolvimento**
+
+		> Ferramentas usadas para escrever e gerenciar o código do projeto.
+
+			### 🔹 **VSCode** → Editor de Código
+
+			- Onde o código é escrito e organizado.
+			- Possui extensões para facilitar o desenvolvimento (ex: ESLint, Tailwind IntelliSense).
+
+		---
+
+	## **2. Estrutura da Aplicação**
+
+		> Ferramentas para organizar, estruturar e estilizar o frontend.
+
+			### 🔹 **HTML** → Linguagem de Marcação
+
+			- Define a estrutura básica da página.
+			- No React, usamos JSX em vez de HTML puro.
+
+			### 🔹 **CSS** → Linguagem de Estilo
+
+			- Define a aparência dos elementos na página.
+			- No projeto, o CSS será gerado automaticamente pelo Tailwind.
+
+			### 🔹 **JavaScript (JS)** → Linguagem de Programação
+
+			- A base do React, usada para interatividade.
+
+			### 🔹 **JSX** → Extensão de Sintaxe do React
+
+			- Permite escrever HTML dentro do JavaScript.
+			- Precisa ser **transpilado** antes de rodar no navegador.
+
+---
+
+	## **3. Biblioteca Principal**
+
+	> A base da aplicação frontend.
+
+		### 🔹 **React** → Biblioteca para Construção de Interfaces
+
+		- Permite criar interfaces interativas baseadas em componentes reutilizáveis.
+		- Utiliza **JSX**, que precisa ser transpilado antes de rodar no navegador.
+
+	---
+
+	## **4. Ferramentas de Build e Desenvolvimento**
+
+	> Responsáveis por converter, otimizar e empacotar o código.
+
+		### 🔹 **Vite** → Ferramenta de Build e Servidor de Desenvolvimento
+
+		- Inicia um servidor local para desenvolvimento com **hot reload** (atualização automática da página).
+		- Transpila e empacota o código para que ele rode no navegador.
+		- Usa **Esbuild para transpilar** e **Rollup para empacotar**.
+
+		### 🔹 **Esbuild** → Transpilador
+
+		- Converte código moderno (JSX, ES6+) para versões que os navegadores entendem.
+		- **Mais rápido que Babel** e usado pelo Vite.
+
+		### 🔹 **Rollup** → Empacotador de Módulos
+
+		- Junta todos os arquivos JS e CSS em pacotes otimizados.
+		- Remove código não utilizado (**tree shaking**) para melhorar a performance.
+
+	---
+
+	## **5. Ferramentas de Estilização**
+
+	> Soluções que facilitam a escrita e organização do CSS.
+
+		### 🔹 **Tailwind CSS** → Framework CSS Utilitário
+
+		- Permite estilizar elementos diretamente com classes CSS reutilizáveis.
+		- Substitui a necessidade de escrever CSS puro.
+
+		### 🔹 **PostCSS** → Processador de CSS
+
+		- Necessário para interpretar e processar o Tailwind.
+
+		### 🔹 **Autoprefixer** → Plugin de CSS
+
+		- Adiciona automaticamente prefixos para compatibilidade com navegadores.
+
+	---
+
+	## **6. Conceitos Importantes**
+
+	> Fundamentos técnicos que explicam o funcionamento das ferramentas.
+
+		### 🔹 **Transpilar**
+
+		- Converter código moderno (JSX, ES6+) para um formato compatível com navegadores antigos.
+		- Feito pelo **Esbuild** dentro do Vite.
+
+		### 🔹 **Empacotar**
+
+		- Unir múltiplos arquivos JS e CSS em um único pacote otimizado.
+		- Feito pelo **Rollup** dentro do Vite.
+
+		### 🔹 **Tree Shaking**
+
+		- Remover código JavaScript não utilizado para reduzir o tamanho final dos arquivos.
+
+	---
+
+	## **Tabela Resumo**
+
+	| **Categoria**             | **Ferramenta**                      | **Função**                                           |
+	| ------------------------- | ----------------------------------- | ---------------------------------------------------- |
+	| **Editor de Código**      | VSCode                              | Onde escrevemos o código                             |
+	| **Linguagens Base**       | HTML, CSS, JS                       | Estrutura, estilo e interatividade                   |
+	| **Sintaxe do React**      | JSX                                 | Permite escrever HTML dentro do JS                   |
+	| **Biblioteca Frontend**   | React                               | Criação da interface                                 |
+	| **Ferramenta de Build**   | Vite                                | Gerencia servidor local, transpila e empacota código |
+	| **Transpilador**          | Esbuild                             | Converte JSX e JS moderno para JS puro               |
+	| **Empacotador**           | Rollup                              | Junta os arquivos JS/CSS e remove código não usado   |
+	| **Framework CSS**         | Tailwind CSS                        | Facilita a estilização com classes CSS utilitárias   |
+	| **Processador CSS**       | PostCSS                             | Gera CSS final a partir do Tailwind                  |
+	| **Plugin de CSS**         | Autoprefixer                        | Adiciona compatibilidade com navegadores             |
+	| **Conceitos Importantes** | Transpilar, Empacotar, Tree Shaking | Processos essenciais para otimização                 |
+
+	---
+
+	### **Fluxo Resumido do Desenvolvimento**
+
+	1️ Escrevemos o código em **React (JSX)** e estilizamos com **Tailwind CSS**.\
+	2️ O **Vite** transpila o JSX para JavaScript puro usando **Esbuild**.\
+	3️ O **Rollup** empacota os arquivos JS/CSS otimizados e remove código não utilizado (**tree shaking**).\
+	4️ O **PostCSS** processa o CSS do Tailwind e adiciona compatibilidade com o **Autoprefixer**.\
+	5️ O navegador recebe um código otimizado e pronto para rodar.
