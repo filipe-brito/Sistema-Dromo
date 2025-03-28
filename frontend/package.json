@@ -11,9 +11,11 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.17",
+    "axios": "^1.8.4",
     "crypto-browserify": "^3.12.1",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.4.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
