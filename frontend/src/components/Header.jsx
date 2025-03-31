@@ -5,15 +5,15 @@ const Header = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   return (
-    <header className="bg-stone-600 text-white shadow-md">
-      <div className="container mx-auto flex justify-between items-center py-4 px-6">
+    <header className="bg-stone-600 text-white shadow-lg shadow-stone-400 sticky">
+      <div className="container mx-auto relative justify-between items-center py-4 px-6">
         {/* Logo à esquerda */}
-        <Link to="/home" className="text-3xl font-bold">
+        <Link to="/home" className="z-10 absolute top-1/2 transform -translate-y-1/2 text-3xl font-bold">
           Dromo
         </Link>
 
         {/* Menu Centralizado */}
-        <nav className="flex-1 flex justify-center">
+        <nav className="z-0 w-full flex justify-center">
           <ul className="flex space-x-6">
             {/* Item com Dropdown */}
             <li className="relative">
