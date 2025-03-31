@@ -7,7 +7,7 @@ import RecordsPage from '../pages/RecordsPage'
 const AppRouter = () => { // AppRouter é uma arrow function
     return ( // A função retorna um conjunto de rotas
         <Router> {/* Organiza o roteador (que define rotas na aplicação). É importado do react-router-dom */}
-        <Header/>
+            <Header/>
             <Routes> {/* Agrupamento de rotas que vamos definir */}
                 <Route path='/login' element={<LoginPage />} /> {/* Definindo a rota "/login" que aponta para o componente LoginPage */}
                 <Route path="/home" element={<DashboardPage/>} />{/* Definindo a rota "/home" que aponta para o componente DashboardPage */}

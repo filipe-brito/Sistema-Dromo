@@ -1,65 +1,36 @@
 import React, { useState } from "react";
+import FilterBar from "../components/FilterBar"
 
-const CadastroPage = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const RecordsPage = () => {
+  const [searchParams, setSearchParams] = useState({});
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Lógica de envio do cadastro, como validar os dados ou enviar para o backend
-    console.log("Cadastro enviado:", { name, email, password });
+  // Função chamada quando o usuário digita nos campos
+  const handleSearch = (name, value) => {
+    setSearchParams((prev) => ({
+      ...prev,
+      [name]: value, // Atualiza o filtro correspondente
+
+    }));
   };
 
-  return (
-    <div className="p-8 bg-gray-50">
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Cadastro</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label htmlFor="name" className="block text-gray-700">Nome</label>
-          <input
-            id="name"
-            type="text"
-            className="w-full p-3 border rounded-md text-gray-800"
-            placeholder="Digite seu nome"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </div>
+  // Lista de filtros (personalizável!)
+  const filters = [
+    {name: "name", placeholder: "Nome", type: "text"},
+    {name: "cpf", placeholder: "CPF", type: "text"},
+    {name: "cnpj", placeholder: "CNPJ", type: "text"},
+  ];
 
-        <div>
-          <label htmlFor="email" className="block text-gray-700">Email</label>
-          <input
-            id="email"
-            type="email"
-            className="w-full p-3 border rounded-md text-gray-800"
-            placeholder="Digite seu email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
+    return (
+    <div className="w-8/10 h-screen mx-auto p-8 bg-stone-300 shadow-lg shadow-stone-400">
+      <h2 className="text-2xl font-bold text-gray-800 mb-6">Cadastro de Pessoas</h2>
 
-        <div>
-          <label htmlFor="password" className="block text-gray-700">Senha</label>
-          <input
-            id="password"
-            type="password"
-            className="w-full p-3 border rounded-md text-gray-800"
-            placeholder="Digite sua senha"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
+      {/*Aplicando componente de filtro*/}
+      <FilterBar filters={filters} onSearch={handleSearch} />
 
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition"
-        >
-          Cadastrar
-        </button>
-      </form>
+      {/* Teste: Exibindo os valores digitados nos filtros */}
+      <pre className="mt-4 text-neutral-800 bg-stone-100 p-4 rounded">{JSON.stringify(searchParams, null, 2)}</pre>
     </div>
   );
 };
 
-export default CadastroPage;
+export default RecordsPage;
