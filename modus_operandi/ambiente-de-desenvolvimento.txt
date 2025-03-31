@@ -8,7 +8,7 @@
 
 ## 📌 🎨 Frontend
 
-	- 🖥️ Implementação conduzida fora do servidor no **VSCode**, utilizando **Bootstrap** e **React** para uma experiência responsiva e dinâmica.
+	- 🖥️ Implementação conduzida fora do servidor no **VSCode**, utilizando **Tailwind** e **React** para uma experiência responsiva e dinâmica.
 	- 📦 Organização do código orientada a componentes reutilizáveis, promovendo eficiência e extensibilidade.
 	- 📤 **Deploy:** Servido via **Nginx**. Atualizações são feitas através do **build local** e envio dos arquivos estáticos para o servidor.
 
