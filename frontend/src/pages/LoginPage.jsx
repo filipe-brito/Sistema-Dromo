@@ -51,9 +51,6 @@ const LoginPage = () => { // No React, criamos componentes (ou páginas) usando 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <span className="absolute right-3 top-3 text-gray-500">
-                <i className="fa fa-lock"></i>
-              </span>
             </div>
           </div>
 
@@ -64,10 +61,6 @@ const LoginPage = () => { // No React, criamos componentes (ou páginas) usando 
             Login
           </button>
         </form>
-
-        <div className="text-center mt-4">
-          <a href="#" className="text-sm text-gray-600 hover:text-blue-500">Forgot password?</a>
-        </div>
       </div>
     </div>
   );

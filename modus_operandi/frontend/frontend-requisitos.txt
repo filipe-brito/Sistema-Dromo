@@ -1,0 +1,71 @@
+**Requisitos do Frontend para o Projeto NeoFuga**
+
+## Objetivo
+Desenvolver o frontend do projeto NeoFuga utilizando a biblioteca React, com foco em uma arquitetura modular, reutilizável e escalável. O frontend seguirá a abordagem Feature-First Structure e utilizará elementos do Atomic Design para garantir um código mais organizado e de fácil manutenção.
+
+## Tecnologias e Ferramentas Utilizadas
+- **React**: Biblioteca JavaScript para criar interfaces de usuário dinâmicas e reativas.
+  - *Objetivo*: Facilitar a criação de componentes reutilizáveis e responsivos.
+- **Vite**: Ferramenta de build moderna para desenvolvimento com React.
+  - *Objetivo*: Substituir o Create React App (CRA) para criação e execução do projeto, oferecendo builds mais rápidos e configuração simplificada.
+- **Tailwind CSS**: Framework CSS utilitário para estilização.
+  - *Objetivo*: Proporcionar estilos rápidos e personalizáveis, baseados em classes utilitárias, para um design responsivo e moderno.
+- **React Router**: Biblioteca para navegação entre páginas dentro do aplicativo React.
+  - *Objetivo*: Gerenciar as rotas de navegação e garantir uma navegação fluida sem recarregar a página.
+- **Axios**: Biblioteca para fazer requisições HTTP.
+  - *Objetivo*: Facilitar a comunicação com o backend e consumo das APIs, como a API de cadastro.
+- **VSCode**: Editor de código utilizado para o desenvolvimento do frontend.
+  - *Objetivo*: Proporcionar um ambiente de desenvolvimento ágil, com suporte a plugins e integração com outras ferramentas.
+- **PostCSS**: Ferramenta para processar CSS com plugins.
+  - *Objetivo*: Melhorar o fluxo de trabalho do CSS, otimizando estilos e adicionando suporte a recursos modernos.
+- **Autoprefixer**: Plugin para PostCSS que adiciona prefixos CSS automaticamente.
+  - *Objetivo*: Garantir compatibilidade com diferentes navegadores.
+
+## Arquitetura de Pastas
+A estrutura do frontend seguirá o padrão Feature-First Structure (FFS), com o uso de Atomic Design para a criação de componentes reutilizáveis. A arquitetura será organizada da seguinte forma:
+
+```
+/frontend/src
+  ├── assets          # Imagens, fontes e arquivos estáticos
+  ├── components      # Componentes reutilizáveis e pequenos (como botões, inputs, modais, etc.)
+  ├── pages           # Páginas principais do sistema (login, dashboard, cadastro de pessoas físicas, etc.)
+  ├── services        # Comunicação com a API (requisições HTTP usando Axios)
+  ├── hooks           # Hooks customizados
+  ├── styles          # Estilos globais (configurações do Tailwind CSS)
+  ├── utils           # Funções utilitárias (ex: formatação de data, validações)
+  ├── App.js          # Componente raiz
+  ├── index.js        # Ponto de entrada do aplicativo
+  ├── router          # Configuração das rotas utilizando React Router
+```
+
+## Padrões de Arquitetura
+### Feature-First Structure (FFS)
+Organizar o código de acordo com as funcionalidades e características do projeto. Em vez de separar as pastas por tipo de código (componentes, serviços, etc.), as funcionalidades que estão relacionadas são agrupadas em pastas específicas. Isso facilita a manutenção à medida que o sistema cresce.
+
+### Atomic Design
+Adotar a metodologia Atomic Design para criar componentes reutilizáveis e modulares, como:
+
+- **Átomos**: Componentes básicos e atômicos, como botões e inputs.
+- **Moléculas**: Combinação de átomos, como formulários com inputs e botões.
+- **Organismos**: Componentes maiores, como barras de navegação e seções de páginas.
+- **Templates**: Estruturas de layout compostas por organismos e moléculas.
+- **Páginas**: Combinação de templates com dados dinâmicos.
+
+## Responsividade
+Utilizar Tailwind CSS para criar uma interface responsiva, garantindo que o sistema seja funcional em diferentes dispositivos (desktop, tablet, mobile).
+
+## Fluxo de Navegação
+- **Página de Login**: Tela de autenticação com campos para usuário e senha.
+- **Página Inicial**: Página principal após o login, com o cabeçalho contendo um menu.
+- **Menu de Navegação**:
+  - Ao clicar em "Cadastros", o usuário verá a opção "Pessoas Físicas".
+  - Ao clicar em "Pessoas Físicas", será redirecionado para a página de cadastro.
+- **Página de Cadastro de Pessoas Físicas**: Página para exibir e cadastrar dados de pessoas físicas.
+
+## Desafios e Melhorias Futuros
+- **Autenticação e Autorização**: Implementar autenticação e controle de acesso.
+- **Testes Unitários e de Integração**: Criar testes para garantir a funcionalidade e estabilidade do sistema.
+- **Desempenho**: Melhorar o desempenho utilizando práticas como lazy loading de componentes e otimização de imagens.
+
+Esta documentação serve como guia inicial para o desenvolvimento do frontend do projeto NeoFuga. Com a escolha das ferramentas certas e a adoção das melhores práticas, o frontend será escalável, modular e alinhado com as necessidades do projeto.
+
