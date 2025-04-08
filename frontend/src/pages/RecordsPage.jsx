@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, } from "react";
 import FilterBar from "../components/FilterBar"
 import ResultBar from "../components/ResultBar";
+import { fetchIndividuals } from "../services/IndividualService";
 
 const RecordsPage = () => {
   const [searchParams, setSearchParams] = useState({});
@@ -28,56 +29,26 @@ const RecordsPage = () => {
     {key: "email", label: "email"},
   ]
 
-  // Teste simulado de retorno de BD
-  const mockResults = [
-    { name: "João da Silva", cpf: "123.456.789-00", email: "joao@email.com" },
-    { name: "Maria Souza", cpf: "987.654.321-00", email: "maria@email.com" },
-    { name: "Empresa XYZ", cpf: "12.345.678/0001-99", email: "contato@xyz.com.br" },
-    { name: "João da Silva", cpf: "123.456.789-00", email: "joao@email.com" },
-    { name: "Maria Souza", cpf: "987.654.321-00", email: "maria@email.com" },
-    { name: "Empresa XYZ", cpf: "12.345.678/0001-99", email: "contato@xyz.com.br" },
-    { name: "João da Silva", cpf: "123.456.789-00", email: "joao@email.com" },
-    { name: "Maria Souza", cpf: "987.654.321-00", email: "maria@email.com" },
-    { name: "Empresa XYZ", cpf: "12.345.678/0001-99", email: "contato@xyz.com.br" },
-    { name: "João da Silva", cpf: "123.456.789-00", email: "joao@email.com" },
-    { name: "Maria Souza", cpf: "987.654.321-00", email: "maria@email.com" },
-    { name: "Empresa XYZ", cpf: "12.345.678/0001-99", email: "contato@xyz.com.br" },
-    { name: "João da Silva", cpf: "123.456.789-00", email: "joao@email.com" },
-    { name: "Maria Souza", cpf: "987.654.321-00", email: "maria@email.com" },
-    { name: "Empresa XYZ", cpf: "12.345.678/0001-99", email: "contato@xyz.com.br" },
-    { name: "João da Silva", cpf: "123.456.789-00", email: "joao@email.com" },
-    { name: "Maria Souza", cpf: "987.654.321-00", email: "maria@email.com" },
-    { name: "Empresa XYZ", cpf: "12.345.678/0001-99", email: "contato@xyz.com.br" },
-    { name: "João da Silva", cpf: "123.456.789-00", email: "joao@email.com" },
-    { name: "Maria Souza", cpf: "987.654.321-00", email: "maria@email.com" },
-    { name: "Empresa XYZ", cpf: "12.345.678/0001-99", email: "contato@xyz.com.br" },
-    { name: "João da Silva", cpf: "123.456.789-00", email: "joao@email.com" },
-    { name: "Maria Souza", cpf: "987.654.321-00", email: "maria@email.com" },
-    { name: "Empresa XYZ", cpf: "12.345.678/0001-99", email: "contato@xyz.com.br" },
-    { name: "João da Silva", cpf: "123.456.789-00", email: "joao@email.com" },
-    { name: "Maria Souza", cpf: "987.654.321-00", email: "maria@email.com" },
-    { name: "Empresa XYZ", cpf: "12.345.678/0001-99", email: "contato@xyz.com.br" },
-    { name: "João da Silva", cpf: "123.456.789-00", email: "joao@email.com" },
-    { name: "Maria Souza", cpf: "987.654.321-00", email: "maria@email.com" },
-    { name: "Empresa XYZ", cpf: "12.345.678/0001-99", email: "contato@xyz.com.br" },
-    { name: "João da Silva", cpf: "123.456.789-00", email: "joao@email.com" },
-    { name: "Maria Souza", cpf: "987.654.321-00", email: "maria@email.com" },
-    { name: "Empresa XYZ", cpf: "12.345.678/0001-99", email: "contato@xyz.com.br" },
-    { name: "João da Silva", cpf: "123.456.789-00", email: "joao@email.com" },
-    { name: "Maria Souza", cpf: "987.654.321-00", email: "maria@email.com" },
-    { name: "Empresa XYZ", cpf: "12.345.678/0001-99", email: "contato@xyz.com.br" },
-    { name: "João da Silva", cpf: "123.456.789-00", email: "joao@email.com" },
-    { name: "Maria Souza", cpf: "987.654.321-00", email: "maria@email.com" },
-    { name: "Empresa XYZ", cpf: "12.345.678/0001-99", email: "contato@xyz.com.br" },
-    { name: "João da Silva", cpf: "123.456.789-00", email: "joao@email.com" },
-    { name: "Maria Souza", cpf: "987.654.321-00", email: "maria@email.com" },
-    { name: "Empresa XYZ", cpf: "12.345.678/0001-99", email: "contato@xyz.com.br" },
-    { name: "João da Silva", cpf: "123.456.789-00", email: "joao@email.com" },
-    { name: "Maria Souza", cpf: "987.654.321-00", email: "maria@email.com" },
-    { name: "Empresa XYZ", cpf: "12.345.678/0001-99", email: "contato@xyz.com.br" },
-  ];
+  const [data, setData] = useState([]);      // Estado para armazenar os dados reais
+  const [loading, setLoading] = useState(true); // Estado para controle de carregamento
 
-    return (
+  useEffect(() => {
+    // Função assíncrona para buscar os dados
+    const loadData = async () => {
+      try {
+        const individuals = await fetchIndividuals(); // Chama a função que busca dados da API
+        setData(individuals); // Atualiza o estado com os dados recebidos
+      } catch (error) {
+        console.error("Erro ao buscar dados:", error);
+      } finally {
+        setLoading(false); // Indica que o carregamento terminou (sucesso ou erro)
+      }
+    };
+  
+    loadData();
+  }, []); // Array de dependências vazio: executa só uma vez quando o componente é montado
+
+  return (
     <div className="w-8/10 h-screen mx-auto p-4 bg-stone-300 shadow-lg shadow-stone-400">
       <h2 className="text-3xl font-bold text-gray-800 mb-4">Cadastro de Pessoas</h2>
 
@@ -86,7 +57,7 @@ const RecordsPage = () => {
         <FilterBar filters={filters} onSearch={handleSearch} />
       </div>
       <div className="flex p-2 mt-1 rounded border-stone-700 shadow-sm bg-stone-100">
-        <ResultBar columns={columns} data={mockResults} />
+      {loading ? <p>Carregando registros...</p> : <ResultBar columns={columns} data={data} />}
       </div>
 
       {/* Teste: Exibindo os valores digitados nos filtros */}

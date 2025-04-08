@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dromo.sistema_dromo.model.Individual;
+import com.dromo.sistema_dromo.dto.IndividualDTO;
 import com.dromo.sistema_dromo.service.IndividualService;
 
 @RestController
@@ -17,7 +17,7 @@ public class RecordsController {
 	private IndividualService individualService;
 	
 	@GetMapping("/individuals")
-	public List<Individual> listIndividuals(){
+	public List<IndividualDTO> listIndividuals(){
 		return individualService.listIndividuals();
 	}
 }

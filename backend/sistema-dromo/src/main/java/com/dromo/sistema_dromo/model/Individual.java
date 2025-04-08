@@ -26,6 +26,7 @@ public class Individual {
 	private int number;
 	@Column(name = "zip_code")
 	private String zipCode;
+	private String email;
 	
 	
 	public long getId() {
@@ -52,4 +53,7 @@ public class Individual {
 	public String getZipCode() {
 		return zipCode;
 	}	
+	public String getEmail() {
+		return email;
+	}
 }

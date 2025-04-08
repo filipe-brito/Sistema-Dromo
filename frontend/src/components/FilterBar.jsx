@@ -4,7 +4,7 @@ const FilterBar = ({filters, onSearch}) => {
       <div className="flex inline-bloc w-9/10 gap-1">
         {filters.map((filter) => (
           <input 
-          key={filter.key}
+          key={filter.name}
           type={filter.type}
           placeholder={filter.placeholder}
 
