@@ -1,5 +1,9 @@
+import { SearchIcon1 } from "../icons/SearchIcon.jsx";
+
 export const SearchButton = () => {
-    return(
-        <button className="absolute right-0 w-20 h-8 rounded-lg border-3 border-emerald-600 bg-emerald-300 text-white">Buscar</button>
-    );
+  return (
+    <button className="group absolute right-0 p-1 rounded-md bg-violet-500 cursor-pointer">
+      <SearchIcon1 className="w-4 h-4 text-white transition-transform duration-300 group-hover:scale-110" />
+    </button>
+  );
 };
