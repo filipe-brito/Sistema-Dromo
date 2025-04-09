@@ -1,6 +1,6 @@
 import React, { useState, useEffect, } from "react";
-import FilterBar from "../components/FilterBar"
-import ResultBar from "../components/ResultBar";
+import FilterBar from "../components/organisms/FilterBar"
+import ResultBar from "../components/organisms/ResultBar";
 import { fetchIndividuals } from "../services/IndividualService";
 
 const RecordsPage = () => {
