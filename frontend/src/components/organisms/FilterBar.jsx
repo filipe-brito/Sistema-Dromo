@@ -1,3 +1,5 @@
+import { SearchButton } from "../atoms/SearchButton";
+
 const FilterBar = ({filters, onSearch}) => {
   return(
     <div className="flex w-full h-8">
@@ -15,7 +17,7 @@ const FilterBar = ({filters, onSearch}) => {
         ))}
       </div>
       <div className="relative w-1/10 h-6">
-        <button className="absolute right-0 w-20 h-8 rounded-lg border-3 border-emerald-600 bg-emerald-300 text-white">Buscar</button>
+        <SearchButton/>
       </div>
     </div>
   );
