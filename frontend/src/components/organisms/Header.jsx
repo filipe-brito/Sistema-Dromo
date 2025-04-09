@@ -1,14 +1,19 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-const Header = () => {
+const Header = ({ className = "" }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   return (
-    <header className="bg-stone-600 text-white shadow-lg shadow-stone-400 sticky">
-      <div className="container mx-auto relative justify-between items-center py-4 px-6">
+    <header
+      className={`bg-stone-800 border-b-2 border-stone-300 text-neutral-300 shadow-lg ${className}`}
+    >
+      <div className="container mx-auto relative justify-between items-center py-1 px-6">
         {/* Logo à esquerda */}
-        <Link to="/home" className="z-10 absolute top-1/2 transform -translate-y-1/2 text-3xl font-bold">
+        <Link
+          to="/home"
+          className="z-10 absolute top-1/2 transform -translate-y-1/2 text-3xl font-bold"
+        >
           Dromo
         </Link>
 
