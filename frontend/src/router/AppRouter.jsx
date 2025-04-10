@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import LoginPage from "../pages/LoginPage";
 import DashboardPage from "../pages/DashboardPage";
-import RecordsPage from "../pages/RecordsPage";
+import PeopleRecords from "../pages/records/PeopleRecords";
 import MainLayout from "../layouts/MainLayout";
 
 const AppRouter = () => {
@@ -17,7 +17,7 @@ const AppRouter = () => {
           {/* Definindo a rota "/login" que aponta para o componente LoginPage */}
           <Route path="/home" element={<DashboardPage />} />
           {/* Definindo a rota "/home" que aponta para o componente DashboardPage */}
-          <Route path="/records" element={<RecordsPage />} />
+          <Route path="/records/people" element={<PeopleRecords />} />
           {/* Definindo a rota "/records" que aponta para o componente RecordsPage */}
           {/* Outras rotas desse layout */}
         </Route>
