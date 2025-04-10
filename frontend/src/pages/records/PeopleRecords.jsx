@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
-import FilterBar from "../components/organisms/FilterBar";
-import ResultBar from "../components/organisms/ResultBar";
-import { fetchIndividuals } from "../services/IndividualService";
+import FilterBar from "../../components/molecules/FilterBar";
+import ResultBar from "../../components/molecules/ResultBar";
+import { fetchIndividuals } from "../../services/IndividualService";
+import { Tab } from "../../components/organisms/Tabs";
 
-const RecordsPage = () => {
+const PeopleRecords = () => {
   const [searchParams, setSearchParams] = useState({});
+  const [data, setData] = useState([]); // Estado para armazenar os dados reais
+  const [loading, setLoading] = useState(true); // Estado para controle de carregamento
 
   // Função chamada quando o usuário digita nos campos
   const handleSearch = (name, value) => {
@@ -28,9 +31,6 @@ const RecordsPage = () => {
     { key: "email", label: "email" },
   ];
 
-  const [data, setData] = useState([]); // Estado para armazenar os dados reais
-  const [loading, setLoading] = useState(true); // Estado para controle de carregamento
-
   useEffect(() => {
     // Função assíncrona para buscar os dados
     const loadData = async () => {
@@ -47,13 +47,9 @@ const RecordsPage = () => {
     loadData();
   }, []); // Array de dependências vazio: executa só uma vez quando o componente é montado
 
-  return (
-    <div className="w-9/10 h-screen mx-auto px-4 py-2 bg-stone-700">
-      <h2 className="text-2xl font-bold text-gray-800 mb-2">
-        Cadastro de Pessoas
-      </h2>
-
-      {/*Aplicando componente de filtro*/}
+  // 🔹 Componente interno da aba de Pessoa Física
+  const IndividualSection = () => (
+    <>
       <div className="flex p-2 rounded shadow-sm bg-stone-100">
         <FilterBar filters={filters} onSearch={handleSearch} />
       </div>
@@ -64,6 +60,30 @@ const RecordsPage = () => {
           <ResultBar columns={columns} data={data} />
         )}
       </div>
+    </>
+  );
+
+  // 🔹 Placeholder para Pessoa Jurídica
+  const CompanySection = () => (
+    <div className="bg-stone-100 p-4 rounded text-neutral-800">
+      Página de cadastro de empresas em construção...
+    </div>
+  );
+
+  return (
+    <div className="w-8/10 min-h-[92dvh] mx-auto px-4 py-2 bg-stone-800 border-x-2 border-stone-700">
+      <h2 className="text-2xl font-bold text-neutral-50 mb-2">
+        Cadastro de Pessoas
+      </h2>
+
+      {/* Tabs com abas de PF e PJ */}
+      <Tab
+        defaultTab={0}
+        tabs={[
+          { label: "Pessoa Física", content: <IndividualSection /> },
+          { label: "Pessoa Jurídica", content: <CompanySection /> },
+        ]}
+      />
 
       {/* Teste: Exibindo os valores digitados nos filtros */}
       <pre className="mt-1 text-neutral-800 bg-stone-100 p-4 rounded">
@@ -73,4 +93,4 @@ const RecordsPage = () => {
   );
 };
 
-export default RecordsPage;
+export default PeopleRecords;

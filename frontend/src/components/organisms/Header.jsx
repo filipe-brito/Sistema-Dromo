@@ -6,9 +6,9 @@ const Header = ({ className = "" }) => {
 
   return (
     <header
-      className={`bg-stone-800 border-b-2 border-stone-300 text-neutral-300 shadow-lg ${className}`}
+      className={`bg-stone-800 border-b border-yellow-600 text-neutral-300 ${className}`}
     >
-      <div className="container mx-auto relative justify-between items-center py-1 px-6">
+      <div className="container mx-auto py-1 px-6 min-h-[8dvh] flex items-center">
         {/* Logo à esquerda */}
         <Link
           to="/home"
@@ -24,7 +24,7 @@ const Header = ({ className = "" }) => {
             <li className="relative">
               <button
                 onClick={() => setDropdownOpen(!dropdownOpen)}
-                className="text-neutral-300 text-xl font-semibold hover:text-neutral-50 flex items-center gap-2"
+                className="text-xl font-semibold flex items-center gap-2 hover:text-neutral-50 cursor-pointer"
               >
                 Cadastros
               </button>
