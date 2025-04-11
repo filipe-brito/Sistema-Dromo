@@ -5,22 +5,22 @@ export const Tab = ({ tabs, defaultTab = 0 }) => {
 
   return (
     <div className="w-full">
-      <div className="flex border border-yellow-500">
+      <div className="flex">
         {tabs.map((tab, index) => (
           <button
             key={index}
             onClick={() => setActiveTab(index)}
-            className={`p-2 font-medium ${
+            className={`p-1 ${
               index === activeTab
-                ? "text-red-500 border-b-2 border-red-500"
-                : "text-green-500"
+                ? "text-blue-400 border-b-2 border-bluw-400"
+                : "text-green-400"
             }`}
           >
             {tab.label}
           </button>
         ))}
       </div>
-      <div>{tabs[activeTab].content}</div>
+      <div className="p-2">{tabs[activeTab].content}</div>
     </div>
   );
 };
