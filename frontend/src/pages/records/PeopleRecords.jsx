@@ -51,7 +51,7 @@ const PeopleRecords = () => {
   const IndividualSection = () => (
     <>
       <div className="flex p-2 rounded shadow-sm bg-stone-100">
-        <FilterBar filters={filters} onSearch={handleSearch} />
+        <FilterBar filters={filters} onSearch={handleSearch} searchParams={searchParams}/>
       </div>
       <div className="flex p-2 mt-1 rounded border-stone-700 shadow-sm bg-stone-100">
         {loading ? (
