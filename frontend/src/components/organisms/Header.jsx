@@ -34,7 +34,7 @@ const Header = ({ className = "" }) => {
                 <ul className="absolute left-0 mt-2 w-48 bg-stone-300 text-neutral-800 shadow-lg rounded-md">
                   <li>
                     <Link
-                      to="/records"
+                      to="/records/people"
                       className="block px-4 py-2 hover:bg-stone-200 rounded-md"
                     >
                       Pessoas

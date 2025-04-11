@@ -1,6 +1,6 @@
 import { SearchButton } from "../atoms/SearchButton";
 
-const FilterBar = ({ filters, onSearch, searchParams }) => {
+const FilterBar = ({ filters }) => {
   return (
     <div className="flex w-full">
       <div className="flex w-9/10 gap-1">
@@ -10,8 +10,6 @@ const FilterBar = ({ filters, onSearch, searchParams }) => {
             type={filter.type}
             placeholder={filter.placeholder}
             className="h-6 px-1 bg-stone-200 rounded border-2 border-stone-400 text-xs"
-            value={searchParams[filter.name] || ''}
-            onChange={(e) => onSearch(filter.name, e.target.value)}
           />
         ))}
       </div>

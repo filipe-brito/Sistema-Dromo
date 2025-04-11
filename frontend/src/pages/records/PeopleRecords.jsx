@@ -1,21 +1,14 @@
 import React, { useState, useEffect } from "react";
 import FilterBar from "../../components/molecules/FilterBar";
 import ResultBar from "../../components/molecules/ResultBar";
+import { PersonIcon } from "../../components/icons/PersonIcon";
+import { CompanyIcon } from "../../components/icons/CompanyIcon";
 import { fetchIndividuals } from "../../services/IndividualService";
 import { Tab } from "../../components/organisms/Tabs";
 
 const PeopleRecords = () => {
-  const [searchParams, setSearchParams] = useState({});
   const [data, setData] = useState([]); // Estado para armazenar os dados reais
   const [loading, setLoading] = useState(true); // Estado para controle de carregamento
-
-  // Função chamada quando o usuário digita nos campos
-  const handleSearch = (name, value) => {
-    setSearchParams((prev) => ({
-      ...prev,
-      [name]: value, // Atualiza o filtro correspondente
-    }));
-  };
 
   // Lista de filtros (personalizável!)
   const filters = [
@@ -51,7 +44,7 @@ const PeopleRecords = () => {
   const IndividualSection = () => (
     <>
       <div className="flex p-2 rounded shadow-sm bg-stone-100">
-        <FilterBar filters={filters} onSearch={handleSearch} searchParams={searchParams}/>
+        <FilterBar filters={filters} />
       </div>
       <div className="flex p-2 mt-1 rounded border-stone-700 shadow-sm bg-stone-100">
         {loading ? (
@@ -80,15 +73,18 @@ const PeopleRecords = () => {
       <Tab
         defaultTab={0}
         tabs={[
-          { label: "Pessoa Física", content: <IndividualSection /> },
-          { label: "Pessoa Jurídica", content: <CompanySection /> },
+          {
+            icon: <PersonIcon className="w-4 h-4" />,
+            label: "Pessoa Física",
+            content: <IndividualSection />,
+          },
+          {
+            icon: <CompanyIcon className="w-4 h-4" />,
+            label: "Pessoa Jurídica",
+            content: <CompanySection />,
+          },
         ]}
       />
-
-      {/* Teste: Exibindo os valores digitados nos filtros */}
-      <pre className="mt-1 text-neutral-800 bg-stone-100 p-4 rounded">
-        {JSON.stringify(searchParams, null, 2)}
-      </pre>
     </div>
   );
 };
