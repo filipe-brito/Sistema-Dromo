@@ -46,7 +46,7 @@ const ResultBar = ({ columns, data }) => {
         >
           Anterior
         </button>
-        <span className="text-sm text-neutral-600">
+        <span className="text-sm text-neutral-600 flex items-center">
           Página {currentPage} de {Math.ceil(data.length / itemsPerPage)}
         </span>
         <button

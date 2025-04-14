@@ -1,16 +1,10 @@
-import React, { useState, useEffect } from "react";
-import FilterBar from "../../components/molecules/FilterBar";
-import ResultBar from "../../components/molecules/ResultBar";
 import { PersonIcon } from "../../components/icons/PersonIcon";
 import { CompanyIcon } from "../../components/icons/CompanyIcon";
-import { fetchIndividuals } from "../../services/IndividualService";
+import { fetchCompanies, fetchIndividuals } from "../../services/PeopleService";
 import { Tab } from "../../components/organisms/Tabs";
-import { LoadingIcon } from "../../components/icons/LoadingIcon";
+import { SearchSection } from "../../components/organisms/SearchSection";
 
 const PeopleRecords = () => {
-  const [data, setData] = useState([]); // Estado para armazenar os dados reais
-  const [loading, setLoading] = useState(true); // Estado para controle de carregamento
-
   // Filtros pessoas físicas
   const individualFilters = [
     { name: "name", placeholder: "Nome", type: "text" },
@@ -33,62 +27,26 @@ const PeopleRecords = () => {
 
   // Colunas da barra de resultados de pessoas jurídicas
   const companyColumns = [
-    { key: "name", label: "Razão Social" },
+    { key: "companyName", label: "Razão Social" },
     { key: "cnpj", label: "CNPJ" },
   ];
 
-  useEffect(() => {
-    // Função assíncrona para buscar os dados
-    const loadData = async () => {
-      try {
-        const individuals = await fetchIndividuals(); // Chama a função que busca dados da API
-        setData(individuals); // Atualiza o estado com os dados recebidos
-      } catch (error) {
-        console.error("Erro ao buscar dados:", error);
-      } finally {
-        setLoading(false); // Indica que o carregamento terminou (sucesso ou erro)
-      }
-    };
-
-    loadData();
-  }, []); // Array de dependências vazio: executa só uma vez quando o componente é montado
-
   // 🔹 Componente interno da aba de Pessoa Física
   const IndividualSection = () => (
-    <>
-      <div className="flex p-2 rounded shadow-sm bg-stone-100">
-        <FilterBar filters={individualFilters} />
-      </div>
-      <div className="flex p-2 mt-1 rounded border-stone-700 shadow-sm bg-stone-100">
-        {loading ? (
-          <div className="flex w-full justify-center">
-            <LoadingIcon />
-            <p>Carregando...</p>
-          </div>
-        ) : (
-          <ResultBar columns={individualColumns} data={data} />
-        )}
-      </div>
-    </>
+    <SearchSection
+      filters={individualFilters}
+      columns={individualColumns}
+      fetch={fetchIndividuals}
+    />
   );
 
   // 🔹 Placeholder para Pessoa Jurídica
   const CompanySection = () => (
-    <>
-      <div className="flex p-2 rounded shadow-sm bg-stone-100">
-        <FilterBar filters={companyFilters} />
-      </div>
-      <div className="flex p-2 mt-1 rounded border-stone-700 shadow-sm bg-stone-100">
-        {loading ? (
-          <div className="flex w-full justify-center">
-            <LoadingIcon />
-            <p>Carregando...</p>
-          </div>
-        ) : (
-          <ResultBar columns={companyColumns} data={data} />
-        )}
-      </div>
-    </>
+    <SearchSection
+      filters={companyFilters}
+      columns={companyColumns}
+      fetch={fetchCompanies}
+    />
   );
 
   return (

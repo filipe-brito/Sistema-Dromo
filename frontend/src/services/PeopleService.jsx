@@ -7,3 +7,12 @@ export const fetchIndividuals = async () => {
 
   return response.json();
 };
+
+export const fetchCompanies = async () => {
+  const response = await fetch("http://localhost:8080/records/companies");
+  if (!response.ok) {
+    throw new Error("Erro ao buscar dados de companias");
+  }
+
+  return response.json();
+};
