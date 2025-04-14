@@ -5,23 +5,36 @@ import { PersonIcon } from "../../components/icons/PersonIcon";
 import { CompanyIcon } from "../../components/icons/CompanyIcon";
 import { fetchIndividuals } from "../../services/IndividualService";
 import { Tab } from "../../components/organisms/Tabs";
+import { LoadingIcon } from "../../components/icons/LoadingIcon";
 
 const PeopleRecords = () => {
   const [data, setData] = useState([]); // Estado para armazenar os dados reais
   const [loading, setLoading] = useState(true); // Estado para controle de carregamento
 
-  // Lista de filtros (personalizável!)
-  const filters = [
+  // Filtros pessoas físicas
+  const individualFilters = [
     { name: "name", placeholder: "Nome", type: "text" },
     { name: "cpf", placeholder: "CPF", type: "text" },
+    { name: "email", placeholder: "email", type: "text" },
+  ];
+
+  // Filtros pessoas jurídicas
+  const companyFilters = [
+    { name: "name", placeholder: "Razão Social", type: "text" },
     { name: "cnpj", placeholder: "CNPJ", type: "text" },
   ];
 
-  // Colunas da barra de resultados
-  const columns = [
+  // Colunas da barra de resultados de pessoas físicas
+  const individualColumns = [
     { key: "name", label: "Nome" },
-    { key: "cpf", label: "CPF/CNPJ" },
+    { key: "cpf", label: "CPF" },
     { key: "email", label: "email" },
+  ];
+
+  // Colunas da barra de resultados de pessoas jurídicas
+  const companyColumns = [
+    { key: "name", label: "Razão Social" },
+    { key: "cnpj", label: "CNPJ" },
   ];
 
   useEffect(() => {
@@ -44,13 +57,16 @@ const PeopleRecords = () => {
   const IndividualSection = () => (
     <>
       <div className="flex p-2 rounded shadow-sm bg-stone-100">
-        <FilterBar filters={filters} />
+        <FilterBar filters={individualFilters} />
       </div>
       <div className="flex p-2 mt-1 rounded border-stone-700 shadow-sm bg-stone-100">
         {loading ? (
-          <p>Carregando registros...</p>
+          <div className="flex w-full justify-center">
+            <LoadingIcon />
+            <p>Carregando...</p>
+          </div>
         ) : (
-          <ResultBar columns={columns} data={data} />
+          <ResultBar columns={individualColumns} data={data} />
         )}
       </div>
     </>
@@ -58,9 +74,21 @@ const PeopleRecords = () => {
 
   // 🔹 Placeholder para Pessoa Jurídica
   const CompanySection = () => (
-    <div className="bg-stone-100 p-4 rounded text-neutral-800">
-      Página de cadastro de empresas em construção...
-    </div>
+    <>
+      <div className="flex p-2 rounded shadow-sm bg-stone-100">
+        <FilterBar filters={companyFilters} />
+      </div>
+      <div className="flex p-2 mt-1 rounded border-stone-700 shadow-sm bg-stone-100">
+        {loading ? (
+          <div className="flex w-full justify-center">
+            <LoadingIcon />
+            <p>Carregando...</p>
+          </div>
+        ) : (
+          <ResultBar columns={companyColumns} data={data} />
+        )}
+      </div>
+    </>
   );
 
   return (
