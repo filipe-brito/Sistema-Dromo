@@ -2,10 +2,31 @@ import { PersonIcon } from "../../components/icons/PersonIcon";
 import { CompanyIcon } from "../../components/icons/CompanyIcon";
 import { fetchCompanies, fetchIndividuals } from "../../services/PeopleService";
 import { Tab } from "../../components/organisms/Tabs";
-import { SearchSection } from "../../components/organisms/SearchSection";
+import { SearchSection } from "../../components/templates/SearchSection";
+
+import React, { useState, useEffect } from "react";
 
 const PeopleRecords = () => {
-  // Filtros pessoas físicas
+  const [loading, setLoading] = useState(true); // Estado para controle de carregamento
+
+  // Dados e filtros de pessoas físicas
+  const [individualData, setIndividualData] = useState([]);
+  const [companyData, setCompanyData] = useState([]);
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        console.log("Consultando...");
+        setIndividualData(await fetchIndividuals());
+        setCompanyData(await fetchCompanies());
+      } catch (error) {
+        console.error("Erro ao buscar dados:", error);
+      } finally {
+        setLoading(false); // Indica que o carregamento terminou (sucesso ou erro)
+      }
+    };
+    loadData();
+  }, []);
+
   const individualFilters = [
     { name: "name", placeholder: "Nome", type: "text" },
     { name: "cpf", placeholder: "CPF", type: "text" },
@@ -36,16 +57,18 @@ const PeopleRecords = () => {
     <SearchSection
       filters={individualFilters}
       columns={individualColumns}
-      fetch={fetchIndividuals}
+      data={individualData}
+      loading={loading}
     />
   );
 
-  // 🔹 Placeholder para Pessoa Jurídica
+  // 🔹 Componente interno da aba de Pessoa jurídica
   const CompanySection = () => (
     <SearchSection
       filters={companyFilters}
       columns={companyColumns}
-      fetch={fetchCompanies}
+      data={companyData}
+      loading={loading}
     />
   );
 
