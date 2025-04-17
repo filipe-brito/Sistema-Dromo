@@ -8,23 +8,36 @@ import React, { useState, useEffect } from "react";
 
 const PeopleRecords = () => {
   const [loading, setLoading] = useState(true); // Estado para controle de carregamento
-
   // Dados e filtros de pessoas físicas
   const [individualData, setIndividualData] = useState([]);
   const [companyData, setCompanyData] = useState([]);
+
+  const handleSearchIndividuals = async (filters = {}) => {
+    setLoading(true);
+    try {
+      const result = await fetchIndividuals(filters); // envia os filtros se tiver
+      setIndividualData(result);
+    } catch (error) {
+      console.error("erro ao buscar pessoas físicas: ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSearchCompanies = async (filters = {}) => {
+    setLoading(true);
+    try {
+      const result = await fetchCompanies(filters);
+    } catch (error) {
+      console.log("Erro ao buscar empresas: ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        console.log("Consultando...");
-        setIndividualData(await fetchIndividuals());
-        setCompanyData(await fetchCompanies());
-      } catch (error) {
-        console.error("Erro ao buscar dados:", error);
-      } finally {
-        setLoading(false); // Indica que o carregamento terminou (sucesso ou erro)
-      }
-    };
-    loadData();
+    handleSearchIndividuals();
+    handleSearchCompanies();
   }, []);
 
   const individualFilters = [
@@ -59,6 +72,7 @@ const PeopleRecords = () => {
       columns={individualColumns}
       data={individualData}
       loading={loading}
+      onSearch={handleSearchIndividuals}
     />
   );
 
@@ -69,6 +83,7 @@ const PeopleRecords = () => {
       columns={companyColumns}
       data={companyData}
       loading={loading}
+      onSearch={handleSearchCompanies}
     />
   );
 
