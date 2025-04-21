@@ -28,6 +28,7 @@ const PeopleRecords = () => {
     setLoading(true);
     try {
       const result = await fetchCompanies(filters);
+      setCompanyData(result);
     } catch (error) {
       console.log("Erro ao buscar empresas: ", error);
     } finally {
