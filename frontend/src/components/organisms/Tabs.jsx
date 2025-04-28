@@ -35,7 +35,7 @@ export const Tab = ({ tabs, defaultTab = 0 }) => {
       {/* 🔹 Conteúdo com borda total */}
       <div className="p-1 border-2 border-green-700 rounded-md">
         {tabs[activeTab].content}{" "}
-        {/* Exibimos o object content da prop tabs. Como tabs é um array, selecionamos o elemento na posíção do estado activeTab */}
+        {/* Exibimos o object content da prop tabs. Como tabs é um array, selecionamos o elemento na posição do estado activeTab */}
       </div>
     </div>
   );
