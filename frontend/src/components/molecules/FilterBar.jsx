@@ -1,10 +1,10 @@
 import { SearchButton } from "../atoms/SearchButton";
 
 const FilterBar = ({ filters, values, setValues, onSearch }) => {
-  // Criamos o componente FilterBar (barra de filtros para pasquisa)
+  // Criamos o componente FilterBar (barra de filtros para pesquisa)
 
   // Variável que recebe uma função que vai criar um objeto do tipo 'object'.
-  // Como será chamado no onChande de um input, o argumento será o 'evento' do usuário digitando nos campos
+  // Como será chamado no onChange de um input, o argumento será o 'evento' do usuário digitando nos campos
   const handleChange = (e) => {
     // A variável abaixo é uma desestruturação de um objeto 'object'
     // 'e' é o evento (usuário digita) e target é o próprio input que foi digitado
@@ -23,7 +23,7 @@ const FilterBar = ({ filters, values, setValues, onSearch }) => {
 
       // No atributo abaixo, os colchetes diz ao React para ele pagar o noma da chave recebida ao invés de
       // criar um novo atributo chamado 'name'
-      [name]: value, // Atributo a mais que estamos adicionando.
+      [name]: value, // Atributo a mais que estamos adicionando. Os colchetes diz ao React para pegar o valor da chave daquele object
       // No final, o estado vai receber 'prev' + name: value
     }));
   };
@@ -40,15 +40,15 @@ const FilterBar = ({ filters, values, setValues, onSearch }) => {
             type={filter.type} // Atribui o valor da chave 'type' ao tipo do input
             name={filter.name} // Atribui o valor da chave 'name' ao nome do input
             placeholder={filter.placeholder} // O texto exibido no campo será o valor da chave 'placeholder'
-            value={values[filter.name] || ""} //
+            value={values[filter.name] || ""} // controla o que está digitado no campo. Os colchetes diz ao React para pegar o valor da chave daquele object
             onChange={handleChange} // Executa handleChange a cada evento. React envia o próprio evento como argumento
             className="h-6 px-1 bg-stone-200 rounded border-2 border-stone-400 text-xs"
           />
         ))}
       </div>
       <div className="relative w-1/10 h-6">
-        {/* Executa onSearch ao clicar no botão, passando o estado values como argumento */}
-        <SearchButton onClick={() => onSearch(values)} />
+        {/* Passa onSearch como prop ao SearchButton */}
+        <SearchButton onClick={onSearch} />
       </div>
     </div>
   );
