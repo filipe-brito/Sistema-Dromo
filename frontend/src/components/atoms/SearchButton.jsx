@@ -2,7 +2,7 @@ import { SearchIcon1 } from "../icons/SearchIcon.jsx";
 
 export const SearchButton = ({ onClick }) => {
   return (
-    // Abaixo passamos a prop na propriedade onClick
+    // Executa a função passada via prop quando o botão for clicado
     <button
       onClick={onClick}
       className="group absolute right-0 p-1 rounded-md bg-green-700 cursor-pointer"

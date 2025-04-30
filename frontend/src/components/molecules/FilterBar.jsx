@@ -1,6 +1,9 @@
 import { SearchButton } from "../atoms/SearchButton";
+import React, { useState } from "react";
 
-const FilterBar = ({ filters, values, setValues, onSearch }) => {
+const FilterBar = ({ filters, onSearch }) => {
+  const [filterValues, setFilterValues] = useState([]);
+
   // Criamos o componente FilterBar (barra de filtros para pesquisa)
 
   // Variável que recebe uma função que vai criar um objeto do tipo 'object'.
@@ -17,8 +20,8 @@ const FilterBar = ({ filters, values, setValues, onSearch }) => {
     // Abaixo está uma 'Updater Function', função que recebe o estado atual e retorna o novo estado.
     // Sempre que passamos um função ao setState, o React atribui ao parâmetro o valor atual do estado antes de alterá-lo
     // Por convenção, o parâmetro é chamado de 'prev'
-    setValues((prev) => ({
-      // Atualizamos o valor de 'values'. As chaves nesse caso dizem que estamos retornando um object js
+    setFilterValues((prev) => ({
+      // Atualizamos o valor de 'filterValues'. As chaves nesse caso dizem que estamos retornando um object js
       ...prev, // As reticências são o operador spread. Ele define que esse object recebe os atributos de prev e adiciona mais
 
       // No atributo abaixo, os colchetes diz ao React para ele pagar o noma da chave recebida ao invés de
@@ -40,15 +43,17 @@ const FilterBar = ({ filters, values, setValues, onSearch }) => {
             type={filter.type} // Atribui o valor da chave 'type' ao tipo do input
             name={filter.name} // Atribui o valor da chave 'name' ao nome do input
             placeholder={filter.placeholder} // O texto exibido no campo será o valor da chave 'placeholder'
-            value={values[filter.name] || ""} // controla o que está digitado no campo. Os colchetes diz ao React para pegar o valor da chave daquele object
+            value={filterValues[filter.name] || ""} // controla o que está digitado no campo. Os colchetes diz ao React para pegar o valor da chave daquele object
             onChange={handleChange} // Executa handleChange a cada evento. React envia o próprio evento como argumento
             className="h-6 px-1 bg-stone-200 rounded border-2 border-stone-400 text-xs"
           />
         ))}
       </div>
       <div className="relative w-1/10 h-6">
-        {/* Passa onSearch como prop ao SearchButton */}
-        <SearchButton onClick={onSearch} />
+        {/* OnSearch recebido do pai deverá ser uma função de consulta ao backend e deverá aceitar argumentos,
+           pois os argumentos serão parâmetros de busca no banco de dados
+           O componente atual recebe uma função do pai e passará para seu filho, então usamos um função anônima e passamos o argumento necessário */}
+        <SearchButton onClick={() => onSearch(filterValues)} />
       </div>
     </div>
   );
