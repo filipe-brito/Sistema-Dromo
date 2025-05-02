@@ -10,23 +10,21 @@ import com.dromo.sistema_dromo.repository.IndividualRepository;
 
 @Service
 public class IndividualService {
-	@Autowired
-	private IndividualRepository individualRepository;
-	
-	public List<IndividualDTO> listIndividuals(){
-		return individualRepository.findAll()
-				.stream()
-		        .map(individual -> new IndividualDTO(
-		            individual.getId(),
-		            individual.getFullName(),
-		            individual.getCpf(),
-		            individual.getDob(),
-		            individual.getGender(),
-		            individual.getStreet(),
-		            individual.getNumber(),
-		            individual.getZipCode(),
-		            individual.getEmail()
-		        ))
-		        .toList();
-	}
+    @Autowired
+    private IndividualRepository individualRepository;
+
+    public List<IndividualDTO> listIndividuals(String fullName, String cpf, String email) {
+	return individualRepository.findByFilters(fullName, cpf, email).stream()
+		.map(individual -> new IndividualDTO(
+			individual.getId(), 
+			individual.getFullName(), 
+			individual.getCpf(),
+			individual.getDob(), 
+			individual.getGender(), 
+			individual.getStreet(), 
+			individual.getNumber(),
+			individual.getZipCode(), 
+			individual.getEmail()))
+		.toList();
+    }
 }
