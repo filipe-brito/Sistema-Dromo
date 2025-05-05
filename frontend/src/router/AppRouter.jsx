@@ -3,6 +3,7 @@ import LoginPage from "../pages/LoginPage";
 import DashboardPage from "../pages/DashboardPage";
 import PeopleRecords from "../pages/records/PeopleRecords";
 import MainLayout from "../layouts/MainLayout";
+import TestPage from "../pages/TestPage";
 
 const AppRouter = () => {
   // AppRouter é uma arrow function
@@ -13,6 +14,7 @@ const AppRouter = () => {
       <Routes>
         {/* Agrupamento de rotas que vamos definir */}
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/teste" element={<TestPage />} />
         <Route element={<MainLayout />}>
           {/* Definindo a rota "/login" que aponta para o componente LoginPage */}
           <Route path="/home" element={<DashboardPage />} />
