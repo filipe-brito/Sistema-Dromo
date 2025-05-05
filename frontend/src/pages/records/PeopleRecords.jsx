@@ -50,14 +50,24 @@ const PeopleRecords = () => {
   const individualFilters = [
     // Variável que guarda um array de objetos do tipo object. Esse array será enviado como prop para a barra de filtro da página. Cada object representa um filtro
     { name: "name", placeholder: "Nome", type: "text" }, // Filtro por nome. "name" é um atributo padrão para identificar um campo em um formulário
-    { name: "cpf", placeholder: "CPF", type: "text" }, // filtro por cpf
+    {
+      name: "cpf",
+      placeholder: "CPF",
+      masked: true,
+      mask: "000.000.000-00",
+    }, // filtro por cpf
     { name: "email", placeholder: "email", type: "text" }, // filtro por email
   ];
 
   // Filtros pessoas jurídicas
   const companyFilters = [
     { name: "name", placeholder: "Razão Social", type: "text" },
-    { name: "cnpj", placeholder: "CNPJ", type: "text" },
+    {
+      name: "cnpj",
+      masked: true,
+      mask: "00.000.000/0000-00",
+      placeholder: "CNPJ",
+    },
   ];
 
   // Colunas da barra de resultados de pessoas físicas
