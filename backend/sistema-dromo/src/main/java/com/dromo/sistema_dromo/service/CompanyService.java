@@ -13,8 +13,8 @@ public class CompanyService {
 	@Autowired
 	private CompanyRepository companyRepository;
 	
-	public List<CompanyDTO> listCompanies(){
-		return companyRepository.findAll()
+	public List<CompanyDTO> listCompanies(String companyName, String cnpj){
+		return companyRepository.findByFilters(companyName, cnpj)
 			.stream()
 			.map(company -> new CompanyDTO(
 					company.getCompanyName(),

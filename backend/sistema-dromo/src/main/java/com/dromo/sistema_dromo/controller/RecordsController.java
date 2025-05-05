@@ -28,12 +28,13 @@ public class RecordsController {
 	    @RequestParam(name = "name", required = false) String fullName, 
 	    @RequestParam(required = false) String cpf,
 	    @RequestParam(required = false) String email) {
-	System.err.println(fullName+ "\n" + cpf + "\n" + email + "\n");
 	return individualService.listIndividuals(fullName, cpf, email);
     }
 
     @GetMapping("/companies")
-    public List<CompanyDTO> listCompanies() {
-	return companyService.listCompanies();
+    public List<CompanyDTO> listCompanies(
+	    @RequestParam(name = "name", required = false) String companyName,
+	    @RequestParam(required = false) String cnpj) {
+	return companyService.listCompanies(companyName, cnpj);
     }
 }
