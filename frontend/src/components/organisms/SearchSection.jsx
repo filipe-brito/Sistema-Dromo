@@ -1,6 +1,6 @@
 import FilterBar from "../molecules/FilterBar";
 import ResultBar from "../molecules/ResultBar";
-import { LoadingIcon } from "../icons/LoadingIcon";
+import { LoadingIcon } from "../atoms/icons/LoadingIcon";
 import React, { useState } from "react";
 
 export const SearchSection = ({
