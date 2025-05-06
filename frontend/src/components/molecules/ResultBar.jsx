@@ -41,7 +41,7 @@ const ResultBar = ({ columns, data }) => {
                     key={column.key}
                     className="px-2 border-2 border-stone-500"
                   >
-                    {item[column.key]}
+                    {column.masked ? (column.formatter(item[column.key])) : (item[column.key])}
                   </td>
                 ))}
               </tr>

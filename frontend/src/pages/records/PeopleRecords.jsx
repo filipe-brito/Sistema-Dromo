@@ -74,14 +74,14 @@ const PeopleRecords = () => {
   const individualColumns = [
     // Variável que guarda um array de objetos do tipo object que será passado como prop da barra de resultados. Cada object representa uma coluna indicando o tipo de dado apresentado
     { key: "name", label: "Nome" }, // key é uma chave que vamos usar para ordenar as colunas e label é um rótulo que será apresentado no título da tabela da barra de resultados
-    { key: "cpf", label: "CPF" },
+    { key: "cpf", label: "CPF", masked: true, formatter: (value) => value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")},
     { key: "email", label: "email" },
   ];
 
   // Colunas da barra de resultados de pessoas jurídicas
   const companyColumns = [
     { key: "companyName", label: "Razão Social" },
-    { key: "cnpj", label: "CNPJ" },
+    { key: "cnpj", label: "CNPJ", masked: true, formatter: (value) => value.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5") },
   ];
 
   return (
