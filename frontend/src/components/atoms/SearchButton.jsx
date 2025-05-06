@@ -1,4 +1,4 @@
-import { SearchIcon1 } from "../icons/SearchIcon.jsx";
+import { SearchIcon1 } from "./icons/SearchIcon.jsx";
 
 export const SearchButton = ({ onClick }) => {
   return (

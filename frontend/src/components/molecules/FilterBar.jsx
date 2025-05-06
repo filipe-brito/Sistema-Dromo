@@ -38,11 +38,11 @@ const FilterBar = ({ filters, onSearch }) => {
         {/* .map itera todos os itens do array filters. A cada iteração, é
         criado um input */}
         {filters.map((filter) =>
-          filter.masked ? (
-            <IMaskInput
+          filter.masked ? ( // Verifica se esse campo usará máscara
+            <IMaskInput // Biblioteca para formatação de inputs
               // Cada object interado tem seus atributos. Vamos atribuir esses atributos adequadamente ao input
               key={filter.name} // Atribui o valor da chave 'name' à key do input
-              mask={filter.mask}
+              mask={filter.mask} // aplica a máscara no campo
               name={filter.name} // Atribui o valor da chave 'name' ao nome do input
               placeholder={filter.placeholder} // O texto exibido no campo será o valor da chave 'placeholder'
               value={filterValues[filter.name] || ""} // controla o que está digitado no campo. Os colchetes diz ao React para pegar o valor da chave daquele object

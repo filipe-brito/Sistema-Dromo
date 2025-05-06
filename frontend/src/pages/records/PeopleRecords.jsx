@@ -1,8 +1,8 @@
-import { PersonIcon } from "../../components/icons/PersonIcon";
-import { CompanyIcon } from "../../components/icons/CompanyIcon";
+import { PersonIcon } from "../../components/atoms/icons/PersonIcon";
+import { CompanyIcon } from "../../components/atoms/icons/CompanyIcon";
 import { fetchCompanies, fetchIndividuals } from "../../services/PeopleService";
-import { Tab } from "../../components/organisms/Tabs";
-import { SearchSection } from "../../components/templates/SearchSection";
+import { Tab } from "../../components/templates/Tabs";
+import { SearchSection } from "../../components/organisms/SearchSection";
 
 import React, { useState, useEffect } from "react";
 
@@ -53,15 +53,15 @@ const PeopleRecords = () => {
     {
       name: "cpf",
       placeholder: "CPF",
-      masked: true,
-      mask: "000.000.000-00",
+      masked: true, // Determina que esse campo terá uma máscara de digitação
+      mask: "000.000.000-00", // Máscara que será usada pelo IMask no FilterBar
     }, // filtro por cpf
     { name: "email", placeholder: "email", type: "text" }, // filtro por email
   ];
 
   // Filtros pessoas jurídicas
   const companyFilters = [
-    { name: "name", placeholder: "Razão Social", type: "text" },
+    { name: "companyName", placeholder: "Razão Social", type: "text" },
     {
       name: "cnpj",
       masked: true,
@@ -74,14 +74,26 @@ const PeopleRecords = () => {
   const individualColumns = [
     // Variável que guarda um array de objetos do tipo object que será passado como prop da barra de resultados. Cada object representa uma coluna indicando o tipo de dado apresentado
     { key: "name", label: "Nome" }, // key é uma chave que vamos usar para ordenar as colunas e label é um rótulo que será apresentado no título da tabela da barra de resultados
-    { key: "cpf", label: "CPF", masked: true, formatter: (value) => value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4")},
+    {
+      key: "cpf",
+      label: "CPF",
+      masked: true, // Determina que esse campo terá uma máscara de exibição
+      formatter: (value) =>
+        value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4"), // Esse atributo enviará uma função anônima que formata a String usando Regex antes de exibir o conteúdo na ResultBar
+    },
     { key: "email", label: "email" },
   ];
 
   // Colunas da barra de resultados de pessoas jurídicas
   const companyColumns = [
     { key: "companyName", label: "Razão Social" },
-    { key: "cnpj", label: "CNPJ", masked: true, formatter: (value) => value.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5") },
+    {
+      key: "cnpj",
+      label: "CNPJ",
+      masked: true,
+      formatter: (value) =>
+        value.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5"),
+    },
   ];
 
   return (
