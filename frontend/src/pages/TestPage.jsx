@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { FormBuilder } from "../components/organisms/FormBuilder";
 import { Tab } from "../components/templates/Tabs";
 import { PersonIcon } from "../components/atoms/icons/PersonIcon";
-import { DefaultInput, MaskedInput } from "../components/atoms/Input";
+import { MaskedInput } from "../components/atoms/Input";
+import { useForm, Controller } from "react-hook-form";
+import { validators } from "../utils/validators";
 
 const TestPage = () => {
-  // Vamos criar um hook form
   const {
     register, // função que registra o campo no formulário
     // handleSSubmit função que lida com o envio do formulário.
@@ -22,6 +23,16 @@ const TestPage = () => {
     console.log("Dados enviados:", data);
   };
 
+  const inputs = [
+    { name: "cpf", label: "CPF", mask: "000.000.000-00" },
+    { name: "cnpj", label: "CNPJ", mask: "00.000.000/0000-00" },
+    {
+      name: "telefone",
+      label: "Telefone",
+      mask: "(00)0000-0000",
+    },
+  ];
+
   return (
     <React.Fragment>
       <div className="w-8/10 min-h-[92dvh] mx-auto px-4 py-2 bg-stone-800 border-x-2 border-stone-700">
@@ -36,61 +47,34 @@ const TestPage = () => {
               label: "Dados pessoais",
               content: (
                 <React.Fragment>
-                  <section className="flex flex-wrap w-full p-2 rounded border-stone-700 shadow-sm bg-stone-100 gap-1">
-                    <form
-                      id="save"
-                      onSubmit={handleSubmit(onSubmit)}
-                      className="flex gap-2"
-                    >
-                      {/* Input Nativo */}
-                      <div>
-                        <Controller
-                          defaultValue="" // <== Isso aqui evita o warning
-                          name="name"
-                          control={control}
-                          rules={{ required: "Nome é obrigatório" }}
-                          render={({ field }) => (
-                            <DefaultInput {...field} label="Nome" />
-                          )}
+                  <div className="flex-col" key={inputs[1].name}>
+                    {errors[inputs[1].name] && (
+                      <span className="text-red-500 text-xs">
+                        {errors[inputs[1].name].message}
+                      </span>
+                    )}
+                    <Controller // Componente do HookForm necessário para inputs não-nativos
+                      defaultValue="" // <== Isso aqui evita o warning
+                      name={inputs[1].name} // Nome do campo
+                      control={control} // Estado para controlar o input fornecido pelo HookForm
+                      rules={{
+                        required: validators[inputs[1].name].requiredMessage,
+                        validate: validators[inputs[1].name].validator,
+                      }} // Demais regras. No caso, definimos este um input obrigatório
+                      render={(
+                        { field } // Função principal para renderizar o campo. A prop field é fornecida pelo Controller
+                      ) => (
+                        <MaskedInput
+                          // Guarda as propriedades de field antes de adicionar as novas abaixo
+                          {...field}
+                          label={inputs[1].label}
+                          mask={inputs[1].mask}
+                          placeholder={inputs[1].mask}
                         />
-                        {errors.nome && (
-                          <span className="text-red-500">
-                            {errors.nome.message}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Input com Máscara (CPF) */}
-
-                      <Controller // Componente do HookForm necessário para inputs não-nativos
-                        defaultValue="" // <== Isso aqui evita o warning
-                        name="cpf" // Nome do campo
-                        control={control} // Estado para controlar o input fornecido pelo HookFrom
-                        rules={{
-                          required: "O CPF é obrigatório",
-                          validate: (value) =>
-                            /^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(value) ||
-                            "CPF inválido",
-                        }} // Demais regras. No caso, definimos este um input obrigatório
-                        render={(
-                          { field } // Função principal para renderizar o campo. A prop field é fornecida pelo Controller
-                        ) => (
-                          <MaskedInput
-                            // Guarda as propriedades de field antes de adicionar as novas abaixo
-                            {...field}
-                            label="CPF"
-                            mask="000.000.000-00"
-                            placeholder="000.000.000-00"
-                          />
-                        )}
-                      />
-                      {errors.cpf && (
-                        <span className="text-red-500 text-xs">
-                          {errors.cpf.message}
-                        </span>
                       )}
-                    </form>
-                  </section>
+                    />
+                  </div>
+                  <FormBuilder inputs={inputs} onSubmit={onSubmit} />
                   <button
                     form="save"
                     type="submit"
