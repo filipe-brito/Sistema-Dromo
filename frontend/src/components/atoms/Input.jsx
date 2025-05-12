@@ -1,4 +1,3 @@
-import React from "react";
 import { IMaskInput } from "react-imask";
 
 // Input padrão do sistema
