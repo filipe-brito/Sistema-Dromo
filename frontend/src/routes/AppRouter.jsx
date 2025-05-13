@@ -1,9 +1,10 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import LoginPage from "../pages/LoginPage";
 import DashboardPage from "../pages/DashboardPage";
-import PeopleRecords from "../pages/records/PeopleRecords";
+import PeopleRecords from "../features/records/people/pages/PeopleRecords";
 import MainLayout from "../layouts/MainLayout";
 import TestPage from "../pages/TestPage";
+import PersonCreatePage from "../features/records/people/pages/PersonCreatePage";
 
 const AppRouter = () => {
   // AppRouter é uma arrow function
@@ -21,6 +22,7 @@ const AppRouter = () => {
           {/* Definindo a rota "/home" que aponta para o componente DashboardPage */}
           <Route path="/records/people" element={<PeopleRecords />} />
           {/* Definindo a rota "/records" que aponta para o componente RecordsPage */}
+          <Route path="/records/people/create" element={<PersonCreatePage />} />
           {/* Outras rotas desse layout */}
         </Route>
       </Routes>

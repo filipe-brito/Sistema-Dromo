@@ -27,14 +27,13 @@ export const FormBuilder = ({ inputs, onSubmit }) => {
                   </span>
                 )}
               </span>
-
               <Controller // Componente do HookForm necessário para inputs não-nativos
                 defaultValue="" // <== Isso aqui evita o warning
                 name={input.name} // Nome do campo
                 control={control} // Estado para controlar o input fornecido pelo HookForm
                 rules={{
-                  required: validators[input.name].requiredMessage,
-                  validate: validators[input.name].validator,
+                  required: input?.required,
+                  validate: validators[input.name]?.validator,
                 }} // Demais regras. No caso, definimos este um input obrigatório
                 render={(
                   { field } // Função principal para renderizar o campo. A prop field é fornecida pelo Controller
@@ -52,7 +51,7 @@ export const FormBuilder = ({ inputs, onSubmit }) => {
           ) : (
             <div className="flex-col" key={input.name}>
               {errors[input.name] && (
-                <span className="text-red-500">
+                <span className="text-red-500 text-xs">
                   {errors[input.name].message}
                 </span>
               )}
@@ -60,9 +59,13 @@ export const FormBuilder = ({ inputs, onSubmit }) => {
                 defaultValue="" // <== Isso aqui evita o warning no navegador
                 name={input.name}
                 control={control}
-                rules={{ required: validators[input.name].required }}
+                rules={{ required: input?.required }}
                 render={({ field }) => (
-                  <DefaultInput {...field} label={input.label} placeholder={input.placeholder}/>
+                  <DefaultInput
+                    {...field}
+                    label={input.label}
+                    placeholder={input.placeholder}
+                  />
                 )}
               />
             </div>
