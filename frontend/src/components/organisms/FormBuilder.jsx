@@ -44,7 +44,7 @@ export const FormBuilder = ({ inputs, onSubmit }) => {
                     {...field}
                     label={input.label}
                     mask={input.mask}
-                    placeholder={input.mask}
+                    placeholder={input.placeholder}
                   />
                 )}
               />
@@ -62,7 +62,7 @@ export const FormBuilder = ({ inputs, onSubmit }) => {
                 control={control}
                 rules={{ required: validators[input.name].required }}
                 render={({ field }) => (
-                  <DefaultInput {...field} label={input.label} />
+                  <DefaultInput {...field} label={input.label} placeholder={input.placeholder}/>
                 )}
               />
             </div>

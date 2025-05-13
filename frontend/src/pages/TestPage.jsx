@@ -24,12 +24,13 @@ const TestPage = () => {
   };
 
   const inputs = [
-    { name: "cpf", label: "CPF", mask: "000.000.000-00" },
-    { name: "cnpj", label: "CNPJ", mask: "00.000.000/0000-00" },
+    { name: "cpf", label: "CPF", mask: "000.000.000-00", placeholder: "Ex: 999.999.999-99" },
+    { name: "cnpj", label: "CNPJ", mask: "00.000.000/0000-00", placeholder: "Ex: 99.999.999/9999-99" },
     {
       name: "telefone",
       label: "Telefone",
       mask: "(00)0000-0000",
+      placeholder: "Ex: (99) 9999-9999"
     },
   ];
 
