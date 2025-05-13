@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import { FormBuilder } from "../components/organisms/FormBuilder";
-import { Tab } from "../components/templates/Tabs";
-import { PersonIcon } from "../components/atoms/icons/PersonIcon";
-import { MaskedInput } from "../components/atoms/Input";
+import { FormBuilder } from "@/components/organisms/FormBuilder";
+import { Tab } from "@/components/templates/Tabs";
+import { PersonIcon } from "@/components/atoms/icons/PersonIcon";
 import { useForm, Controller } from "react-hook-form";
-import { validators } from "../utils/validators";
 
-const TestPage = () => {
+const PersonCreatePage = () => {
   const {
     register, // função que registra o campo no formulário
     // handleSSubmit função que lida com o envio do formulário.
@@ -25,20 +23,21 @@ const TestPage = () => {
 
   const inputs = [
     {
+      name: "name",
+      label: "Nome",
+      required: "Nome é obrigatório",
+    },
+    {
       name: "cpf",
       label: "CPF",
+      required: "CPF é obrigatório",
       mask: "000.000.000-00",
       placeholder: "Ex: 999.999.999-99",
     },
     {
-      name: "cnpj",
-      label: "CNPJ",
-      mask: "00.000.000/0000-00",
-      placeholder: "Ex: 99.999.999/9999-99",
-    },
-    {
       name: "telefone",
       label: "Telefone",
+      required: "CPF é obrigatório",
       mask: "(00)0000-0000",
       placeholder: "Ex: (99) 9999-9999",
     },
@@ -58,33 +57,22 @@ const TestPage = () => {
               label: "Dados pessoais",
               content: (
                 <React.Fragment>
-                  <div className="flex-col" key={inputs[1].name}>
-                    {errors[inputs[1].name] && (
-                      <span className="text-red-500 text-xs">
-                        {errors[inputs[1].name].message}
-                      </span>
+                  <Controller
+                    name="gender"
+                    control={control}
+                    defaultValue=""
+                    rules={{ required: "Campo obrigatório" }}
+                    render={({ field }) => (
+                      <div>
+                        <label htmlFor="gender">Sexo</label>
+                        <select {...field} id="gender">
+                          <option value="">Selecione...</option>
+                          <option value="masculino">Masculino</option>
+                          <option value="feminino">Feminino</option>
+                        </select>
+                      </div>
                     )}
-                    <Controller // Componente do HookForm necessário para inputs não-nativos
-                      defaultValue="" // <== Isso aqui evita o warning
-                      name={inputs[1].name} // Nome do campo
-                      control={control} // Estado para controlar o input fornecido pelo HookForm
-                      rules={{
-                        required: validators[inputs[1].name].requiredMessage,
-                        validate: validators[inputs[1].name].validator,
-                      }} // Demais regras. No caso, definimos este um input obrigatório
-                      render={(
-                        { field } // Função principal para renderizar o campo. A prop field é fornecida pelo Controller
-                      ) => (
-                        <MaskedInput
-                          // Guarda as propriedades de field antes de adicionar as novas abaixo
-                          {...field}
-                          label={inputs[1].label}
-                          mask={inputs[1].mask}
-                          placeholder={inputs[1].mask}
-                        />
-                      )}
-                    />
-                  </div>
+                  />
                   <FormBuilder inputs={inputs} onSubmit={onSubmit} />
                   <button
                     form="save"
@@ -103,4 +91,4 @@ const TestPage = () => {
   );
 };
 
-export default TestPage;
+export default PersonCreatePage;

@@ -1,8 +1,11 @@
-import { PersonIcon } from "../../components/atoms/icons/PersonIcon";
-import { CompanyIcon } from "../../components/atoms/icons/CompanyIcon";
-import { fetchCompanies, fetchIndividuals } from "../../services/PeopleService";
-import { Tab } from "../../components/templates/Tabs";
-import { SearchSection } from "../../components/organisms/SearchSection";
+import { PersonIcon } from "../../../../components/atoms/icons/PersonIcon";
+import { CompanyIcon } from "../../../../components/atoms/icons/CompanyIcon";
+import {
+  fetchCompanies,
+  fetchIndividuals,
+} from "../../../../services/PeopleService";
+import { Tab } from "../../../../components/templates/Tabs";
+import { SearchSection } from "../../../../components/organisms/SearchSection";
 
 import React, { useState, useEffect } from "react";
 

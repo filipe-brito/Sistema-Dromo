@@ -16,7 +16,7 @@ export const validators = {
   telefone: {
     mask: (value) => value.replace(/(\d{2})(\d{4})(\d{4})/, "($1)$2-$3"),
     validator: (value) =>
-      /^\(\d{2}\) \d{4}-\d{4}$/.test(value) || "Telefone inválido",
+      /^\(\d{2}\)\d{4}-\d{4}$/.test(value) || "Telefone inválido",
     requiredMessage: "Telefone é obrigatório",
   },
 };
