@@ -24,22 +24,73 @@ const PersonCreatePage = () => {
   const inputs = [
     {
       name: "name",
+      type: "default",
       label: "Nome",
       required: "Nome é obrigatório",
     },
     {
       name: "cpf",
+      type: "masked",
       label: "CPF",
       required: "CPF é obrigatório",
       mask: "000.000.000-00",
       placeholder: "Ex: 999.999.999-99",
     },
     {
+      name: "gender",
+      type: "select",
+      label: "Sexo",
+      required: "Sexo é obrigatório",
+      options: [{ value: "Masculino" }, { value: "Feminino" }],
+      inputStyle: "w-25",
+    },
+    {
+      name: "marital_status",
+      type: "select",
+      label: "Estado civil",
+      options: [{ value: "Solteiro" }, { value: "Casado" }],
+      inputStyle: "w-25",
+    },
+    {
       name: "telefone",
+      type: "masked",
       label: "Telefone",
-      required: "CPF é obrigatório",
-      mask: "(00)0000-0000",
+      mask: "(00) 0000-0000",
       placeholder: "Ex: (99) 9999-9999",
+    },
+    {
+      name: "cellphone",
+      type: "masked",
+      label: "Celular",
+      mask: "(00) 0 0000-0000",
+      placeholder: "Ex: (99) 9 9999-9999",
+    },
+    {
+      name: "Data de nascimento",
+      type: "default",
+      type2: "date",
+      label: "Data de nascimento",
+      required: "Data de nascimento é obrigatório",
+      inputStyle: "w-30",
+    },
+    {
+      name: "rg",
+      type: "default",
+      label: "RG",
+      inputStyle: "w-30",
+    },
+    {
+      name: "rntrc",
+      type: "default",
+      label: "RNTRC",
+      inputStyle: "2-30",
+    },
+    {
+      name: "email",
+      type: "default",
+      type2: "email",
+      label: "Email",
+      inputStyle: "w-50",
     },
   ];
 
@@ -57,22 +108,6 @@ const PersonCreatePage = () => {
               label: "Dados pessoais",
               content: (
                 <React.Fragment>
-                  <Controller
-                    name="gender"
-                    control={control}
-                    defaultValue=""
-                    rules={{ required: "Campo obrigatório" }}
-                    render={({ field }) => (
-                      <div>
-                        <label htmlFor="gender">Sexo</label>
-                        <select {...field} id="gender">
-                          <option value="">Selecione...</option>
-                          <option value="masculino">Masculino</option>
-                          <option value="feminino">Feminino</option>
-                        </select>
-                      </div>
-                    )}
-                  />
                   <FormBuilder inputs={inputs} onSubmit={onSubmit} />
                   <button
                     form="save"

@@ -1,6 +1,6 @@
 import { validators } from "../../utils/validators";
 import { useForm, Controller } from "react-hook-form";
-import { DefaultInput, MaskedInput } from "../atoms/Input";
+import { DefaultInput, MaskedInput, SelectInput } from "../atoms/Input";
 
 export const FormBuilder = ({ inputs, onSubmit }) => {
   const {
@@ -16,61 +16,104 @@ export const FormBuilder = ({ inputs, onSubmit }) => {
 
   return (
     <section className="flex p-2 rounded shadow-sm bg-stone-100">
-      <form id="save" onSubmit={handleSubmit(onSubmit)} className="flex gap-2">
-        {inputs.map((input) =>
-          input.mask ? (
-            <div className="flex-col" key={input.name}>
-              <span>
-                {errors[input.name] && (
-                  <span className="text-red-500 text-xs">
-                    {errors[input.name].message}
+      <form
+        id="save"
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex gap-2 flex-wrap items-end"
+      >
+        {inputs.map((input) => {
+          switch (input.type) {
+            case "default":
+              return (
+                <div className="flex-col" key={input.name}>
+                  {errors[input.name] && (
+                    <span className="text-red-500 text-xs">
+                      {errors[input.name].message}
+                    </span>
+                  )}
+                  <Controller
+                    defaultValue="" // <== Isso aqui evita o warning no navegador
+                    name={input.name}
+                    control={control}
+                    rules={{ required: input?.required }}
+                    render={({ field }) => (
+                      <DefaultInput
+                        {...field}
+                        label={input.label}
+                        placeholder={input.placeholder}
+                        type={input.type2}
+                        inputStyle={input.inputStyle}
+                      />
+                    )}
+                  />
+                </div>
+              );
+            case "masked":
+              return (
+                <div className="flex-col" key={input.name}>
+                  <span>
+                    {errors[input.name] && (
+                      <span className="text-red-500 text-xs">
+                        {errors[input.name].message}
+                      </span>
+                    )}
                   </span>
-                )}
-              </span>
-              <Controller // Componente do HookForm necessário para inputs não-nativos
-                defaultValue="" // <== Isso aqui evita o warning
-                name={input.name} // Nome do campo
-                control={control} // Estado para controlar o input fornecido pelo HookForm
-                rules={{
-                  required: input?.required,
-                  validate: validators[input.name]?.validator,
-                }} // Demais regras. No caso, definimos este um input obrigatório
-                render={(
-                  { field } // Função principal para renderizar o campo. A prop field é fornecida pelo Controller
-                ) => (
-                  <MaskedInput
-                    // Guarda as propriedades de field antes de adicionar as novas abaixo
-                    {...field}
-                    label={input.label}
-                    mask={input.mask}
-                    placeholder={input.placeholder}
+                  <Controller // Componente do HookForm necessário para inputs não-nativos
+                    defaultValue="" // <== Isso aqui evita o warning
+                    name={input.name} // Nome do campo
+                    control={control} // Estado para controlar o input fornecido pelo HookForm
+                    rules={{
+                      required: input?.required,
+                      validate: validators[input.name]?.validator,
+                    }} // Demais regras. No caso, definimos este um input obrigatório
+                    render={(
+                      { field } // Função principal para renderizar o campo. A prop field é fornecida pelo Controller
+                    ) => (
+                      <MaskedInput
+                        // Guarda as propriedades de field antes de adicionar as novas abaixo
+                        {...field}
+                        label={input.label}
+                        mask={input.mask}
+                        placeholder={input.placeholder}
+                      />
+                    )}
                   />
-                )}
-              />
-            </div>
-          ) : (
-            <div className="flex-col" key={input.name}>
-              {errors[input.name] && (
-                <span className="text-red-500 text-xs">
-                  {errors[input.name].message}
-                </span>
-              )}
-              <Controller
-                defaultValue="" // <== Isso aqui evita o warning no navegador
-                name={input.name}
-                control={control}
-                rules={{ required: input?.required }}
-                render={({ field }) => (
-                  <DefaultInput
-                    {...field}
-                    label={input.label}
-                    placeholder={input.placeholder}
+                </div>
+              );
+
+            case "select":
+              return (
+                <div className="flex-col" key={input.name}>
+                  <span>
+                    {errors[input.name] && (
+                      <span className="text-red-500 text-xs">
+                        {errors[input.name].message}
+                      </span>
+                    )}
+                  </span>
+                  <Controller // Componente do HookForm necessário para inputs não-nativos
+                    defaultValue="" // <== Isso aqui evita o warning
+                    name={input.name} // Nome do campo
+                    control={control} // Estado para controlar o input fornecido pelo HookForm
+                    rules={{
+                      required: input?.required,
+                    }} // Demais regras. No caso, definimos este um input obrigatório
+                    render={(
+                      { field } // Função principal para renderizar o campo. A prop field é fornecida pelo Controller
+                    ) => (
+                      <SelectInput
+                        {...field}
+                        name={input.name}
+                        label={input.label}
+                        options={input.options}
+                        inputStyle={input.inputStyle}
+                      />
+                    )}
                   />
-                )}
-              />
-            </div>
-          )
-        )}
+                </div>
+              );
+          }
+        })}
       </form>
     </section>
   );

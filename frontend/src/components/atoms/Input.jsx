@@ -2,7 +2,6 @@ import { IMaskInput } from "react-imask";
 
 // Input padrão do sistema
 export const DefaultInput = ({
-  key,
   name,
   label,
   placeholder,
@@ -52,6 +51,38 @@ export const MaskedInput = ({
           inputStyle ? inputStyle : "w-40"
         }`}
       />
+    </div>
+  );
+};
+
+export const SelectInput = ({
+  name,
+  label,
+  options,
+  inputStyle,
+  value,
+  onChange,
+}) => {
+  return (
+    <div className="flex flex-col">
+      <label htmlFor={label} className="text-sm">
+        {label}
+      </label>
+      <select
+        id={name}
+        value={value}
+        onChange={onChange}
+        className={`h-6 px-1 bg-stone-200 rounded border-2 border-stone-400 text-xs ${
+          inputStyle ? inputStyle : "w-40"
+        }`}
+      >
+        <option value="">Selecione...</option>
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.value}
+          </option>
+        ))}
+      </select>
     </div>
   );
 };
