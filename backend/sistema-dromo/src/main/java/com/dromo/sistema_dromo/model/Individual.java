@@ -20,14 +20,16 @@ public class Individual {
 	@Column(name = "full_name")
 	private String fullName;
 	private String cpf;
-	private LocalDate dob;
 	private char gender;
-	private String street;
-	private int number;
-	@Column(name = "zip_code")
-	private String zipCode;
+	@Column(name = "marital_status")
+	private String maritalStatus;
+	private String phone;
+	@Column(name = "cell_phone")
+	private String cellPhone;
+	private LocalDate dob;
+	private String rg;
+	private String rntrc;
 	private String email;
-	
 	
 	public long getId() {
 		return id;
@@ -38,22 +40,63 @@ public class Individual {
 	public String getCpf() {
 		return cpf;
 	}
-	public LocalDate getDob() {
-		return dob;
-	}
 	public char getGender() {
 		return gender;
 	}
-	public String getStreet() {
-		return street;
+	public String getMaritalStatus() {
+		return maritalStatus;
 	}
-	public int getNumber() {
-		return number;
+	public String getPhone() {
+		return phone;
 	}
-	public String getZipCode() {
-		return zipCode;
-	}	
+	public String getCellPhone() {
+		return cellPhone;
+	}
+	public LocalDate getDob() {
+		return dob;
+	}
+	public String getRg() {
+		return rg;
+	}
+	public String getRntrc() {
+		return rntrc;
+	}
 	public String getEmail() {
 		return email;
 	}
+	
+	public void setId(long id) {
+		this.id = id;
+	}
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
+	public void setGender(char gender) {
+		this.gender = gender;
+	}
+	public void setMaritalStatus(String maritalStatus) {
+		this.maritalStatus = maritalStatus;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	public void setCellPhone(String cellPhone) {
+		this.cellPhone = cellPhone;
+	}
+	public void setDob(LocalDate dob) {
+		this.dob = dob;
+	}
+	public void setRg(String rg) {
+		this.rg = rg;
+	}
+	public void setRntrc(String rntrc) {
+		this.rntrc = rntrc;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
 }

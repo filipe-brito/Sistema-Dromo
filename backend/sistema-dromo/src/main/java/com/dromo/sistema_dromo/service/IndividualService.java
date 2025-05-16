@@ -19,12 +19,18 @@ public class IndividualService {
 			individual.getId(), 
 			individual.getFullName(), 
 			individual.getCpf(),
+			individual.getGender(),
+			individual.getMaritalStatus(),
+			individual.getPhone(),
+			individual.getCellPhone(),
 			individual.getDob(), 
-			individual.getGender(), 
-			individual.getStreet(), 
-			individual.getNumber(),
-			individual.getZipCode(), 
+			individual.getRg(),
+			individual.getRntrc(),
 			individual.getEmail()))
 		.toList();
+    }
+    
+    public IndividualDTO saveIndividual(IndividualDTO dto {
+    	return individualRepository.save(individual);
     }
 }
