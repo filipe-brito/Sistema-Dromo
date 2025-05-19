@@ -15,6 +15,22 @@ export const fetchIndividuals = async (filters = {}) => {
   return response.json(); // Retorne a resposta da API
 };
 
+export const postIndividual = async (data) => {
+  const response = await fetch("http://localhost:8080/records/individuals", {
+    method: "POST", // método POST
+    headers: {
+      "Content-Type": "application/json", // diz que o corpo será JSON
+    },
+    body: JSON.stringify(data), // transforma o objeto JS em JSON string
+  });
+
+  if (!response.ok) {
+    throw new Error("Erro ao salvar indivíduo");
+  }
+
+  return response.json(); // retorna o DTO com os dados salvos
+};
+
 export const fetchCompanies = async (filters = {}) => {
   const query = new URLSearchParams(filters).toString();
   const response = await fetch(

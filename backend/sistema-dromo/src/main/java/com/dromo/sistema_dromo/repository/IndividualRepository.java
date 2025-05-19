@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.dromo.sistema_dromo.model.Individual;
 
 @Repository
-public interface IndividualRepository extends JpaRepository<Individual, Long>{
+public interface IndividualRepository extends JpaRepository<Individual, Integer>{
  // @Query cria uma query customizada para o método imediatamente abaixo 
  // O parâmetro é a query e o método abaixo é como a query deve ser chamada no código Java    
 

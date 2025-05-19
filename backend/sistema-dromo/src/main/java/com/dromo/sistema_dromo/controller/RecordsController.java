@@ -35,7 +35,7 @@ public class RecordsController {
 	return individualService.listIndividuals(fullName, cpf, email);
     }
     
-    @PostMapping
+    @PostMapping("/individuals")
     public ResponseEntity<IndividualDTO> create(@RequestBody IndividualDTO dto) {
     	IndividualDTO saved = individualService.saveIndividual(dto);
     	return ResponseEntity.status(HttpStatus.CREATED).body(saved);
