@@ -2,24 +2,9 @@ import React, { useState } from "react";
 import { FormBuilder } from "@/components/organisms/FormBuilder";
 import { Tab } from "@/components/templates/Tabs";
 import { PersonIcon } from "@/components/atoms/icons/PersonIcon";
-import { useForm, Controller } from "react-hook-form";
+import { postIndividual } from "../../../../services/PeopleService";
 
-const PersonCreatePage = () => {
-  const {
-    register, // função que registra o campo no formulário
-    // handleSSubmit função que lida com o envio do formulário.
-    // Ela vai validar se os campos foram preenchidos devidamente antes de chamar uma requisição ao BD
-    handleSubmit,
-    control, // função que registra os campos que não são nativos (inputs)
-    // formState é objeto com os erros de validação. A chave seria o nome do campo e o valor seria a mensagem a ser apresentada
-    // caso o usuário tente submeter o formulário com algum campo obrigatório vazio
-    formState: { errors },
-  } = useForm();
-
-  const onSubmit = (data) => {
-    // Função principal que define a ação ao submeter o formulário
-    console.log("Dados enviados:", data);
-  };
+const IndividualCreatePage = () => {
 
   const inputs = [
     {
@@ -41,14 +26,14 @@ const PersonCreatePage = () => {
       type: "select",
       label: "Sexo",
       required: "Sexo é obrigatório",
-      options: [{ value: "Masculino" }, { value: "Feminino" }],
+      options: [{ optionLabel: "masculino", value: 'M' }, { optionLabel: "feminina",value: 'F' }],
       inputStyle: "w-25",
     },
     {
       name: "marital_status",
       type: "select",
       label: "Estado civil",
-      options: [{ value: "Solteiro" }, { value: "Casado" }],
+      options: [{ optionLabel: "Solteiro", value: "solteiro" }, { optionLabel: "Casado", value: "casado" }],
       inputStyle: "w-25",
     },
     {
@@ -66,7 +51,7 @@ const PersonCreatePage = () => {
       placeholder: "Ex: (99) 9 9999-9999",
     },
     {
-      name: "Data de nascimento",
+      name: "dob",
       type: "default",
       type2: "date",
       label: "Data de nascimento",
@@ -108,7 +93,7 @@ const PersonCreatePage = () => {
               label: "Dados pessoais",
               content: (
                 <React.Fragment>
-                  <FormBuilder inputs={inputs} onSubmit={onSubmit} />
+                  <FormBuilder inputs={inputs} onSubmit={postIndividual} />
                   <button
                     form="save"
                     type="submit"
@@ -126,4 +111,4 @@ const PersonCreatePage = () => {
   );
 };
 
-export default PersonCreatePage;
+export default IndividualCreatePage;

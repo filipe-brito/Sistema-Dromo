@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dromo.sistema_dromo.dto.IndividualDTO;
+import com.dromo.sistema_dromo.mapper.IndividualMapper;
+import com.dromo.sistema_dromo.model.Individual;
 import com.dromo.sistema_dromo.repository.IndividualRepository;
 
 @Service
@@ -30,7 +32,9 @@ public class IndividualService {
 		.toList();
     }
     
-    public IndividualDTO saveIndividual(IndividualDTO dto {
-    	return individualRepository.save(individual);
+    public IndividualDTO saveIndividual(IndividualDTO dto) {
+	Individual entity = IndividualMapper.toEntity(dto);
+        Individual saved = individualRepository.save(entity);
+        return IndividualMapper.toDTO(saved);
     }
 }

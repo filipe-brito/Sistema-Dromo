@@ -12,11 +12,11 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "individuals", schema = "records")
-@SequenceGenerator(name = "individual_seq",sequenceName = "individuals_id_seq",allocationSize = 1)
+@SequenceGenerator(name = "individual_seq",sequenceName = "records.individuals_id_seq",allocationSize = 1)
 public class Individual {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "individual_seq")
-	private long id;
+	private int id;
 	@Column(name = "full_name")
 	private String fullName;
 	private String cpf;
@@ -31,7 +31,7 @@ public class Individual {
 	private String rntrc;
 	private String email;
 	
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 	public String getFullName() {
@@ -65,14 +65,18 @@ public class Individual {
 		return email;
 	}
 	
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
 	}
 	public void setCpf(String cpf) {
-		this.cpf = cpf;
+	    if (cpf != null) {
+	        this.cpf = cpf.replaceAll("[^0-9]", "");
+	    } else {
+	        this.cpf = null;
+	    }
 	}
 	public void setGender(char gender) {
 		this.gender = gender;

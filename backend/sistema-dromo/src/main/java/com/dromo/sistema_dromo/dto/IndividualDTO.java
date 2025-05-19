@@ -3,7 +3,7 @@ package com.dromo.sistema_dromo.dto;
 import java.time.LocalDate;
 
 public class IndividualDTO {
-	private long id;
+	private int id;
 	private String name;
     private String cpf;
     private char gender;
@@ -16,7 +16,7 @@ public class IndividualDTO {
     private String email;
     
     // Construtor
-	public IndividualDTO(long id, String name, String cpf, char gender, String maritalStatus, String phone, String cellPhone, LocalDate dob, String rg, String rntrc, String email) {
+	public IndividualDTO(int id, String name, String cpf, char gender, String maritalStatus, String phone, String cellPhone, LocalDate dob, String rg, String rntrc, String email) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -34,7 +34,7 @@ public class IndividualDTO {
 		
 	}
 
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 
@@ -78,7 +78,7 @@ public class IndividualDTO {
 		return email;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
