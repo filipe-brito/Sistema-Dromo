@@ -12,7 +12,7 @@ import React, { useState, useEffect } from "react";
 const PeopleRecords = () => {
   const [loading, setLoading] = useState(true); // Estado booleano para ativar ou desativar a telinha de carregamento
   // Dados e filtros de pessoas físicas
-  const [individualData, setIndividualData] = useState([]); // Estado de arrayque armazena os dados de PF retornados pelo backend
+  const [individualData, setIndividualData] = useState([]); // Estado de array que armazena os dados de PF retornados pelo backend
   const [companyData, setCompanyData] = useState([]);
 
   const handleSearchIndividuals = async (filters = {}) => {

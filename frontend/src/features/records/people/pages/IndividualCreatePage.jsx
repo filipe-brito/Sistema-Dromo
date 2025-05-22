@@ -3,9 +3,10 @@ import { FormBuilder } from "@/components/organisms/FormBuilder";
 import { Tab } from "@/components/templates/Tabs";
 import { PersonIcon } from "@/components/atoms/icons/PersonIcon";
 import { postIndividual } from "../../../../services/PeopleService";
+import { FormFooter } from "../../../../components/organisms/Footer";
+import { ConfirmModal } from "../../../../components/molecules/ConfirmModal";
 
 const IndividualCreatePage = () => {
-
   const inputs = [
     {
       name: "name",
@@ -26,14 +27,20 @@ const IndividualCreatePage = () => {
       type: "select",
       label: "Sexo",
       required: "Sexo é obrigatório",
-      options: [{ optionLabel: "masculino", value: 'M' }, { optionLabel: "feminina",value: 'F' }],
+      options: [
+        { optionLabel: "masculino", value: "M" },
+        { optionLabel: "feminina", value: "F" },
+      ],
       inputStyle: "w-25",
     },
     {
       name: "marital_status",
       type: "select",
       label: "Estado civil",
-      options: [{ optionLabel: "Solteiro", value: "solteiro" }, { optionLabel: "Casado", value: "casado" }],
+      options: [
+        { optionLabel: "Solteiro", value: "solteiro" },
+        { optionLabel: "Casado", value: "casado" },
+      ],
       inputStyle: "w-25",
     },
     {
@@ -79,12 +86,36 @@ const IndividualCreatePage = () => {
     },
   ];
 
+  const [isConfirmOpen, setConfirmOpen] = useState(false);
+  const [status, setStatus] = useState("idle"); // idle | loading | success | error
+
+  const handleSubmitIndividual = async (data) => {
+    // Variável que recebe uma arrow function. É necessário passar um argumento do tipo object, caso não seja passado, a função considera filter um object vazio
+    setStatus("loading"); // Altera o state setStatus para true quando necessário
+    // Sempre envolver requisições em um bloco try-catch
+    try {
+      await postIndividual(data); // Executa a chamada à API e guarda o retorno na variável result. Caso a função receba filters, enviamos os filters para a requisição
+      setStatus("success");
+    } catch (error) {
+      // Captura qualquer retorno de erro
+      console.error("erro ao buscar pessoas físicas: ", error); // Imprime o erro no console
+      setStatus("error");
+    }
+  };
+
   return (
     <React.Fragment>
       <div className="w-8/10 min-h-[92dvh] mx-auto px-4 py-2 bg-stone-800 border-x-2 border-stone-700">
         <h2 className="text-2xl font-bold text-neutral-50 mb-2">
           Editar Pessoa Física
         </h2>
+        {isConfirmOpen && (
+          <ConfirmModal
+            status={status}
+            setStatus={setStatus}
+            setConfirmOpen={setConfirmOpen}
+          />
+        )}
         <Tab
           defaultTab={0}
           tabs={[
@@ -93,20 +124,17 @@ const IndividualCreatePage = () => {
               label: "Dados pessoais",
               content: (
                 <React.Fragment>
-                  <FormBuilder inputs={inputs} onSubmit={postIndividual} />
-                  <button
-                    form="save"
-                    type="submit"
-                    className="bg-blue-500 text-white px-3 py-1 rounded fixed right-30 bottom-5"
-                  >
-                    Salvar
-                  </button>
+                  <FormBuilder
+                    inputs={inputs}
+                    onSubmit={handleSubmitIndividual}
+                  />
                 </React.Fragment>
               ),
             },
           ]}
         />
       </div>
+      <FormFooter setConfirmOpen={setConfirmOpen} />
     </React.Fragment>
   );
 };
