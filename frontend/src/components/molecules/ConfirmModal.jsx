@@ -1,4 +1,5 @@
 import { LoadingIcon } from "../atoms/icons/LoadingIcon";
+import { DoneIcon } from "../atoms/icons/DoneIcon";
 import React from "react";
 
 export const ConfirmModal = ({ setStatus, status, setConfirmOpen }) => {
@@ -8,7 +9,7 @@ export const ConfirmModal = ({ setStatus, status, setConfirmOpen }) => {
     case "idle":
       content = (
         <React.Fragment>
-          <p className="mb-4 text-lg">Deseja realmente enviar os dados?</p>
+          <p className="mb-4 text-2xl">Deseja realmente enviar os dados?</p>
           <div className="flex justify-center gap-2">
             <button
               onClick={() => setConfirmOpen(false)}
@@ -30,8 +31,8 @@ export const ConfirmModal = ({ setStatus, status, setConfirmOpen }) => {
     case "loading":
       content = (
         <React.Fragment>
-          <p>Carregando...</p>
-          <LoadingIcon />
+          <p className="text-2xl">Carregando...</p>
+          <LoadingIcon className="w-12 h-12" />
         </React.Fragment>
       );
       break;
@@ -39,7 +40,8 @@ export const ConfirmModal = ({ setStatus, status, setConfirmOpen }) => {
     case "success":
       content = (
         <React.Fragment>
-          <p>Cadastro realizado!</p>
+          <DoneIcon fill="green" className={"w-15 h-15 text-green-600"} />
+          <p className="text-2xl"> Cadastro realizado!</p>
           <button
             onClick={() => setConfirmOpen(false)}
             className="px-3 py-1 bg-blue-600 text-white rounded cursor-pointer hover:bg-blue-500"
@@ -54,7 +56,7 @@ export const ConfirmModal = ({ setStatus, status, setConfirmOpen }) => {
     case "error":
       content = (
         <React.Fragment>
-          <p>Erro!</p>
+          <p className="text-2xl">Erro!</p>
           <button
             onClick={() => setConfirmOpen(false)}
             className="px-3 py-1 bg-blue-600 text-white rounded cursor-pointer hover:bg-blue-500"
@@ -68,7 +70,9 @@ export const ConfirmModal = ({ setStatus, status, setConfirmOpen }) => {
   }
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50">
-      <div className="bg-white p-6 rounded shadow-md">{content}</div>
+      <div className="bg-white flex flex-col items-center p-6 rounded gap-y-4 min-w-100">
+        {content}
+      </div>
     </div>
   );
 };
