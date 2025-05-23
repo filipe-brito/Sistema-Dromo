@@ -86,6 +86,9 @@ const IndividualCreatePage = () => {
     },
   ];
 
+  // Estado que controla as mudanças de trigger recebido pelo FormBuilder
+  const [triggerValidation, setTriggerValidation] = useState(null);
+
   const [isConfirmOpen, setConfirmOpen] = useState(false);
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
 
@@ -127,6 +130,9 @@ const IndividualCreatePage = () => {
                   <FormBuilder
                     inputs={inputs}
                     onSubmit={handleSubmitIndividual}
+                    onTriggerReady={(trigger) =>
+                      setTriggerValidation(() => trigger)
+                    }
                   />
                 </React.Fragment>
               ),
@@ -134,7 +140,11 @@ const IndividualCreatePage = () => {
           ]}
         />
       </div>
-      <FormFooter setConfirmOpen={setConfirmOpen} />
+      <FormFooter
+        setConfirmOpen={setConfirmOpen}
+        onTrigger={triggerValidation}
+        setStatus={setStatus}
+      />
     </React.Fragment>
   );
 };

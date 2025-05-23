@@ -37,11 +37,33 @@ export const ConfirmModal = ({ setStatus, status, setConfirmOpen }) => {
       break;
 
     case "success":
-      content = <p>Cadastro realizado!</p>;
+      content = (
+        <React.Fragment>
+          <p>Cadastro realizado!</p>
+          <button
+            onClick={() => setConfirmOpen(false)}
+            className="px-3 py-1 bg-blue-600 text-white rounded cursor-pointer hover:bg-blue-500"
+          >
+            Fechar
+          </button>
+        </React.Fragment>
+      );
+      setTimeout(() => setConfirmOpen(false), 5000);
       break;
 
     case "error":
-      content = <p>Erro!</p>;
+      content = (
+        <React.Fragment>
+          <p>Erro!</p>
+          <button
+            onClick={() => setConfirmOpen(false)}
+            className="px-3 py-1 bg-blue-600 text-white rounded cursor-pointer hover:bg-blue-500"
+          >
+            Fechar
+          </button>
+        </React.Fragment>
+      );
+      setTimeout(() => setConfirmOpen(false), 5000);
       break;
   }
   return (
