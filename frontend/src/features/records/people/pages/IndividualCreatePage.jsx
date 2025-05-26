@@ -117,6 +117,12 @@ const IndividualCreatePage = () => {
             status={status}
             setStatus={setStatus}
             setConfirmOpen={setConfirmOpen}
+            messages={{
+              idle: "Deseja realmente enviar os dados?",
+              loading: "Carregando...",
+              success: "Cadastro realizado",
+              error: "Erro!",
+            }}
           />
         )}
         <Tab

@@ -31,6 +31,16 @@ export const postIndividual = async (data) => {
   return response.json(); // retorna o DTO com os dados salvos
 };
 
+export const deleteIndividual = async (id) => {
+  const response = await fetch(
+    `http://localhost:8080/records/individuals/${id}`,
+    { method: "DELETE" }
+  );
+  if (!response.ok) {
+    throw new Error("Erro ao excluir registro");
+  }
+};
+
 export const fetchCompanies = async (filters = {}) => {
   const query = new URLSearchParams(filters).toString();
   const response = await fetch(

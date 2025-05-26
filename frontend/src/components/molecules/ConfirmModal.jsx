@@ -2,14 +2,14 @@ import { LoadingIcon } from "../atoms/icons/LoadingIcon";
 import { DoneIcon } from "../atoms/icons/DoneIcon";
 import React from "react";
 
-export const ConfirmModal = ({ setStatus, status, setConfirmOpen }) => {
+export const ConfirmModal = ({ status, setConfirmOpen, messages }) => {
   let content;
 
   switch (status) {
     case "idle":
       content = (
         <React.Fragment>
-          <p className="mb-4 text-2xl">Deseja realmente enviar os dados?</p>
+          <p className="mb-4 text-2xl">{messages.idle}</p>
           <div className="flex justify-center gap-2">
             <button
               onClick={() => setConfirmOpen(false)}
@@ -31,7 +31,7 @@ export const ConfirmModal = ({ setStatus, status, setConfirmOpen }) => {
     case "loading":
       content = (
         <React.Fragment>
-          <p className="text-2xl">Carregando...</p>
+          <p className="text-2xl">{messages.loading}</p>
           <LoadingIcon className="w-12 h-12" />
         </React.Fragment>
       );
@@ -41,7 +41,7 @@ export const ConfirmModal = ({ setStatus, status, setConfirmOpen }) => {
       content = (
         <React.Fragment>
           <DoneIcon fill="green" className={"w-15 h-15 text-green-600"} />
-          <p className="text-2xl"> Cadastro realizado!</p>
+          <p className="text-2xl">{messages.success}</p>
           <button
             onClick={() => setConfirmOpen(false)}
             className="px-3 py-1 bg-blue-600 text-white rounded cursor-pointer hover:bg-blue-500"
@@ -56,7 +56,7 @@ export const ConfirmModal = ({ setStatus, status, setConfirmOpen }) => {
     case "error":
       content = (
         <React.Fragment>
-          <p className="text-2xl">Erro!</p>
+          <p className="text-2xl">{messages.error}</p>
           <button
             onClick={() => setConfirmOpen(false)}
             className="px-3 py-1 bg-blue-600 text-white rounded cursor-pointer hover:bg-blue-500"

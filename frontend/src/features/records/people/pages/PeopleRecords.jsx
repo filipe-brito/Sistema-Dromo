@@ -1,11 +1,13 @@
-import { PersonIcon } from "../../../../components/atoms/icons/PersonIcon";
-import { CompanyIcon } from "../../../../components/atoms/icons/CompanyIcon";
+import { PersonIcon } from "@/components/atoms/icons/PersonIcon";
+import { CompanyIcon } from "@/components/atoms/icons/CompanyIcon";
 import {
   fetchCompanies,
   fetchIndividuals,
 } from "../../../../services/PeopleService";
-import { Tab } from "../../../../components/templates/Tabs";
-import { SearchSection } from "../../../../components/organisms/SearchSection";
+import { Tab } from "@/components/templates/Tabs";
+import { SearchSection } from "@/components/organisms/SearchSection";
+import { EditButton } from "@/components/atoms/EditButton";
+import { DeleteButton } from "@/components/atoms/DeleteButton";
 
 import React, { useState, useEffect } from "react";
 
@@ -40,6 +42,23 @@ const PeopleRecords = () => {
       console.log("Erro ao buscar empresas: ", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const [isConfirmOpen, setConfirmOpen] = useState(false);
+  const [status, setStatus] = useState("idle"); // idle | loading | success | error
+
+  const handleDeleteIndividual = async (id) => {
+    // Variável que recebe uma arrow function. É necessário passar um argumento do tipo object, caso não seja passado, a função considera filter um object vazio
+    setStatus("loading"); // Altera o state setStatus para true quando necessário
+    // Sempre envolver requisições em um bloco try-catch
+    try {
+      await postIndividual(data); // Executa a chamada à API e guarda o retorno na variável result. Caso a função receba filters, enviamos os filters para a requisição
+      setStatus("success");
+    } catch (error) {
+      // Captura qualquer retorno de erro
+      console.error("erro ao buscar pessoas físicas: ", error); // Imprime o erro no console
+      setStatus("error");
     }
   };
 
@@ -99,6 +118,13 @@ const PeopleRecords = () => {
     },
   ];
 
+  const actionsColumn = (
+    <div className="flex items-center justify-center">
+      <EditButton />
+      <DeleteButton />
+    </div>
+  );
+
   return (
     <div className="w-8/10 min-h-[92dvh] mx-auto px-4 py-2 bg-stone-800 border-x-2 border-stone-700">
       <h2 className="text-2xl font-bold text-neutral-50 mb-2">
@@ -119,6 +145,7 @@ const PeopleRecords = () => {
                 filters={individualFilters} // Para montar o a barra de filtros, mandamos como prop o array de objects dos filtros Para que o SearchSection monte o FilterBar
                 columns={individualColumns} // Necessário para o SearchSection montar o ResultBar
                 data={individualData} // São os dados retornados pela api. Passamos para o SearchSection montar o ResultBar e apresentar os dados
+                actions={actionsColumn}
                 loading={loading} // O ícone de loading será exibido na barra de resultados, então passamos esse state para o SearchSection passar para ResultBar
                 onSearch={handleSearchIndividuals} // Passamos essa prop para SearchSection passar para Filterbar passar para o botão. É a ação que será executada ao clicar no botão.
               />

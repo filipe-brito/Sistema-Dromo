@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const ResultBar = ({ columns, data }) => {
+const ResultBar = ({ columns, data, actions }) => {
   // Criamos um componente ResultBar
   const [currentPage, setCurrentPage] = useState(1); // Estado que controla a paginação dos dados que serão apresentados.
   const itemsPerPage = 20; // Variável que guarda a quantidade máxima de itens que devem ser exibidos em uma única página
@@ -29,6 +29,7 @@ const ResultBar = ({ columns, data }) => {
                   {column.label}
                 </th>
               ))}
+              {actions ? <th className="border-2 border-stone-500"></th> : null}
             </tr>
           </thead>
           <tbody>
@@ -41,9 +42,14 @@ const ResultBar = ({ columns, data }) => {
                     key={column.key}
                     className="px-2 border-2 border-stone-500"
                   >
-                    {column.masked ? (column.formatter(item[column.key])) : (item[column.key])}
+                    {column.masked
+                      ? column.formatter(item[column.key])
+                      : item[column.key]}
                   </td>
                 ))}
+                {actions ? (
+                  <td className="border-2 border-stone-500">{actions}</td>
+                ) : null}
               </tr>
             ))}
           </tbody>
