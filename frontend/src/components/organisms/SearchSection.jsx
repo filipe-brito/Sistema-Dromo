@@ -11,6 +11,7 @@ export const SearchSection = ({
   data, // Dados que serão apresentados na barra de resultados
   loading, // Estado para exibir o ícone de loading enquanto os dados carregam
   onSearch, // Ação do botão de pesquisar da barra de filtros
+  actions,
 }) => {
   // Arrow function que esse componente irá executar
 
@@ -34,7 +35,7 @@ export const SearchSection = ({
           </div>
         ) : (
           // caso 'false', carrega a barra de resultados
-          <ResultBar columns={columns} data={data} /> // Passamos as colunas e os dados que serão exibidos nessas colunas
+          <ResultBar columns={columns} data={data} actions={actions} /> // Passamos as colunas e os dados que serão exibidos nessas colunas
         )}
       </div>
     </React.Fragment>

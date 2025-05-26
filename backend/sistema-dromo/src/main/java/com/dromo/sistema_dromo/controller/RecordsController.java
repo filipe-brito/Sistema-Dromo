@@ -5,7 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +22,7 @@ import com.dromo.sistema_dromo.service.IndividualService;
 @RestController
 @RequestMapping("/records")
 public class RecordsController {
+	// Métodos para o cadastro de pessoas físicas
     @Autowired
     private IndividualService individualService;
     @Autowired
@@ -40,7 +43,14 @@ public class RecordsController {
     	IndividualDTO saved = individualService.saveIndividual(dto);
     	return ResponseEntity.status(HttpStatus.CREATED).body(saved);
     }
-
+    
+    @DeleteMapping("individuals/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable Integer id) {
+    	individualService.deleteById(id);
+    	return ResponseEntity.noContent().build();
+    }
+    
+    // Métodos para o cadastro de pessoas jurídicas
     @GetMapping("/companies")
     public List<CompanyDTO> listCompanies(
 	    @RequestParam(name = "name", required = false) String companyName,

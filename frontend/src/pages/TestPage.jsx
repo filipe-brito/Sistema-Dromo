@@ -1,22 +1,31 @@
 import React, { useState } from "react";
+import { DeleteIcon, EditIcon } from "../components/atoms/icons/ActionsIcon";
+import { EditButton } from "../components/atoms/EditButton";
+import { DeleteButton } from "../components/atoms/DeleteButton";
 import { ConfirmModal } from "../components/molecules/ConfirmModal";
-import { DoneIcon } from "../components/atoms/icons/DoneIcon";
-import { LoadingIcon } from "../components/atoms/icons/LoadingIcon";
 
 const TestPage = () => {
+  const [isConfirmOpen, setConfirmOpen] = useState(false);
+  const [status, setStatus] = useState("idle"); // idle | loading | success | error
+
+  const actionsColumn = (
+    <div className="p-1/2 flex items-center">
+      <EditButton />
+      <DeleteButton onClick={() => setConfirmOpen(true)} />
+    </div>
+  );
+
   return (
     <React.Fragment>
-      <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50">
-        <div className="bg-white flex flex-col items-center p-6 rounded gap-y-4">
-          <DoneIcon fill="green" className={"w-15 h-15 text-green-600"} />
-          <p>Cadastro realizado!</p>
-          <button
-            onClick={() => setConfirmOpen(false)}
-            className="px-3 py-1 bg-blue-600 text-white rounded cursor-pointer hover:bg-blue-500"
-          >
-            Fechar
-          </button>
-        </div>
+      {isConfirmOpen && (
+        <ConfirmModal
+          status={status}
+          setStatus={setStatus}
+          setConfirmOpen={setConfirmOpen}
+        />
+      )}
+      <div className="flex p-2 rounded shadow-sm bg-stone-100">
+        {actionsColumn}
       </div>
     </React.Fragment>
   );

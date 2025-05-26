@@ -10,6 +10,8 @@ import com.dromo.sistema_dromo.mapper.IndividualMapper;
 import com.dromo.sistema_dromo.model.Individual;
 import com.dromo.sistema_dromo.repository.IndividualRepository;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class IndividualService {
     @Autowired
@@ -36,5 +38,12 @@ public class IndividualService {
 	Individual entity = IndividualMapper.toEntity(dto);
         Individual saved = individualRepository.save(entity);
         return IndividualMapper.toDTO(saved);
+    }
+    
+    public void deleteById(Integer id) {
+    	if (!individualRepository.existsById(id)) {
+    		throw new EntityNotFoundException("Registro Não Encontrado: " + id);
+    	}
+    	individualRepository.deleteById(id);
     }
 }
