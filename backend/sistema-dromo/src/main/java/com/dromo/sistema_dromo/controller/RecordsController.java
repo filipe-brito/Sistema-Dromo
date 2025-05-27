@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,6 +49,21 @@ public class RecordsController {
     public ResponseEntity<Void> deleteById(@PathVariable Integer id) {
     	individualService.deleteById(id);
     	return ResponseEntity.noContent().build();
+    }
+    
+    @GetMapping("individuals/{id}")
+    public ResponseEntity<IndividualDTO> getById(@PathVariable Integer id) {
+        IndividualDTO dto = individualService.getById(id);
+        return ResponseEntity.ok(dto);
+    }
+    
+    @PutMapping("individuals/{id}")
+    public ResponseEntity<IndividualDTO> update(
+            @PathVariable Integer id,
+            @RequestBody IndividualDTO dto
+    ) {
+        IndividualDTO updated = individualService.update(id, dto);
+        return ResponseEntity.ok(updated);
     }
     
     // Métodos para o cadastro de pessoas jurídicas

@@ -5,6 +5,7 @@ import PeopleRecords from "../features/records/people/pages/PeopleRecords";
 import MainLayout from "../layouts/MainLayout";
 import TestPage from "../pages/TestPage";
 import IndividualCreatePage from "../features/records/people/pages/IndividualCreatePage";
+import IndividualEditPage from "../features/records/people/pages/IndividualEditPage";
 
 const AppRouter = () => {
   // AppRouter é uma arrow function
@@ -22,7 +23,14 @@ const AppRouter = () => {
           {/* Definindo a rota "/home" que aponta para o componente DashboardPage */}
           <Route path="/records/people" element={<PeopleRecords />} />
           {/* Definindo a rota "/records" que aponta para o componente RecordsPage */}
-          <Route path="/records/people/create" element={<IndividualCreatePage />} />
+          <Route
+            path="/records/individual/create"
+            element={<IndividualCreatePage />}
+          />
+          <Route
+            path="/records/individual/edit/:id"
+            element={<IndividualEditPage />}
+          />
           {/* Outras rotas desse layout */}
         </Route>
       </Routes>

@@ -1,12 +1,16 @@
+import { useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { getIndividualById, updateIndividual } from "@/services/PeopleService";
 import React, { useState } from "react";
 import { FormBuilder } from "@/components/organisms/FormBuilder";
 import { Tab } from "@/components/templates/Tabs";
 import { PersonIcon } from "@/components/atoms/icons/PersonIcon";
-import { postIndividual } from "@/services/PeopleService";
 import { FormFooter } from "@/components/organisms/Footer";
 import { ConfirmModal } from "@/components/molecules/ConfirmModal";
+import { LoadingIcon } from "../../../../components/atoms/icons/LoadingIcon";
 
-const IndividualCreatePage = () => {
+const IndividualEditPage = () => {
   const inputs = [
     {
       name: "name",
@@ -75,7 +79,7 @@ const IndividualCreatePage = () => {
       name: "rntrc",
       type: "default",
       label: "RNTRC",
-      inputStyle: "2-30",
+      inputStyle: "w-30",
     },
     {
       name: "email",
@@ -89,19 +93,31 @@ const IndividualCreatePage = () => {
   // Estado que controla as mudanças de trigger recebido pelo FormBuilder
   const [triggerValidation, setTriggerValidation] = useState(null);
 
+  const { id } = useParams();
+
   const [isConfirmOpen, setConfirmOpen] = useState(false);
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
+  const [individualData, setIndividualData] = useState(null); // Estado novo para armazenar dados
 
-  const handleSubmitIndividual = async (data) => {
-    // Variável que recebe uma arrow function. É necessário passar um argumento do tipo object, caso não seja passado, a função considera filter um object vazio
-    setStatus("loading"); // Altera o state setStatus para true quando necessário
-    // Sempre envolver requisições em um bloco try-catch
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getIndividualById(id);
+      // Substitui todos os valores null por ""
+      const normalizedData = Object.fromEntries(
+        Object.entries(data).map(([key, value]) => [key, value ?? ""])
+      );
+      setIndividualData(normalizedData); // Salva os dados no estado
+    };
+    fetchData();
+  }, [id]);
+
+  const handleSubmitIndividual = async (individualData) => {
+    setStatus("loading");
     try {
-      await postIndividual(data); // Executa a chamada à API e guarda o retorno na variável result. Caso a função receba filters, enviamos os filters para a requisição
+      await updateIndividual(id, individualData);
       setStatus("success");
     } catch (error) {
-      // Captura qualquer retorno de erro
-      console.error("erro ao buscar pessoas físicas: ", error); // Imprime o erro no console
+      console.error("Erro ao atualizar: ", error);
       setStatus("error");
     }
   };
@@ -110,7 +126,7 @@ const IndividualCreatePage = () => {
     <React.Fragment>
       <div className="w-8/10 min-h-[92dvh] mx-auto px-4 py-2 bg-stone-800 border-x-2 border-stone-700">
         <h2 className="text-2xl font-bold text-neutral-50 mb-2">
-          Nova Pessoa Física
+          Editar Pessoa Física
         </h2>
         {isConfirmOpen && (
           <ConfirmModal
@@ -120,7 +136,7 @@ const IndividualCreatePage = () => {
             messages={{
               idle: "Deseja realmente enviar os dados?",
               loading: "Carregando...",
-              success: "Cadastro realizado",
+              success: "Cadastro atualizado!",
               error: "Erro!",
             }}
           />
@@ -133,13 +149,21 @@ const IndividualCreatePage = () => {
               label: "Dados pessoais",
               content: (
                 <React.Fragment>
-                  <FormBuilder
-                    inputs={inputs}
-                    onSubmit={handleSubmitIndividual}
-                    onTriggerReady={(trigger) =>
-                      setTriggerValidation(() => trigger)
-                    }
-                  />
+                  {individualData ? (
+                    <FormBuilder
+                      inputs={inputs}
+                      onSubmit={handleSubmitIndividual}
+                      onTriggerReady={(trigger) =>
+                        setTriggerValidation(() => trigger)
+                      }
+                      data={individualData}
+                    />
+                  ) : (
+                    <div className="flex flex-col items-center p-2 rounded shadow-sm bg-stone-100">
+                      <LoadingIcon />
+                      <p>Carregando dados...</p>
+                    </div>
+                  )}
                 </React.Fragment>
               ),
             },
@@ -155,4 +179,4 @@ const IndividualCreatePage = () => {
   );
 };
 
-export default IndividualCreatePage;
+export default IndividualEditPage;

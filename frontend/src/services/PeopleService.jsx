@@ -41,6 +41,32 @@ export const deleteIndividual = async (id) => {
   }
 };
 
+export const getIndividualById = async (id) => {
+  const response = await fetch(
+    `http://localhost:8080/records/individuals/${id}`
+  );
+  if (!response.ok) {
+    throw new Error("Erro ao buscar registro");
+  }
+  return response.json();
+};
+
+export const updateIndividual = async (id, data) => {
+  const response = await fetch(
+    `http://localhost:8080/records/individuals/${id}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json", // diz que o corpo será JSON
+      },
+      body: JSON.stringify(data),
+    }
+  ); // transforma o objeto JS em JSON string,);
+  if (!response.ok) {
+    throw new Error("Erro ao atualizar registro");
+  }
+};
+
 export const fetchCompanies = async (filters = {}) => {
   const query = new URLSearchParams(filters).toString();
   const response = await fetch(
