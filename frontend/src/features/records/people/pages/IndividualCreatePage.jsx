@@ -7,6 +7,7 @@ import { FormFooter } from "@/components/organisms/Footer";
 import { ConfirmModal } from "@/components/molecules/ConfirmModal";
 
 const IndividualCreatePage = () => {
+  // Array com as informações principais para criar os inputs do formulário
   const inputs = [
     {
       name: "name",
@@ -88,18 +89,20 @@ const IndividualCreatePage = () => {
 
   // Estado que controla as mudanças de trigger recebido pelo FormBuilder
   const [triggerValidation, setTriggerValidation] = useState(null);
-
+  // Estado para controlar o modal de confirmação ao submeter o formulário
   const [isConfirmOpen, setConfirmOpen] = useState(false);
+  // Estado que alterna quais informações devem aparecer no modal
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
 
+  // Função que envia o formulário
   const handleSubmitIndividual = async (data) => {
-    // Variável que recebe uma arrow function. É necessário passar um argumento do tipo object, caso não seja passado, a função considera filter um object vazio
-    setStatus("loading"); // Altera o state setStatus para true quando necessário
+    setStatus("loading"); // Altera o state para roda o loading enquanto a função não retorna os dados
     // Sempre envolver requisições em um bloco try-catch
     try {
-      await postIndividual(data); // Executa a chamada à API e guarda o retorno na variável result. Caso a função receba filters, enviamos os filters para a requisição
-      setStatus("success");
+      await postIndividual(data); // Método de chamada à API do backend
+      setStatus("success"); // Se não houver erro no envio, altera o status para success
     } catch (error) {
+      // Captura erros da requisição
       // Captura qualquer retorno de erro
       console.error("erro ao buscar pessoas físicas: ", error); // Imprime o erro no console
       setStatus("error");
@@ -112,12 +115,15 @@ const IndividualCreatePage = () => {
         <h2 className="text-2xl font-bold text-neutral-50 mb-2">
           Nova Pessoa Física
         </h2>
+        {/* Abaixo há uma short-circuit evaluation. Verifica se a condição é verdadeira para retornar o componente
+        / Caso false, não acontece nada
+        */}
         {isConfirmOpen && (
-          <ConfirmModal
-            status={status}
-            setStatus={setStatus}
-            setConfirmOpen={setConfirmOpen}
+          <ConfirmModal // Modal de confirmação que deve se sobrepor a página ao clicar no botão de salvar
+            status={status} // Modal vai usar para saber se deve apresentar o loading, o idle ou error
+            setConfirmOpen={setConfirmOpen} // Modal usa para fechar ele mesmo depois da operação concluída
             messages={{
+              // Mensagens que o modal apresenta para cada status
               idle: "Deseja realmente enviar os dados?",
               loading: "Carregando...",
               success: "Cadastro realizado",
@@ -125,20 +131,21 @@ const IndividualCreatePage = () => {
             }}
           />
         )}
-        <Tab
+        <Tab // Componente que apresenta os dados em uma tab
           defaultTab={0}
           tabs={[
             {
-              icon: <PersonIcon className="w-4 h-4" />,
-              label: "Dados pessoais",
+              icon: <PersonIcon className="w-4 h-4" />, // Ícone da tab
+              label: "Dados pessoais", // Descrição da tab
+              // Conteúdo principal da tab
               content: (
                 <React.Fragment>
-                  <FormBuilder
-                    inputs={inputs}
-                    onSubmit={handleSubmitIndividual}
-                    onTriggerReady={(trigger) =>
-                      setTriggerValidation(() => trigger)
-                    }
+                  <FormBuilder // Formulário a ser submetido
+                    inputs={inputs} // Enviamos as informações de campos para o formulário montar os inputs
+                    onSubmit={handleSubmitIndividual} // Método que será chamado quando o formulário for submetido
+                    onTriggerReady={(
+                      trigger // Prop que aplica a validação dos campos obrigatórios
+                    ) => setTriggerValidation(() => trigger)}
                   />
                 </React.Fragment>
               ),
@@ -146,10 +153,10 @@ const IndividualCreatePage = () => {
           ]}
         />
       </div>
-      <FormFooter
-        setConfirmOpen={setConfirmOpen}
-        onTrigger={triggerValidation}
-        setStatus={setStatus}
+      <FormFooter // Rodapé
+        setConfirmOpen={setConfirmOpen} // enviado para que o botão de salvar abra o modal
+        onTrigger={triggerValidation} // Faz a validação dos campos obrigatórios antes de abrir o modal
+        setStatus={setStatus} //
       />
     </React.Fragment>
   );
