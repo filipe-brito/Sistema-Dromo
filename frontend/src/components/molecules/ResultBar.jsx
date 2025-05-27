@@ -48,7 +48,9 @@ const ResultBar = ({ columns, data, actions }) => {
                   </td>
                 ))}
                 {actions ? (
-                  <td className="border-2 border-stone-500">{actions}</td>
+                  <td className="border-2 border-stone-500">
+                    {actions(item.id)}
+                  </td>
                 ) : null}
               </tr>
             ))}

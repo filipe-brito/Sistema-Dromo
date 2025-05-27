@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { FormBuilder } from "@/components/organisms/FormBuilder";
 import { Tab } from "@/components/templates/Tabs";
 import { PersonIcon } from "@/components/atoms/icons/PersonIcon";
-import { postIndividual } from "../../../../services/PeopleService";
-import { FormFooter } from "../../../../components/organisms/Footer";
-import { ConfirmModal } from "../../../../components/molecules/ConfirmModal";
+import { postIndividual } from "@/services/PeopleService";
+import { FormFooter } from "@/components/organisms/Footer";
+import { ConfirmModal } from "@/components/molecules/ConfirmModal";
 
 const IndividualCreatePage = () => {
   const inputs = [

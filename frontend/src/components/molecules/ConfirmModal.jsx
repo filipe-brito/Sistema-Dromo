@@ -2,7 +2,12 @@ import { LoadingIcon } from "../atoms/icons/LoadingIcon";
 import { DoneIcon } from "../atoms/icons/DoneIcon";
 import React from "react";
 
-export const ConfirmModal = ({ status, setConfirmOpen, messages }) => {
+export const ConfirmModal = ({
+  status,
+  setConfirmOpen,
+  messages,
+  onConfirm,
+}) => {
   let content;
 
   switch (status) {
@@ -19,6 +24,7 @@ export const ConfirmModal = ({ status, setConfirmOpen, messages }) => {
             </button>
             <button
               form="save"
+              onClick={onConfirm}
               className="px-3 py-1 bg-blue-600 text-white rounded cursor-pointer hover:bg-blue-500"
             >
               Sim
