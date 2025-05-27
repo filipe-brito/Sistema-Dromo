@@ -10,6 +10,7 @@ import { SearchSection } from "@/components/organisms/SearchSection";
 import { EditButton } from "@/components/atoms/EditButton";
 import { DeleteButton } from "@/components/atoms/DeleteButton";
 import { ConfirmModal } from "@/components/molecules/ConfirmModal";
+import { useNavigate } from "react-router-dom"; // <--- Importa isso no topo
 
 import React, { useState, useEffect } from "react";
 
@@ -58,12 +59,13 @@ const PeopleRecords = () => {
   };
 
   const handleDeleteIndividual = async (selectedItem) => {
-    // Variável que recebe uma arrow function. É necessário passar um argumento do tipo object, caso não seja passado, a função considera filter um object vazio
     setStatus("loading"); // Altera o state setStatus para true quando necessário
     // Sempre envolver requisições em um bloco try-catch
     try {
       await deleteIndividual(selectedItem); // Executa a chamada à API e guarda o retorno na variável result. Caso a função receba filters, enviamos os filters para a requisição
       setStatus("success");
+      // 🔁 Atualiza os dados da tabela após exclusão
+      await handleSearchIndividuals(); // <-- aqui
     } catch (error) {
       // Captura qualquer retorno de erro
       console.error("erro ao deletar registro: ", error); // Imprime o erro no console
@@ -127,9 +129,14 @@ const PeopleRecords = () => {
     },
   ];
 
+  const navigate = useNavigate(); // <--- Cria o hook
+
   const actionsColumn = (id) => (
     <div className="flex items-center justify-center">
-      <EditButton id={id} />
+      <EditButton
+        id={id}
+        onClick={() => navigate(`/records/individual/edit/${id}`)}
+      />
       <DeleteButton onClick={() => openConfirmModal(id)} />
     </div>
   );

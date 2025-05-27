@@ -3,7 +3,7 @@ import { useForm, Controller } from "react-hook-form";
 import { DefaultInput, MaskedInput, SelectInput } from "../atoms/Input";
 import { useEffect } from "react";
 
-export const FormBuilder = ({ inputs, onSubmit, onTriggerReady }) => {
+export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
   const {
     register, // função que registra o campo no formulário
     // handleSSubmit função que lida com o envio do formulário.
@@ -12,15 +12,20 @@ export const FormBuilder = ({ inputs, onSubmit, onTriggerReady }) => {
     control, // função que registra os campos que não são nativos (inputs)
     // formState é objeto com os erros de validação. A chave seria o nome do campo e o valor seria a mensagem a ser apresentada
     // caso o usuário tente submeter o formulário com algum campo obrigatório vazio
+    reset,
     formState: { errors },
     trigger, // Controla a validação dos campo. Caso true chama submit, caso false exibe erro acima dos campos
   } = useForm();
 
   useEffect(() => {
-    // Executa efeitos colaterais (funções) após a renderização do componente
-    // Verifica se foi passado a prop onTriggerReady. Se sim, devolve o trigger do form para o pai via prop
     if (onTriggerReady) onTriggerReady(trigger);
-  }, [trigger]); // Executa o effect quando trigger mudar
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // apenas uma vez
+
+  // Dispara quando `data` for fornecida (edição)
+  useEffect(() => {
+    if (data) reset(data);
+  }, [data, reset]);
 
   return (
     <section className="flex p-2 rounded shadow-sm bg-stone-100">

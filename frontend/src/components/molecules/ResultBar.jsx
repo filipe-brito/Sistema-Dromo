@@ -35,7 +35,7 @@ const ResultBar = ({ columns, data, actions }) => {
           <tbody>
             {/* Define o corpo da tabela. Onde os dados reais serão apresentados */}
             {currentItems.map((item, index) => (
-              <tr key={index}>
+              <tr key={index} className="hover:bg-black/15">
                 {columns.map((column) => (
                   // (table data cell) É uma célula de dados
                   <td

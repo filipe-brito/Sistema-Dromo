@@ -42,4 +42,18 @@ public class IndividualService {
     public void deleteById(Integer id) {
 	    individualRepository.deleteById(id);
 	}
+    
+    public IndividualDTO getById(Integer id) {
+        Individual individual = individualRepository.findById(id).orElse(null);
+        return IndividualMapper.toDTO(individual);
+    }
+    
+    public IndividualDTO update(Integer id, IndividualDTO dto) {
+        Individual existing = individualRepository.findById(id).orElse(null);
+
+        Individual updated = IndividualMapper.toEntity(dto);
+        updated.setId(existing.getId()); // mantém o mesmo ID
+        individualRepository.save(updated);
+        return IndividualMapper.toDTO(updated);
+    }
 }
