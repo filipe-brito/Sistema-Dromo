@@ -1,6 +1,7 @@
 import { PersonIcon } from "@/components/atoms/icons/PersonIcon";
 import { CompanyIcon } from "@/components/atoms/icons/CompanyIcon";
 import {
+  deleteIndividual,
   fetchCompanies,
   fetchIndividuals,
 } from "../../../../services/PeopleService";
@@ -8,6 +9,7 @@ import { Tab } from "@/components/templates/Tabs";
 import { SearchSection } from "@/components/organisms/SearchSection";
 import { EditButton } from "@/components/atoms/EditButton";
 import { DeleteButton } from "@/components/atoms/DeleteButton";
+import { ConfirmModal } from "@/components/molecules/ConfirmModal";
 
 import React, { useState, useEffect } from "react";
 
@@ -45,19 +47,26 @@ const PeopleRecords = () => {
     }
   };
 
+  const [selectedItem, setSelectedItem] = useState(null); // <-- Aqui você guarda o ID a ser deletado
   const [isConfirmOpen, setConfirmOpen] = useState(false);
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
 
-  const handleDeleteIndividual = async (id) => {
+  const openConfirmModal = (id) => {
+    setSelectedItem(id);
+    setConfirmOpen(true);
+    setStatus("idle");
+  };
+
+  const handleDeleteIndividual = async (selectedItem) => {
     // Variável que recebe uma arrow function. É necessário passar um argumento do tipo object, caso não seja passado, a função considera filter um object vazio
     setStatus("loading"); // Altera o state setStatus para true quando necessário
     // Sempre envolver requisições em um bloco try-catch
     try {
-      await postIndividual(data); // Executa a chamada à API e guarda o retorno na variável result. Caso a função receba filters, enviamos os filters para a requisição
+      await deleteIndividual(selectedItem); // Executa a chamada à API e guarda o retorno na variável result. Caso a função receba filters, enviamos os filters para a requisição
       setStatus("success");
     } catch (error) {
       // Captura qualquer retorno de erro
-      console.error("erro ao buscar pessoas físicas: ", error); // Imprime o erro no console
+      console.error("erro ao deletar registro: ", error); // Imprime o erro no console
       setStatus("error");
     }
   };
@@ -118,19 +127,38 @@ const PeopleRecords = () => {
     },
   ];
 
-  const actionsColumn = (
+  const actionsColumn = (id) => (
     <div className="flex items-center justify-center">
-      <EditButton />
-      <DeleteButton />
+      <EditButton id={id} />
+      <DeleteButton onClick={() => openConfirmModal(id)} />
     </div>
   );
+
+  useEffect(() => {
+    if (selectedItem) {
+      console.log("ID selecionado para deletar:", selectedItem);
+    }
+  }, [selectedItem]);
 
   return (
     <div className="w-8/10 min-h-[92dvh] mx-auto px-4 py-2 bg-stone-800 border-x-2 border-stone-700">
       <h2 className="text-2xl font-bold text-neutral-50 mb-2">
         Cadastro de Pessoas
       </h2>
-
+      {isConfirmOpen && (
+        <ConfirmModal
+          status={status}
+          setStatus={setStatus}
+          setConfirmOpen={setConfirmOpen}
+          messages={{
+            idle: "Deseja realmente excluir esse registro?",
+            loading: "Excluindo...",
+            success: "Registro excluído!",
+            error: "Erro!",
+          }}
+          onConfirm={() => handleDeleteIndividual(selectedItem)}
+        />
+      )}
       {/* Tabs com abas de PF e PJ */}
       <Tab // Componente reutilizável que criamos para gerenciar abas. Há duas props que precisamos passar
         defaultTab={0} // Prop que indica qual aba será exibida por padrão ao montar o componente
@@ -161,6 +189,7 @@ const PeopleRecords = () => {
                 data={companyData}
                 loading={loading}
                 onSearch={handleSearchCompanies}
+                actions={actionsColumn}
               />
             ),
           },

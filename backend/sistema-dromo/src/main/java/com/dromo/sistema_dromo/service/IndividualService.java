@@ -10,7 +10,6 @@ import com.dromo.sistema_dromo.mapper.IndividualMapper;
 import com.dromo.sistema_dromo.model.Individual;
 import com.dromo.sistema_dromo.repository.IndividualRepository;
 
-import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class IndividualService {
@@ -41,9 +40,6 @@ public class IndividualService {
     }
     
     public void deleteById(Integer id) {
-    	if (!individualRepository.existsById(id)) {
-    		throw new EntityNotFoundException("Registro Não Encontrado: " + id);
-    	}
-    	individualRepository.deleteById(id);
-    }
+	    individualRepository.deleteById(id);
+	}
 }
