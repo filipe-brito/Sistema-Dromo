@@ -5,51 +5,72 @@ import { useEffect } from "react";
 
 export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
   const {
-    register, // função que registra o campo no formulário
-    // handleSSubmit função que lida com o envio do formulário.
-    // Ela vai validar se os campos foram preenchidos devidamente antes de chamar uma requisição ao BD
+    register, // estado que registra o inputs comuns no formulário
+    // handleSubmit função que lida com o envio do formulário.
     handleSubmit,
-    control, // função que registra os campos que não são nativos (inputs)
-    // formState é objeto com os erros de validação. A chave seria o nome do campo e o valor seria a mensagem a ser apresentada
-    // caso o usuário tente submeter o formulário com algum campo obrigatório vazio
+    control, // estado que registra os campos que não são nativos (inputs)
+    // O reset preenche os campos com os dados enviados pelo comnponente de edição de cadastro
     reset,
+    // formState é objeto com os erros de validação.
+    // A chave seria o nome do campo e o valor seria a mensagem a ser apresentada caso trigger retornar false
     formState: { errors },
-    trigger, // Controla a validação dos campo. Caso true chama submit, caso false exibe erro acima dos campos
-  } = useForm();
+    // Controla a validação dos campos. Caso true chama handleSubmit,
+    // caso false exibe os erros de formState acima dos campos
+    trigger,
+  } = useForm(); // Hook do React para formulários
 
+  // Efeito colateral para enviar o trigger ao componente pai
   useEffect(() => {
-    if (onTriggerReady) onTriggerReady(trigger);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Abaixo, Condicional que verifica se a prop onTriggerReady foi enviada
+    if (onTriggerReady) {
+      onTriggerReady(trigger); // Envia o trigger para o onTriggerReady do pai para que ele use como argumento de uma função
+    }
   }, []); // apenas uma vez
 
-  // Dispara quando `data` for fornecida (edição)
+  // Efeito colateral que envia os dados ao reset quando `data` for fornecida (edição)
   useEffect(() => {
-    if (data) reset(data);
-  }, [data, reset]);
+    // Abaixo, condicional que verifica se a prop data é true
+    if (data) {
+      // Executa o reset com os dados como argumento. O reset vai preencher os campos do formulário automaticamente
+      reset(data);
+    }
+    // "Sempre declare todas as dependências que você usa dentro do efeito."
+  }, [data, reset]); // As dependências garantem que o reset será feito sempre que data e reset mudarem
 
   return (
     <section className="flex p-2 rounded shadow-sm bg-stone-100">
+      {/* No jsx montamos um form html */}
       <form
-        id="save"
-        onSubmit={handleSubmit(onSubmit)}
+        id="save" // Vincula o onSubmit em qualquer elemente que tenha esse mesmo id
+        onSubmit={handleSubmit(onSubmit)} // OI que deverá ser feito ao submeter o formulário
         className="flex gap-2 flex-wrap items-end"
       >
+        {/* Iteramos a prop inputs para criar os campos do formulário usando a expressão .map() */}
         {inputs.map((input) => {
+          // usamos o switch/case usando o parâmetro type de cada object do array de inputs
           switch (input.type) {
-            case "default":
+            case "default": // input padrão que criamos
               return (
                 <div className="flex-col" key={input.name}>
+                  {/** Abaixo há a expressão que verifica se esse campo contém erro.
+                   * Se tiver, apresenta a mensagem recebida na prop
+                   */}
                   {errors[input.name] && (
                     <span className="text-red-500 text-xs">
                       {errors[input.name].message}
                     </span>
                   )}
+                  {/**Abaixo, componente que é adicionado à propriedade control do useForm */}
                   <Controller
-                    defaultValue="" // <== Isso aqui evita o warning no navegador
-                    name={input.name}
-                    control={control}
-                    rules={{ required: input?.required }}
+                    defaultValue="" // Boa prática nunca deixar campos com null ou undefined
+                    name={input.name} // Nome do campo. Serve como identificador
+                    control={control} // Passa o estado control do useFrom para esse componente via prop. Essa prop é obrigatória
+                    rules={{ required: input.required }} // Regras para validação (required e validate)
+                    // Abaixo, prop obrigatória. É onde passamos o componente customizável para ser gerenciado pelo Controller
+                    // O argumento field é um objeto do hook form com
+                    // valores gerados automaticamente. É um objeto necessário para vincular o input ao useForm
                     render={({ field }) => (
+                      // DefaultInput é o nosso input customizado. Ele recebe suas props nativas e mais o objeto field
                       <DefaultInput
                         {...field}
                         label={input.label}
@@ -61,7 +82,7 @@ export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
                   />
                 </div>
               );
-            case "masked":
+            case "masked": // input com máscara
               return (
                 <div className="flex-col" key={input.name}>
                   <span>
@@ -71,19 +92,18 @@ export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
                       </span>
                     )}
                   </span>
-                  <Controller // Componente do HookForm necessário para inputs não-nativos
-                    defaultValue="" // <== Isso aqui evita o warning
-                    name={input.name} // Nome do campo
-                    control={control} // Estado para controlar o input fornecido pelo HookForm
+                  <Controller
+                    defaultValue=""
+                    name={input.name}
+                    control={control}
                     rules={{
-                      required: input?.required,
+                      required: input.required,
+                      // É um input com validate. Os formatos são salvos no componente validators que criamos
+                      // Caso não exista esse validator no componente, usamos o encadeamento "?" para retornar undefined
                       validate: validators[input.name]?.validator,
                     }} // Demais regras. No caso, definimos este um input obrigatório
-                    render={(
-                      { field } // Função principal para renderizar o campo. A prop field é fornecida pelo Controller
-                    ) => (
+                    render={({ field }) => (
                       <MaskedInput
-                        // Guarda as propriedades de field antes de adicionar as novas abaixo
                         {...field}
                         label={input.label}
                         mask={input.mask}
@@ -94,7 +114,7 @@ export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
                 </div>
               );
 
-            case "select":
+            case "select": // input de seleções
               return (
                 <div className="flex-col" key={input.name}>
                   <span>
@@ -104,16 +124,14 @@ export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
                       </span>
                     )}
                   </span>
-                  <Controller // Componente do HookForm necessário para inputs não-nativos
-                    defaultValue="" // <== Isso aqui evita o warning
-                    name={input.name} // Nome do campo
-                    control={control} // Estado para controlar o input fornecido pelo HookForm
+                  <Controller
+                    defaultValue=""
+                    name={input.name}
+                    control={control}
                     rules={{
                       required: input?.required,
-                    }} // Demais regras. No caso, definimos este um input obrigatório
-                    render={(
-                      { field } // Função principal para renderizar o campo. A prop field é fornecida pelo Controller
-                    ) => (
+                    }}
+                    render={({ field }) => (
                       <SelectInput
                         {...field}
                         name={input.name}
