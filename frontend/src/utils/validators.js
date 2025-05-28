@@ -1,3 +1,4 @@
+// Objeto criado para formatação e validação de campos
 export const validators = {
   cpf: {
     mask: (value) =>
