@@ -1,6 +1,5 @@
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
 import { getIndividualById, updateIndividual } from "@/services/PeopleService";
 import React, { useState } from "react";
 import { FormBuilder } from "@/components/organisms/FormBuilder";
@@ -101,8 +100,9 @@ const IndividualEditPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      // Busca os dados cadastrados no banco de dados para alterarmos
       const data = await getIndividualById(id);
-      // Substitui todos os valores null por ""
+      // Substitui todos os valores null por "" para o navegador não alertar campos undefined
       const normalizedData = Object.fromEntries(
         Object.entries(data).map(([key, value]) => [key, value ?? ""])
       );

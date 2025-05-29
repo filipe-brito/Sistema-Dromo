@@ -5,7 +5,7 @@ export const EditButton = ({ onClick }) => {
     <button className="cursor-pointer" onClick={onClick}>
       <EditIcon
         className={
-          "w-6 h-6 text-blue-700 transition-transform duration-300 hover:scale-120"
+          "w-6 h-6 text-blue-500 transition-transform duration-300 hover:scale-120"
         }
       />
     </button>

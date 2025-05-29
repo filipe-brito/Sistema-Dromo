@@ -1,83 +1,59 @@
 import React, { useState } from "react";
-import { FormBuilder } from "@/components/organisms/FormBuilder";
-import { Tab } from "@/components/templates/Tabs";
-import { PersonIcon } from "@/components/atoms/icons/PersonIcon";
-import { postIndividual } from "@/services/PeopleService";
-import { FormFooter } from "@/components/organisms/Footer";
-import { ConfirmModal } from "@/components/molecules/ConfirmModal";
 import { useNavigate } from "react-router-dom";
+import { Tab } from "@/components/templates/Tabs";
+import { postCompany } from "@/services/PeopleService";
+import { ConfirmModal } from "@/components/molecules/ConfirmModal";
+import { FormFooter } from "@/components/organisms/Footer";
+import { CompanyIcon } from "@/components/atoms/icons/CompanyIcon";
+import { FormBuilder } from "@/components/organisms/FormBuilder";
 
-const IndividualCreatePage = () => {
+const CompanyCreatePage = () => {
   // Array com as informações principais para criar os inputs do formulário
   const inputs = [
     {
-      name: "name",
+      name: "companyName",
       type: "default",
-      label: "Nome",
-      required: "Nome é obrigatório",
+      label: "Razão Social",
+      required: "Razão Social é obrigatório",
+      inputStyle: "w-60",
     },
     {
-      name: "cpf",
+      name: "cnpj",
       type: "masked",
-      label: "CPF",
-      required: "CPF é obrigatório",
-      mask: "000.000.000-00",
-      placeholder: "Ex: 999.999.999-99",
+      label: "CNPJ",
+      required: "CNPJ é obrigatório",
+      placeholder: "Ex: 99.999.999/9999-99",
+      mask: "00.000.000/0000-00",
     },
     {
-      name: "gender",
-      type: "select",
-      label: "Sexo",
-      required: "Sexo é obrigatório",
-      options: [
-        { optionLabel: "masculino", value: "M" },
-        { optionLabel: "feminina", value: "F" },
-      ],
-      inputStyle: "w-25",
+      name: "tradeName",
+      type: "default",
+      label: "Nome Fantasia",
+      inputStyle: "w-60",
     },
     {
-      name: "marital_status",
-      type: "select",
-      label: "Estado civil",
-      options: [
-        { optionLabel: "Solteiro", value: "solteiro" },
-        { optionLabel: "Casado", value: "casado" },
-      ],
-      inputStyle: "w-25",
+      name: "doe",
+      type: "default",
+      type2: "date",
+      label: "Data de Fundação",
+      required: "Data de fundação é obrigatório",
     },
     {
-      name: "telefone",
+      name: "municipalRegistration",
+      type: "default",
+      label: "Inscrição Municipal",
+    },
+    {
+      name: "stateRegistration",
+      type: "default",
+      label: "Inscrição Estadual",
+    },
+    {
+      name: "phone",
       type: "masked",
       label: "Telefone",
       mask: "(00) 0000-0000",
       placeholder: "Ex: (99) 9999-9999",
-    },
-    {
-      name: "cellphone",
-      type: "masked",
-      label: "Celular",
-      mask: "(00) 0 0000-0000",
-      placeholder: "Ex: (99) 9 9999-9999",
-    },
-    {
-      name: "dob",
-      type: "default",
-      type2: "date",
-      label: "Data de nascimento",
-      required: "Data de nascimento é obrigatório",
-      inputStyle: "w-30",
-    },
-    {
-      name: "rg",
-      type: "default",
-      label: "RG",
-      inputStyle: "w-30",
-    },
-    {
-      name: "rntrc",
-      type: "default",
-      label: "RNTRC",
-      inputStyle: "2-30",
     },
     {
       name: "email",
@@ -98,20 +74,18 @@ const IndividualCreatePage = () => {
   const navigate = useNavigate(); // Hook para direcionar para outras páginas
 
   // Função que envia o formulário
-  const handleSubmitIndividual = async (data) => {
+  const handleSubmitCompany = async (data) => {
     setStatus("loading"); // Altera o state para rodar o loading enquanto a função não retorna os dados
     // Sempre envolver requisições em um bloco try-catch
     try {
-      const response = await postIndividual(data); // Método de chamada à API do backend
+      const response = await postCompany(data); // Método de chamada à API do backend
+      console.log(response);
       setStatus("success"); // Se não houver erro no envio, altera o status para success
-      setTimeout(
-        () => navigate(`/records/individual/edit/${response.id}`),
-        3000
-      ); // Redireciona para a edição do novo registro
+      setTimeout(() => navigate(`/records/company/edit/${response.id}`), 3000); // Redireciona para a edição do novo registro
     } catch (error) {
       // Captura erros da requisição
-      console.error("erro ao buscar pessoas físicas: ", error); // Imprime o erro no console
-      setStatus("error"); // Modal de confirmação apresenta o erro
+      console.error("Erro ao buscar empresa: ", error.message); // Imprime o erro no console
+      setStatus("Error"); // Modal de confirmação apresenta o erro
     }
   };
 
@@ -119,15 +93,15 @@ const IndividualCreatePage = () => {
     <React.Fragment>
       <div className="w-8/10 min-h-[92dvh] mx-auto px-4 py-2 bg-stone-800 border-x-2 border-stone-700">
         <h2 className="text-2xl font-bold text-neutral-50 mb-2">
-          Nova Pessoa Física
+          Nova Pessoa Jurídica
         </h2>
         {/** Abaixo há uma short-circuit evaluation. Varifica se a condição é verdadeira
          * para retornar o componente. Caso false, nada acontece
          */}
         {isConfirmOpen && (
-          <ConfirmModal // Modal de confirmação que deve se sobrepor a página ao clicar no botão de salvar
+          <ConfirmModal // Modal de confirmação que deve se sobrepor a página aoi clicar no botão de salvar
             status={status} // Modal vai usar para saber se deve apresentar o loading, idle ou error
-            setConfirmOpen={setConfirmOpen} // Modal usa para fechar ele mesmo depois da operação concluída
+            setConfirmOpen={setConfirmOpen}
             messages={{
               // Mensagens que o modal apresenta para cada status
               idle: "Deseja realmente enviar os dados?",
@@ -141,17 +115,17 @@ const IndividualCreatePage = () => {
           defaultTab={0}
           tabs={[
             {
-              icon: <PersonIcon className="w-4 h-4" />, // Ícone da tab
-              label: "Dados pessoais", // Descrição da tab
+              icon: <CompanyIcon className="w-4 h-4" />, // Ícone da tab
+              label: "Dados de empresa", // Descrição da tab
               // Conteúdo principal da tab
               content: (
                 <React.Fragment>
                   <FormBuilder // Formulário a ser submetido
                     inputs={inputs} // Enviamos as informações de campos para o formulário montar os inputs
-                    onSubmit={handleSubmitIndividual} // Método que será chamado quando o formulário for submetido
+                    onSubmit={handleSubmitCompany} // Método que será chamado quando o formulário for submetido
                     // Abaixo, prop que recebe a função trigger para validação dos campos obrigatórios
                     // É uma callback usada pelo componente atual para buscar a função trigger do FormBuilder
-                    // Com isso, podemos passar a função trigger para o footer usar, que abrirá o modal somente se trigger for true
+                    // Com isso, podemos passar a função trigger para o footer usar, que abrirá o modal somente se o trigger for true
                     onTriggerReady={(trigger) =>
                       setTriggerValidation(() => trigger)
                     }
@@ -162,13 +136,13 @@ const IndividualCreatePage = () => {
           ]}
         />
       </div>
-      <FormFooter // Rodapé
+      <FormFooter // Rodapé flutuante
         setConfirmOpen={setConfirmOpen} // enviado para que o botão de salvar abra o modal
         onTrigger={triggerValidation} // Faz a validação dos campos obrigatórios antes de abrir o modal
-        setStatus={setStatus} // Passado ao footer que poderá controlar o conteúdo exibido no modal
+        setStatus={setStatus} // Passado ao footer que poderá controlar o coneúdo exibido no modal
       />
     </React.Fragment>
   );
 };
 
-export default IndividualCreatePage;
+export default CompanyCreatePage;

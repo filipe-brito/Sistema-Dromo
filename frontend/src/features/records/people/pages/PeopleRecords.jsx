@@ -73,6 +73,21 @@ const PeopleRecords = () => {
     }
   };
 
+  const handleDeleteCompany = async (selectedItem) => {
+    setStatus("loading"); // Altera o state setStatus para true quando necessário
+    // Sempre envolver requisições em um bloco try-catch
+    try {
+      await deleteCompany(selectedItem); // Executa a chamada à API e guarda o retorno na variável result. Caso a função receba filters, enviamos os filters para a requisição
+      setStatus("success");
+      // 🔁 Atualiza os dados da tabela após exclusão
+      await handleSearchCompanies(); // <-- aqui
+    } catch (error) {
+      // Captura qualquer retorno de erro
+      console.error("erro ao deletar registro: ", error); // Imprime o erro no console
+      setStatus("error");
+    }
+  };
+
   useEffect(() => {
     // useEffect executa um código que não tem relação com a renderização da interface. No caso, chamadas a API, e por isso, é executado fora do return
     handleSearchIndividuals(); // Executa a chamada à API. Como não foi passado argumentos, fetchIndividuals será executado com filtros vazios
@@ -131,11 +146,21 @@ const PeopleRecords = () => {
 
   const navigate = useNavigate(); // <--- Cria o hook
 
-  const actionsColumn = (id) => (
+  const individualsActionsColumn = (id) => (
     <div className="flex items-center justify-center">
       <EditButton
         id={id}
         onClick={() => navigate(`/records/individual/edit/${id}`)}
+      />
+      <DeleteButton onClick={() => openConfirmModal(id)} />
+    </div>
+  );
+
+  const companyActionsColumn = (id, type) => (
+    <div className="flex items-center justify-center">
+      <EditButton
+        id={id}
+        onClick={() => navigate(`/records/company/edit/${id}`)}
       />
       <DeleteButton onClick={() => openConfirmModal(id)} />
     </div>
@@ -163,7 +188,13 @@ const PeopleRecords = () => {
             success: "Registro excluído!",
             error: "Erro!",
           }}
-          onConfirm={() => handleDeleteIndividual(selectedItem)}
+          onConfirm={() => {
+            if (activeTab === 0) {
+              handleDeleteIndividual(selectedItem);
+            } else if (selectedItem.type === "company") {
+              () => handleDeleteCompany(selectedItem);
+            }
+          }}
         />
       )}
       {/* Tabs com abas de PF e PJ */}
@@ -180,7 +211,7 @@ const PeopleRecords = () => {
                 filters={individualFilters} // Para montar o a barra de filtros, mandamos como prop o array de objects dos filtros Para que o SearchSection monte o FilterBar
                 columns={individualColumns} // Necessário para o SearchSection montar o ResultBar
                 data={individualData} // São os dados retornados pela api. Passamos para o SearchSection montar o ResultBar e apresentar os dados
-                actions={actionsColumn}
+                actions={individualsActionsColumn}
                 loading={loading} // O ícone de loading será exibido na barra de resultados, então passamos esse state para o SearchSection passar para ResultBar
                 onSearch={handleSearchIndividuals} // Passamos essa prop para SearchSection passar para Filterbar passar para o botão. É a ação que será executada ao clicar no botão.
               />
@@ -196,7 +227,7 @@ const PeopleRecords = () => {
                 data={companyData}
                 loading={loading}
                 onSearch={handleSearchCompanies}
-                actions={actionsColumn}
+                actions={companyActionsColumn}
               />
             ),
           },

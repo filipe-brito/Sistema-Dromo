@@ -11,7 +11,7 @@ import com.dromo.sistema_dromo.model.Company;
 import com.dromo.sistema_dromo.model.Individual;
 
 @Repository
-public interface CompanyRepository extends JpaRepository<Company, Long> {
+public interface CompanyRepository extends JpaRepository<Company, Integer> {
  // @Query cria uma query customizada para o método imediatamente abaixo 
     // O parâmetro é a query e o método abaixo é como a query deve ser chamada no código Java    
 
