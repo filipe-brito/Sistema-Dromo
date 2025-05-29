@@ -98,7 +98,7 @@ export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
                     control={control}
                     rules={{
                       required: input.required,
-                      // É um input com validate. Os formatos são salvos no componente validators que criamos
+                      // É um input com validate. Os formatos são salvos no arquivo validators que criamos
                       // Caso não exista esse validator no componente, usamos o encadeamento "?" para retornar undefined
                       validate: validators[input.name]?.validator,
                     }} // Demais regras. No caso, definimos este um input obrigatório
