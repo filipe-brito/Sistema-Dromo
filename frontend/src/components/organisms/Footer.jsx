@@ -4,12 +4,14 @@ export const FormFooter = ({ style, setConfirmOpen, onTrigger, setStatus }) => {
   return (
     <div className={`w-full fixed bottom-3 ${style}`}>
       <footer className="relative mx-auto w-8/10 h-10">
-        <SaveButton
+        <SaveButton // Componente de botão customizável
+          // onClick vai receber uma função assíncrona
           onClick={async () => {
-            setStatus("idle"); // só abre o modal se estiver tudo certo
+            setStatus("idle"); // Garante que o conteúdo apresentado ao abrir o modal seja referente ao state idle
+            // Verifica se a função trigger de um formulário foi passada via prop
             if (onTrigger) {
-              const isValid = await onTrigger(); // valida os campos
-              if (isValid) setConfirmOpen(true);
+              const isValid = await onTrigger(); // Chama a função trigger e só continua o código quando tiver retorno
+              if (isValid) setConfirmOpen(true); // Abre o modal se o retorno de trigger for true
             }
           }}
           style="absolute right-6"
