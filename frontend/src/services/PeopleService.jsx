@@ -80,3 +80,37 @@ export const fetchCompanies = async (filters = {}) => {
 
   return response.json();
 };
+
+export const postCompany = async (data) => {
+  const response = await fetch("http://localhost:8080/records/companies", {
+    method: "POST", // método POST
+    headers: {
+      "Content-Type": "application/json", // diz que o corpo será JSON
+    },
+    body: JSON.stringify(data), // transforma o objeto JS em JSON string
+  });
+
+  if (!response.ok) {
+    throw new Error("Erro ao salvar empresa");
+  }
+
+  return response.json(); // retorna o DTO com os dados salvos
+};
+
+export const deleteCompany = async (id) => {
+  const response = await fetch(
+    `http://localhost:8080/records/companies/${id}`,
+    { method: "DELETE" }
+  );
+  if (!response.ok) {
+    throw new Error("Erro ao excluir registro");
+  }
+};
+
+export const getCompanyById = async (id) => {
+  const response = await fetch(`http://localhost:8080/records/companies/${id}`);
+  if (!response.ok) {
+    throw new Error("Erro ao buscar registro");
+  }
+  return response.json();
+};

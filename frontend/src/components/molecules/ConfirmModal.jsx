@@ -1,6 +1,7 @@
 import { LoadingIcon } from "../atoms/icons/LoadingIcon";
 import { DoneIcon } from "../atoms/icons/DoneIcon";
 import React, { useEffect } from "react";
+import { ErrorIcon } from "../atoms/icons/ErrorIcon";
 
 export const ConfirmModal = ({
   status, // Modal usa o status como critério para definir qual componente o content deve receber
@@ -58,7 +59,7 @@ export const ConfirmModal = ({
     case "success":
       content = (
         <React.Fragment>
-          <DoneIcon fill="green" className={"w-15 h-15 text-green-600"} />
+          <DoneIcon className={"w-15 h-15 text-green-600"} />
           <p className="text-2xl">{messages.success}</p>
           <button
             onClick={() => setConfirmOpen(false)} // Fecha o modal ao clicar nesse botão
@@ -74,6 +75,7 @@ export const ConfirmModal = ({
     case "error":
       content = (
         <React.Fragment>
+          <ErrorIcon className="w-15 h-15 text-red-500" />
           <p className="text-2xl">{messages.error}</p>
           <button
             onClick={() => setConfirmOpen(false)}

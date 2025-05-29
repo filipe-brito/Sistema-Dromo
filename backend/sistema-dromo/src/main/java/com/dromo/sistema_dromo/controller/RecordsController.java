@@ -46,7 +46,7 @@ public class RecordsController {
     }
     
     @DeleteMapping("individuals/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable Integer id) {
+    public ResponseEntity<Void> deleteIndividualById(@PathVariable Integer id) {
     	individualService.deleteById(id);
     	return ResponseEntity.noContent().build();
     }
@@ -58,7 +58,7 @@ public class RecordsController {
     }
     
     @PutMapping("individuals/{id}")
-    public ResponseEntity<IndividualDTO> update(
+    public ResponseEntity<IndividualDTO> updateIndividual(
             @PathVariable Integer id,
             @RequestBody IndividualDTO dto
     ) {
@@ -72,5 +72,32 @@ public class RecordsController {
 	    @RequestParam(name = "name", required = false) String companyName,
 	    @RequestParam(required = false) String cnpj) {
 	return companyService.listCompanies(companyName, cnpj);
+    }
+    
+    @PostMapping("/companies")
+    public ResponseEntity<CompanyDTO> create(@RequestBody CompanyDTO dto) {
+    	CompanyDTO saved = companyService.saveCompany(dto);
+    	return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    }
+    
+    @DeleteMapping("companies/{id}")
+    public ResponseEntity<Void> deleteCompanyById(@PathVariable Integer id) {
+    	companyService.deleteById(id);
+    	return ResponseEntity.noContent().build();
+    }
+    
+    @GetMapping("companies/{id}")
+    public ResponseEntity<CompanyDTO> getCompanyById(@PathVariable Integer id) {
+        CompanyDTO dto = companyService.getById(id);
+        return ResponseEntity.ok(dto);
+    }
+    
+    @PutMapping("companies/{id}")
+    public ResponseEntity<CompanyDTO> updateCompany(
+            @PathVariable Integer id,
+            @RequestBody CompanyDTO dto
+    ) {
+        CompanyDTO updated = companyService.update(id, dto);
+        return ResponseEntity.ok(updated);
     }
 }

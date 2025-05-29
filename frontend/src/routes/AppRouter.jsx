@@ -6,6 +6,8 @@ import MainLayout from "../layouts/MainLayout";
 import TestPage from "../pages/TestPage";
 import IndividualCreatePage from "../features/records/people/pages/IndividualCreatePage";
 import IndividualEditPage from "../features/records/people/pages/IndividualEditPage";
+import CompanyCreatePage from "../features/records/people/pages/CompanyCreatePage";
+import CompanyEditPage from "../features/records/people/pages/CompanyEditPage";
 
 const AppRouter = () => {
   // AppRouter é uma arrow function
@@ -28,8 +30,16 @@ const AppRouter = () => {
             element={<IndividualCreatePage />}
           />
           <Route
+            path="/records/company/create"
+            element={<CompanyCreatePage />}
+          />
+          <Route
             path="/records/individual/edit/:id"
             element={<IndividualEditPage />}
+          />
+          <Route
+            path="/records/company/edit/:id"
+            element={<CompanyEditPage />}
           />
           {/* Outras rotas desse layout */}
         </Route>
