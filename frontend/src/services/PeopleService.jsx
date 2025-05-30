@@ -98,6 +98,7 @@ export const postCompany = async (data) => {
 };
 
 export const deleteCompany = async (id) => {
+  console.log("Id a ser deletado:" + id);
   const response = await fetch(
     `http://localhost:8080/records/companies/${id}`,
     { method: "DELETE" }

@@ -5,15 +5,15 @@ import java.time.LocalDate;
 public class IndividualDTO {
 	private int id;
 	private String name;
-    private String cpf;
-    private char gender;
-    private String maritalStatus;
-    private String phone;
-    private String cellPhone;
-    private LocalDate dob;
-    private String rg;
-    private String rntrc;
-    private String email;
+        private String cpf;
+        private char gender;
+        private String maritalStatus;
+        private String phone;
+        private String cellPhone;
+        private LocalDate dob;
+        private String rg;
+        private String rntrc;
+        private String email;
     
     // Construtor
 	public IndividualDTO(int id, String name, String cpf, char gender, String maritalStatus, String phone, String cellPhone, LocalDate dob, String rg, String rntrc, String email) {

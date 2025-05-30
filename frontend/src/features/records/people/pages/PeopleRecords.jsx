@@ -2,6 +2,7 @@ import { PersonIcon } from "@/components/atoms/icons/PersonIcon";
 import { CompanyIcon } from "@/components/atoms/icons/CompanyIcon";
 import {
   deleteIndividual,
+  deleteCompany,
   fetchCompanies,
   fetchIndividuals,
 } from "../../../../services/PeopleService";
@@ -19,6 +20,10 @@ const PeopleRecords = () => {
   // Dados e filtros de pessoas físicas
   const [individualData, setIndividualData] = useState([]); // Estado de array que armazena os dados de PF retornados pelo backend
   const [companyData, setCompanyData] = useState([]);
+  const [selectedItem, setSelectedItem] = useState(null); // <-- Aqui você guarda o ID a ser deletado
+  const [isConfirmOpen, setConfirmOpen] = useState(false);
+  const [status, setStatus] = useState("idle"); // idle | loading | success | error
+  const [activeTab, setActiveTab] = useState(0); // State para atualizar a guia ativa pelo index
 
   const handleSearchIndividuals = async (filters = {}) => {
     // Variável que recebe uma arrow function. É necessário passar um argumento do tipo object, caso não seja passado, a função considera filter um object vazio
@@ -47,10 +52,6 @@ const PeopleRecords = () => {
       setLoading(false);
     }
   };
-
-  const [selectedItem, setSelectedItem] = useState(null); // <-- Aqui você guarda o ID a ser deletado
-  const [isConfirmOpen, setConfirmOpen] = useState(false);
-  const [status, setStatus] = useState("idle"); // idle | loading | success | error
 
   const openConfirmModal = (id) => {
     setSelectedItem(id);
@@ -156,7 +157,7 @@ const PeopleRecords = () => {
     </div>
   );
 
-  const companyActionsColumn = (id, type) => (
+  const companyActionsColumn = (id) => (
     <div className="flex items-center justify-center">
       <EditButton
         id={id}
@@ -191,15 +192,16 @@ const PeopleRecords = () => {
           onConfirm={() => {
             if (activeTab === 0) {
               handleDeleteIndividual(selectedItem);
-            } else if (selectedItem.type === "company") {
-              () => handleDeleteCompany(selectedItem);
+            } else if (activeTab === 1) {
+              handleDeleteCompany(selectedItem);
             }
           }}
         />
       )}
       {/* Tabs com abas de PF e PJ */}
       <Tab // Componente reutilizável que criamos para gerenciar abas. Há duas props que precisamos passar
-        defaultTab={0} // Prop que indica qual aba será exibida por padrão ao montar o componente
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
         tabs={[
           // Prop que passar um array de objects que representam as abas do componente. No caso, terá duas abas
           {
