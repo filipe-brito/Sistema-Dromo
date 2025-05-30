@@ -115,3 +115,19 @@ export const getCompanyById = async (id) => {
   }
   return response.json();
 };
+
+export const updateCompany = async (id, data) => {
+  const response = await fetch(
+    `http://localhost:8080/records/companies/${id}`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json", // diz que o corpo será JSON
+      },
+      body: JSON.stringify(data),
+    }
+  ); // transforma o objeto JS em JSON string,);
+  if (!response.ok) {
+    throw new Error("Erro ao atualizar registro");
+  }
+};

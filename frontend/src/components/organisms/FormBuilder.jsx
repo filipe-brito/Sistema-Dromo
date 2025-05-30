@@ -31,11 +31,25 @@ export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
   useEffect(() => {
     // Abaixo, condicional que verifica se a prop data é true
     if (data) {
+      // Aplica máscaras se existir um validador com .mask
+      console.log("Data company: ", data);
+      // A máscara não é aplicada no reset, o que quebra o validate.
+      // Vamos formatar os campos antes de inserí-los nos campos
+      // Object.entries converte objects em array de pares [chave, valor]
+      // .reduce itera todos os pares e junta tudo em um novo object (acc)
+      // Para cada iteração, o .reduce aplica a máscara ao par
+      const formattedData = Object.entries(data).reduce((acc, [key, value]) => {
+        const mask = validators[key]?.mask;
+        acc[key] = mask ? mask(value) : value;
+        return acc;
+      }, {});
+
       // Executa o reset com os dados como argumento. O reset vai preencher os campos do formulário automaticamente
-      reset(data);
+      // Retornamos o object reformatado pelo redux. Agora, o validate passa normalmente
+      reset(formattedData);
     }
     // "Sempre declare todas as dependências que você usa dentro do efeito."
-  }, [data, reset]); // As dependências garantem que o reset será feito sempre que data e reset mudarem
+  }, []); // As dependências garantem que o reset será feito sempre que data e reset mudarem
 
   return (
     <section className="flex p-2 rounded shadow-sm bg-stone-100">
