@@ -73,6 +73,7 @@ const CompanyEditPage = () => {
   // Estado que alterna quais informações devem aparecer no modal
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
   const [companyData, setCompanyData] = useState(null); // Estado para armazenar os dados que serão editados
+  const [activeTab, setActiveTab] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -126,7 +127,8 @@ const CompanyEditPage = () => {
           />
         )}
         <Tab // Componente que apresenta os dados em uma tab
-          defaultTab={0}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
           tabs={[
             {
               icon: <CompanyIcon className="w-4 h-4" />, // Ícone da tab

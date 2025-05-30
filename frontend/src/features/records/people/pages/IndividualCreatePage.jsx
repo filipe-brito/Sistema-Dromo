@@ -94,6 +94,7 @@ const IndividualCreatePage = () => {
   const [isConfirmOpen, setConfirmOpen] = useState(false);
   // Estado que alterna quais informações devem aparecer no modal
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
+  const [activeTab, setActiveTab] = useState(0);
 
   const navigate = useNavigate(); // Hook para direcionar para outras páginas
 
@@ -138,7 +139,8 @@ const IndividualCreatePage = () => {
           />
         )}
         <Tab // Componente que apresenta os dados em uma tab
-          defaultTab={0}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
           tabs={[
             {
               icon: <PersonIcon className="w-4 h-4" />, // Ícone da tab

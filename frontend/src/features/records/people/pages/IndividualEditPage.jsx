@@ -97,6 +97,7 @@ const IndividualEditPage = () => {
   const [isConfirmOpen, setConfirmOpen] = useState(false);
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
   const [individualData, setIndividualData] = useState(null); // Estado novo para armazenar dados
+  const [activeTab, setActiveTab] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -142,7 +143,8 @@ const IndividualEditPage = () => {
           />
         )}
         <Tab
-          defaultTab={0}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
           tabs={[
             {
               icon: <PersonIcon className="w-4 h-4" />,

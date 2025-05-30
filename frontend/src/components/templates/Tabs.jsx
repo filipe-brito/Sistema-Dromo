@@ -1,8 +1,7 @@
 import { useState } from "react";
 
-export const Tab = ({ tabs, defaultTab = 0 }) => {
-  // Cria o componente e faz uma exportação nomeada. Recebe 2 props. defaulTab terá 0 como valor padrão, caso não seja enviado nenhum
-  const [activeTab, setActiveTab] = useState(defaultTab); // State para atualizar a guia ativa pelo index
+export const Tab = ({ tabs, activeTab, setActiveTab }) => {
+  // Cria o componente e faz uma exportação nomeada.
 
   return (
     // Componente que será renderizado
