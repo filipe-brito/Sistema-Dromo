@@ -1,11 +1,12 @@
 import { useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import { getCompanyById } from "@/services/PeopleService";
+import { getCompanyById, updateCompany } from "@/services/PeopleService";
 import { Tab } from "@/components/templates/Tabs";
 import { CompanyIcon } from "@/components/atoms/icons/CompanyIcon";
 import { LoadingIcon } from "@/components/atoms/icons/LoadingIcon";
 import { FormFooter } from "@/components/organisms/Footer";
 import { FormBuilder } from "@/components/organisms/FormBuilder";
+import { ConfirmModal } from "@/components/molecules/ConfirmModal";
 
 const CompanyEditPage = () => {
   // Array com as informações principais para criar os inputs do formulário
@@ -89,18 +90,14 @@ const CompanyEditPage = () => {
   }, [id]);
 
   // Função que envia o formulário
-  const handleSubmitCompany = async (data) => {
-    setStatus("loading"); // Altera o state para rodar o loading enquanto a função não retorna os dados
-    // Sempre envolver requisições em um bloco try-catch
+  const handleSubmitCompany = async (companyData) => {
+    setStatus("loading");
     try {
-      const response = await postCompany(data); // Método de chamada à API do backend
-      console.log(response);
-      setStatus("success"); // Se não houver erro no envio, altera o status para success
-      setTimeout(() => navigate(`/records/company/edit/${response.id}`), 3000); // Redireciona para a edição do novo registro
+      await updateCompany(id, companyData);
+      setStatus("success");
     } catch (error) {
-      // Captura erros da requisição
-      console.error("Erro ao buscar empresa: ", error.message); // Imprime o erro no console
-      setStatus("Error"); // Modal de confirmação apresenta o erro
+      console.error("Erro ao atualizar: ", error);
+      setStatus("error");
     }
   };
 
@@ -108,7 +105,7 @@ const CompanyEditPage = () => {
     <React.Fragment>
       <div className="w-8/10 min-h-[92dvh] mx-auto px-4 py-2 bg-stone-800 border-x-2 border-stone-700">
         <h2 className="text-2xl font-bold text-neutral-50 mb-2">
-          Nova Pessoa Jurídica
+          Editar Pessoa Jurídica
         </h2>
         {/** Abaixo há uma short-circuit evaluation. Varifica se a condição é verdadeira
          * para retornar o componente. Caso false, nada acontece
