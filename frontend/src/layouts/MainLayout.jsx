@@ -5,7 +5,7 @@ const MainLayout = () => {
   return (
     <div className="font-[Rajdhani] min-h-screen bg-stone-800">
       <Header className="fixed w-full z-50" />
-      <main className="pt-[8dvh]">
+      <main className="py-[8dvh]">
         <Outlet />
       </main>
     </div>
