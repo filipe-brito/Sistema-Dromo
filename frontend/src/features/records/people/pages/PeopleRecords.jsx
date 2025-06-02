@@ -14,6 +14,7 @@ import { ConfirmModal } from "@/components/molecules/ConfirmModal";
 import { useNavigate } from "react-router-dom"; // <--- Importa isso no topo
 
 import React, { useState, useEffect } from "react";
+import { NewFooter } from "../../../../components/organisms/Footer";
 
 const PeopleRecords = () => {
   const [loading, setLoading] = useState(true); // Estado booleano para ativar ou desativar a telinha de carregamento
@@ -145,7 +146,7 @@ const PeopleRecords = () => {
     },
   ];
 
-  const navigate = useNavigate(); // <--- Cria o hook
+  const navigate = useNavigate();
 
   const individualsActionsColumn = (id) => (
     <div className="flex items-center justify-center">
@@ -174,68 +175,71 @@ const PeopleRecords = () => {
   }, [selectedItem]);
 
   return (
-    <div className="w-8/10 min-h-[92dvh] mx-auto px-4 py-2 bg-stone-800 border-x-2 border-stone-700">
-      <h2 className="text-2xl font-bold text-neutral-50 mb-2">
-        Cadastro de Pessoas
-      </h2>
-      {isConfirmOpen && (
-        <ConfirmModal
-          status={status}
-          setStatus={setStatus}
-          setConfirmOpen={setConfirmOpen}
-          messages={{
-            idle: "Deseja realmente excluir esse registro?",
-            loading: "Excluindo...",
-            success: "Registro excluído!",
-            error: "Erro!",
-          }}
-          onConfirm={() => {
-            if (activeTab === 0) {
-              handleDeleteIndividual(selectedItem);
-            } else if (activeTab === 1) {
-              handleDeleteCompany(selectedItem);
-            }
-          }}
+    <React.Fragment>
+      <div className="w-8/10 min-h-[92dvh] mx-auto px-4 py-2 bg-stone-800 rounded-b border-x-2 border-b-2 border-stone-700">
+        <h2 className="text-2xl font-bold text-neutral-50 mb-2">
+          Cadastro de Pessoas
+        </h2>
+        {isConfirmOpen && (
+          <ConfirmModal
+            status={status}
+            setStatus={setStatus}
+            setConfirmOpen={setConfirmOpen}
+            messages={{
+              idle: "Deseja realmente excluir esse registro?",
+              loading: "Excluindo...",
+              success: "Registro excluído!",
+              error: "Erro!",
+            }}
+            onConfirm={() => {
+              if (activeTab === 0) {
+                handleDeleteIndividual(selectedItem);
+              } else if (activeTab === 1) {
+                handleDeleteCompany(selectedItem);
+              }
+            }}
+          />
+        )}
+        {/* Tabs com abas de PF e PJ */}
+        <Tab // Componente reutilizável que criamos para gerenciar abas. Há duas props que precisamos passar
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          tabs={[
+            // Prop que passar um array de objects que representam as abas do componente. No caso, terá duas abas
+            {
+              icon: <PersonIcon className="w-4 h-4" />, // Componente de um ícone de pessoa física
+              label: "Pessoa Física", // Rótulo que será exibido na aba para selecionar
+              // Conteúdo principal da aba. No caso, uma SearchSection
+              content: (
+                <SearchSection // Componente que Criamos para uma sessão inteiro dedicada à pesquisa de dados.
+                  filters={individualFilters} // Para montar o a barra de filtros, mandamos como prop o array de objects dos filtros Para que o SearchSection monte o FilterBar
+                  columns={individualColumns} // Necessário para o SearchSection montar o ResultBar
+                  data={individualData} // São os dados retornados pela api. Passamos para o SearchSection montar o ResultBar e apresentar os dados
+                  actions={individualsActionsColumn}
+                  loading={loading} // O ícone de loading será exibido na barra de resultados, então passamos esse state para o SearchSection passar para ResultBar
+                  onSearch={handleSearchIndividuals} // Passamos essa prop para SearchSection passar para Filterbar passar para o botão. É a ação que será executada ao clicar no botão.
+                />
+              ),
+            },
+            {
+              icon: <CompanyIcon className="w-4 h-4" />,
+              label: "Pessoa Jurídica",
+              content: (
+                <SearchSection
+                  filters={companyFilters}
+                  columns={companyColumns}
+                  data={companyData}
+                  loading={loading}
+                  onSearch={handleSearchCompanies}
+                  actions={companyActionsColumn}
+                />
+              ),
+            },
+          ]}
         />
-      )}
-      {/* Tabs com abas de PF e PJ */}
-      <Tab // Componente reutilizável que criamos para gerenciar abas. Há duas props que precisamos passar
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        tabs={[
-          // Prop que passar um array de objects que representam as abas do componente. No caso, terá duas abas
-          {
-            icon: <PersonIcon className="w-4 h-4" />, // Componente de um ícone de pessoa física
-            label: "Pessoa Física", // Rótulo que será exibido na aba para selecionar
-            // Conteúdo principal da aba. No caso, uma SearchSection
-            content: (
-              <SearchSection // Componente que Criamos para uma sessão inteiro dedicada à pesquisa de dados.
-                filters={individualFilters} // Para montar o a barra de filtros, mandamos como prop o array de objects dos filtros Para que o SearchSection monte o FilterBar
-                columns={individualColumns} // Necessário para o SearchSection montar o ResultBar
-                data={individualData} // São os dados retornados pela api. Passamos para o SearchSection montar o ResultBar e apresentar os dados
-                actions={individualsActionsColumn}
-                loading={loading} // O ícone de loading será exibido na barra de resultados, então passamos esse state para o SearchSection passar para ResultBar
-                onSearch={handleSearchIndividuals} // Passamos essa prop para SearchSection passar para Filterbar passar para o botão. É a ação que será executada ao clicar no botão.
-              />
-            ),
-          },
-          {
-            icon: <CompanyIcon className="w-4 h-4" />,
-            label: "Pessoa Jurídica",
-            content: (
-              <SearchSection
-                filters={companyFilters}
-                columns={companyColumns}
-                data={companyData}
-                loading={loading}
-                onSearch={handleSearchCompanies}
-                actions={companyActionsColumn}
-              />
-            ),
-          },
-        ]}
-      />
-    </div>
+      </div>
+      <NewFooter />
+    </React.Fragment>
   );
 };
 

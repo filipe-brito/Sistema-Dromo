@@ -118,7 +118,7 @@ const IndividualCreatePage = () => {
 
   return (
     <React.Fragment>
-      <div className="w-8/10 min-h-[92dvh] mx-auto px-4 py-2 bg-stone-800 border-x-2 border-stone-700">
+      <div className="w-8/10 min-h-[92dvh] mx-auto px-4 py-2 bg-stone-800 border-x-2 border-b-2 rounded-b border-stone-700">
         <h2 className="text-2xl font-bold text-neutral-50 mb-2">
           Nova Pessoa Física
         </h2>

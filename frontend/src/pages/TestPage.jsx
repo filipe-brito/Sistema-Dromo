@@ -1,32 +1,27 @@
 import React, { useState } from "react";
-import { DeleteIcon, EditIcon } from "../components/atoms/icons/ActionsIcon";
 import { EditButton } from "../components/atoms/EditButton";
-import { DeleteButton } from "../components/atoms/DeleteButton";
-import { ConfirmModal } from "../components/molecules/ConfirmModal";
+import { NewFooter } from "../components/organisms/Footer";
+import { SaveButton } from "../components/atoms/SaveButton";
 
 const TestPage = () => {
   const [isConfirmOpen, setConfirmOpen] = useState(false);
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
 
-  const actionsColumn = (
-    <div className="p-1/2 flex items-center">
+  const footerButtons = () => (
+    <React.Fragment>
+      <SaveButton className="absolute right-6" />
       <EditButton />
-      <DeleteButton onClick={() => setConfirmOpen(true)} />
-    </div>
+    </React.Fragment>
   );
 
   return (
     <React.Fragment>
-      {isConfirmOpen && (
-        <ConfirmModal
-          status={status}
-          setStatus={setStatus}
-          setConfirmOpen={setConfirmOpen}
-        />
-      )}
-      <div className="flex p-2 rounded shadow-sm bg-stone-100">
-        {actionsColumn}
+      <div className="w-8/10 min-h-[92dvh] mx-auto px-4 py-2 rounded-b bg-stone-800 border-x-2 border-b-2 border-stone-700">
+        <div className="w-full bg-green-900 h-500">
+          <h1>Teste maroto</h1>
+        </div>
       </div>
+      <NewFooter />
     </React.Fragment>
   );
 };
