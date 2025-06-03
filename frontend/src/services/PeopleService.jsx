@@ -5,7 +5,6 @@ export const fetchIndividuals = async (filters = {}) => {
   const response = await fetch(
     `http://localhost:8080/records/individuals${query ? `?${query}` : ""}`
   ); // faz a requisição HTTP para a rota de PF
-  console.log("query do PF: " + query);
 
   if (!response.ok) {
     // Verifica se a requisição deu erro
@@ -72,7 +71,6 @@ export const fetchCompanies = async (filters = {}) => {
   const response = await fetch(
     `http://localhost:8080/records/companies${query ? `?${query}` : ""}`
   );
-  console.log("query do PJ: " + query);
 
   if (!response.ok) {
     throw new Error("Erro ao buscar dados de companias");

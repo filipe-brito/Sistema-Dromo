@@ -25,7 +25,7 @@ public class IndividualService {
 			individual.getGender(),
 			individual.getMaritalStatus(),
 			individual.getPhone(),
-			individual.getCellPhone(),
+			individual.getCellphone(),
 			individual.getDob(), 
 			individual.getRg(),
 			individual.getRntrc(),

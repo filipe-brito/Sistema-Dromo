@@ -36,7 +36,7 @@ const IndividualCreatePage = () => {
       inputStyle: "w-25",
     },
     {
-      name: "marital_status",
+      name: "maritalStatus",
       type: "select",
       label: "Estado civil",
       options: [
@@ -46,7 +46,7 @@ const IndividualCreatePage = () => {
       inputStyle: "w-25",
     },
     {
-      name: "telefone",
+      name: "phone",
       type: "masked",
       label: "Telefone",
       mask: "(00) 0000-0000",

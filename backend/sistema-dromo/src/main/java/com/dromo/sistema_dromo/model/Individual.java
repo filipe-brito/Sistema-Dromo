@@ -25,7 +25,7 @@ public class Individual {
 	private String maritalStatus;
 	private String phone;
 	@Column(name = "cell_phone")
-	private String cellPhone;
+	private String cellphone;
 	private LocalDate dob;
 	private String rg;
 	private String rntrc;
@@ -49,8 +49,8 @@ public class Individual {
 	public String getPhone() {
 		return phone;
 	}
-	public String getCellPhone() {
-		return cellPhone;
+	public String getCellphone() {
+		return cellphone;
 	}
 	public LocalDate getDob() {
 		return dob;
@@ -85,10 +85,18 @@ public class Individual {
 		this.maritalStatus = maritalStatus;
 	}
 	public void setPhone(String phone) {
-		this.phone = phone;
+		if (phone != null) {
+	        this.phone = phone.replaceAll("[^0-9]", "");
+	    } else {
+	        this.phone = null;
+	    }
 	}
-	public void setCellPhone(String cellPhone) {
-		this.cellPhone = cellPhone;
+	public void setCellphone(String cellphone) {
+		if (cellphone != null) {
+	        this.cellphone = cellphone.replaceAll("[^0-9]", "");
+	    } else {
+	        this.cellphone = null;
+	    }
 	}
 	public void setDob(LocalDate dob) {
 		this.dob = dob;
