@@ -32,7 +32,6 @@ export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
     // Abaixo, condicional que verifica se a prop data é true
     if (data) {
       // Aplica máscaras se existir um validador com .mask
-      console.log("Data company: ", data);
       // A máscara não é aplicada no reset, o que quebra o validate.
       // Vamos formatar os campos antes de inserí-los nos campos
       // Object.entries converte objects em array de pares [chave, valor]

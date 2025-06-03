@@ -9,14 +9,14 @@ public class IndividualDTO {
         private char gender;
         private String maritalStatus;
         private String phone;
-        private String cellPhone;
+        private String cellphone;
         private LocalDate dob;
         private String rg;
         private String rntrc;
         private String email;
     
     // Construtor
-	public IndividualDTO(int id, String name, String cpf, char gender, String maritalStatus, String phone, String cellPhone, LocalDate dob, String rg, String rntrc, String email) {
+	public IndividualDTO(int id, String name, String cpf, char gender, String maritalStatus, String phone, String cellphone, LocalDate dob, String rg, String rntrc, String email) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -24,7 +24,7 @@ public class IndividualDTO {
 		this.gender = gender;
 		this.maritalStatus = maritalStatus;
 		this.phone = phone;
-		this.cellPhone = cellPhone;
+		this.cellphone = cellphone;
 		this.dob = dob;
 		this.rg = rg;
 		this.rntrc = rntrc;
@@ -58,8 +58,8 @@ public class IndividualDTO {
 		return phone;
 	}
 
-	public String getCellPhone() {
-		return cellPhone;
+	public String getCellphone() {
+		return cellphone;
 	}
 
 	public LocalDate getDob() {
@@ -102,8 +102,8 @@ public class IndividualDTO {
 		this.phone = phone;
 	}
 
-	public void setCellPhone(String cellPhone) {
-		this.cellPhone = cellPhone;
+	public void setCellphone(String cellphone) {
+		this.cellphone = cellphone;
 	}
 
 	public void setDob(LocalDate dob) {

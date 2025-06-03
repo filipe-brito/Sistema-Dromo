@@ -12,7 +12,7 @@ public class IndividualMapper {
 		individual.setGender(dto.getGender());
 		individual.setMaritalStatus(sanitize(dto.getMaritalStatus()));
 		individual.setPhone(sanitize(dto.getPhone()));
-		individual.setCellPhone(sanitize(dto.getCellPhone()));
+		individual.setCellphone(sanitize(dto.getCellphone()));
 		individual.setDob(dto.getDob());
 		individual.setRg(sanitize(dto.getRg()));
 		individual.setRntrc(sanitize(dto.getRntrc()));
@@ -28,7 +28,7 @@ public class IndividualMapper {
 		dto.setGender(entity.getGender());
 		dto.setMaritalStatus(entity.getMaritalStatus());
 		dto.setPhone(entity.getPhone());
-		dto.setCellPhone(entity.getCellPhone());
+		dto.setCellphone(entity.getCellphone());
 		dto.setDob(entity.getDob());
 		dto.setRg(entity.getRg());
 		dto.setRntrc(entity.getRntrc());

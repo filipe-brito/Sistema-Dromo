@@ -37,7 +37,7 @@ const IndividualEditPage = () => {
       inputStyle: "w-25",
     },
     {
-      name: "marital_status",
+      name: "maritalStatus",
       type: "select",
       label: "Estado civil",
       options: [
@@ -47,7 +47,7 @@ const IndividualEditPage = () => {
       inputStyle: "w-25",
     },
     {
-      name: "telefone",
+      name: "phone",
       type: "masked",
       label: "Telefone",
       mask: "(00) 0000-0000",
@@ -114,6 +114,7 @@ const IndividualEditPage = () => {
 
   const handleSubmitIndividual = async (individualData) => {
     setStatus("loading");
+    console.log("IndividualData", individualData);
     try {
       await updateIndividual(id, individualData);
       setStatus("success");
