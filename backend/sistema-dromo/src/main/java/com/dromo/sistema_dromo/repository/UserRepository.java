@@ -1,5 +1,8 @@
 package com.dromo.sistema_dromo.repository;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -24,6 +27,7 @@ import com.dromo.sistema_dromo.model.User;
  * Long: tipo de valor da chave primária.
  */
 @Repository // Anotação opcional para indicar que esta interface é um repositório.
-public interface UserRepository extends JpaRepository<User, Long> { 
+public interface UserRepository extends JpaRepository<User, UUID> {
 	// Métodos personalizados podem ser adicionados aqui.
+	Optional<User> findByEmail(String email);
 }
