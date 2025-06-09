@@ -69,6 +69,8 @@ public class JwtUtil {
 	
 	/*
 	 * Quarto ponto-chave da autenticação e o mais importante.
+	 * Esse método, basicamente extrai todas as claims de um token e os retorna em um objeto
+	 * Claims.
 	 * Depois o token é gerado para o cliente, o usuário deverá ser autenticado por esse token
 	 * em todas as requisições posteriores que ele fizer dentro do sistema.
 	 * O método verifyWith é o responsável por verificar se a assinatura do token corresponde
@@ -89,7 +91,7 @@ public class JwtUtil {
 	/*
 	 * Aqui estamos aplicando o conceito de Generics no java.
 	 * <T> declara que esse método se trata de um generic, ou seja,
-	 * não sabemos ainda o tipo de dado que esse método vai retornar.
+	 * o tipo do retorno será definido por quem chamar o método.
 	 * claimsResolver é um parâmetro que recebe uma função como valor, cuja a entrada desse função
 	 * deve ser do tipo Claims e a saída será de um tipo ainda não definido.
 	 * .apply é um método da interface Function que simplesmente executa a função.
@@ -111,12 +113,28 @@ public class JwtUtil {
 		return extractClaim(token, Claims::getSubject);
 	}
 
-	// Valida se o token ainda é válido
+	/*
+	 * Método de entrada da classe para validação do token.
+	 * Valida se o token ainda é válido.
+	 * A validação ocorre no método getExpiration de Claims, que extrai a claim exp do token.
+	 * new Date() cria um novo objeto Date com a data atual do sistema.
+	 * O método .after verifica se o Date da claim exp é posterior ao Date com a data atual.
+	 * Caso true, significa que o token não está expirado ainda, caso false, o token já
+	 * expirou e é inválido.
+	 * Se algum erro ocorrer com getAllClaims, será lançada a exceção JwtException ou
+	 * IllegalArgumentException, retornando false.
+	 */
 	public boolean isTokenValid(String token) {
 		try {
+			// Chama getAllClaims para extrair todas as claims do token
 			Claims claims = getAllClaims(token);
 			return claims.getExpiration().after(new Date());
-		} catch (JwtException | IllegalArgumentException e) {
+		} 
+		/*
+		 *  Para capturar múltiplas exceções em um único bloco catch, usamos o multi-catch,
+		 *  bastando separar as exceções por pipes "|"
+		 */
+		catch (JwtException | IllegalArgumentException e) {
 			return false;
 		}
 	}
