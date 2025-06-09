@@ -20,7 +20,7 @@ public class JwtUtil {
 	/*
 	 * A SECRET_KEY é usada para gerar uma assinatura do token, garantindo
 	 * que ele não foi adulterado. Essa chave deve ser criptografada por um HMAC
-	 * antes que seja gerada a assinatura. mínimo 32 caracteres
+	 * antes que seja gerada a assinatura. Mínimo 32 caracteres
 	 */
 	private final String SECRET_KEY = "umasecretaextremamenteseguraparagerartokens123";
 	// Define por quanto tempo o token é válido em milissegundos.
@@ -50,7 +50,7 @@ public class JwtUtil {
 	 * Jwts é a classe principal da biblioteca JJWT para construir JWTs.
 	 * Para construir um  JWT, vamos passar ao Jwts as seguintes "claims":
 	 * subject (email, no caso): é um identificador do usuário que está solicitando o token;
-	 * iat: momento em que o token foi criado em milissegundos e convertido para Date
+	 * iat: momento em que o token foi criado em milissegundos e convertido para Date;
 	 * exp: momento de expiração do token. Será somado os milissegundos da varíavel
 	 * EXPIRATION_TIME_MS com o currentTimeMillis (momento atual) e convertido em um Date.
 	 * Além das Claims, o Jwts gera uma assinatura no token usando a chave formatada
@@ -69,7 +69,7 @@ public class JwtUtil {
 	
 	/*
 	 * Quarto ponto-chave da autenticação e o mais importante.
-	 * Depois o token é gerado para o cliente, ele deverá ser autenticado por esse token
+	 * Depois o token é gerado para o cliente, o usuário deverá ser autenticado por esse token
 	 * em todas as requisições posteriores que ele fizer dentro do sistema.
 	 * O método verifyWith é o responsável por verificar se a assinatura do token corresponde
 	 * com a chave formatada que geramos antes.
@@ -86,14 +86,26 @@ public class JwtUtil {
 				.getPayload(); // Pega todas as claims consolidadas em um objeto Claims
 	}
 	
+	/*
+	 * Aqui estamos aplicando o conceito de Generics no java.
+	 * <T> declara que esse método se trata de um generic, ou seja,
+	 * não sabemos ainda o tipo de dado que esse método vai retornar.
+	 * claimsResolver é um parâmetro que recebe uma função como valor, cuja a entrada desse função
+	 * deve ser do tipo Claims e a saída será de um tipo ainda não definido.
+	 * .apply é um método da interface Function que simplesmente executa a função.
+	 */
 	private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-		final Claims claims = getAllClaims(token);
-		return claimsResolver.apply(claims);
+		final Claims claims = getAllClaims(token); // Separa todas as claims do token
+		return claimsResolver.apply(claims); // Executa claimsResolver passando as claims como parâmetro
 	}
 	
 	/*
 	 * Extrai o subject (email) do token
-	 * Chama extractClaim, passando dois parâmetros: o token e uma função.
+	 * Chama extractClaim, passando dois parâmetros: o token e a função Claim para extrair o subject.
+	 * getSubject sempre retorna uma String, nesse ponto, definimos que o retorno de extractClaim 
+	 * será uma String também.
+	 * Claims::getSubject se trata de uma referência de método, onde precisamos informar objeto Claim
+	 * como argumento para executar o método getSubject
 	 */
 	public String extractSubject(String token) {
 		return extractClaim(token, Claims::getSubject);
