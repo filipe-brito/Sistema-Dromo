@@ -22,48 +22,71 @@ import com.dromo.sistema_dromo.security.user.UserDetailsServiceImpl; // Seu novo
 @EnableMethodSecurity // Habilita segurança em nível de método (ex: @PreAuthorize)
 public class SecurityConfig {
 
-    private final JwtAuthFilter jwtAuthFilter; // Filtro que vai validar o JWT em cada requisição
-    private final UserDetailsServiceImpl userDetailsService; // NOVO: Injeta sua implementação de UserDetailsService
-    // Construtor que injeta o JwtFilter
-    public SecurityConfig(JwtAuthFilter jwtAuthFilter, UserDetailsServiceImpl userDetailsService) {
-        this.jwtAuthFilter = jwtAuthFilter;
-        this.userDetailsService = userDetailsService;
-    }
+	private final JwtAuthFilter jwtAuthFilter; // Filtro que vai validar o JWT em cada requisição
+	private final UserDetailsServiceImpl userDetailsService; // NOVO: Injeta sua implementação de UserDetailsService
+	// Construtor que injeta o JwtFilter
 
-    @Bean // Define a cadeia de filtros de segurança HTTP
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf(csrf -> csrf.disable()) // Desabilita CSRF para APIs RESTful sem estado
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/auth/**").permitAll() // Permite acesso público ao endpoint de autenticação
-                .anyRequest().authenticated() // Todas as outras requisições exigem autenticação
-            )
-            .sessionManagement(session -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Configura a sessão como stateless (sem estado)
-            )
-            .authenticationProvider(authenticationProvider()) // NOVO: Usa o provedor de autenticação que configuramos
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class); // Adiciona o filtro JWT antes do filtro padrão de username/password
+	public SecurityConfig(JwtAuthFilter jwtAuthFilter, UserDetailsServiceImpl userDetailsService) {
+		this.jwtAuthFilter = jwtAuthFilter;
+		this.userDetailsService = userDetailsService;
+	}
 
-        return http.build();
-    }
+	/*
+	 * A anotação @Bean dentro de uma classe anotada com @Configuration configura
+	 * esse método para retornar um objeto que será gerenciado pelo Spring Boot, ou
+	 * seja, o próprio Spring executa o método, cria e injeta o objeto de retorno
+	 * onde for preciso de forma automática. Em outras palavras, esse é um método
+	 * necessário para a autenticação, porém, não precisamos chamá-lo e nem
+	 * gerenciar o objeto de retorno em nenhuma outra classe, o próprio Spring Boot
+	 * faz isso de forma automática ao iniciar a aplicação. O próprio Spring também
+	 * fornece o HttpSecurity do parâmetro do método. Esse método vai retornar um
+	 * SecurityFilterChain. É uma classe nativa do SpringSecurity que será
+	 * gerenciada pelo próprio Spring. HttpSecurity contém métodos nativos para
+	 * criar as "etapas de proteção do sistema" e retornar em um objeto
+	 * SecurityFilterChain. Chamamos esses métodos em cadeia para definir como o
+	 * SecurityFilterChain do retorno de http deve ser criado.
+	 */
+	@Bean
+	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		http.csrf(csrf -> csrf.disable())
+				.authorizeHttpRequests(
+						auth -> auth.requestMatchers("/auth/**").permitAll().anyRequest().authenticated())
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.authenticationProvider(authenticationProvider())
+				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+		
+		/*
+		 * ------------------ANÁLISE DOS MÉTODOS-------------------
+		 * .csrf: método HttpSecurity para configuração da proteção CSRF. No caso, passamos 
+		 * uma expressão lambda como argumento para desabilitar essa proteção, pois ela é 
+		 * baseada em uma autenticação de estado, em que libera uma "sessão" para o cliente fazer 
+		 * as requisições depois de autenticado; o que não é o nosso caso.
+		 * 
+		 * .authorizeHttpRequests: A partir desse método que definimos as regras de requisições 
+		 * ao sistema.
+		 */
 
-    
-    @Bean // Define o provedor de autenticação (como Spring Security vai buscar usuários e validar senhas)
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService); // Usa seu UserDetailsService
-        authProvider.setPasswordEncoder(passwordEncoder()); // Usa seu PasswordEncoder (o bean que vamos criar abaixo)
-        return authProvider;
-    }
+		return http.build();
+	}
 
-    @Bean // Define o codificador de senhas (BCrypt para hashing)
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // Usa a implementação BCrypt para hashear e verificar senhas
-    }
+	@Bean // Define o provedor de autenticação (como Spring Security vai buscar usuários e
+			// validar senhas)
+	public AuthenticationProvider authenticationProvider() {
+		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+		authProvider.setUserDetailsService(userDetailsService); // Usa seu UserDetailsService
+		authProvider.setPasswordEncoder(passwordEncoder()); // Usa seu PasswordEncoder (o bean que vamos criar abaixo)
+		return authProvider;
+	}
 
-    // Bean necessário para autenticação se você for usar no AuthService5 futuramente
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
-    }
+	@Bean // Define o codificador de senhas (BCrypt para hashing)
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder(); // Usa a implementação BCrypt para hashear e verificar senhas
+	}
+
+	// Bean necessário para autenticação se você for usar no AuthService5
+	// futuramente
+	@Bean
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
+		return config.getAuthenticationManager();
+	}
 }
