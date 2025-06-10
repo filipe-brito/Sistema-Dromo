@@ -50,7 +50,7 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable())
 				.authorizeHttpRequests(
-						auth -> auth.requestMatchers("/auth/**").permitAll().anyRequest().authenticated())
+						auth -> auth.requestMatchers("/auth/login").permitAll().anyRequest().authenticated())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authenticationProvider(authenticationProvider())
 				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
@@ -63,7 +63,14 @@ public class SecurityConfig {
 		 * as requisições depois de autenticado; o que não é o nosso caso.
 		 * 
 		 * .authorizeHttpRequests: A partir desse método que definimos as regras de requisições 
-		 * ao sistema.
+		 * ao sistema. Passamos uma expressão lambda e os métodos que definem as regras.
+		 * auth: parâmetro que será criado e gerenciado pelo Spring
+		 * .requestMatchers: passamos como argumento as rotas que queremos configurar com os métodos 
+		 * seguintes
+		 * .permitAll: Regra que será aplicada nas rotas definidas em requestMatchers. No caso,
+		 * permitAll não impõe nenhuma restrição e a rota é definida como "pública".
+		 * 
+		 * 
 		 */
 
 		return http.build();
