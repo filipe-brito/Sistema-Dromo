@@ -36,6 +36,7 @@ public class RecordsController {
 	    @RequestParam(name = "name", required = false) String fullName, 
 	    @RequestParam(required = false) String cpf,
 	    @RequestParam(required = false) String email) {
+    	System.out.println("teste para ver se a requisição chega até aqui!");
 	return individualService.listIndividuals(fullName, cpf, email);
     }
     
