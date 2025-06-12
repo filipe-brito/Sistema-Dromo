@@ -19,11 +19,12 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component // Indica que essa classe é um componente gerenciado pelo Spring (será um
 			// "bean")
 /*
- * Essa classe será uma extensão de OncePerRequestFilter para garantir que o
- * filtro rode uma vez por requisição.
+ * O Spring Security utiliza filtros nas requisições HTTP que ele intercepta. JwtAuthFilter
+ * é um filtro personalizado para extrair e validar o token. Esse filtro deve ser o primeiro 
+ * a ser utilizado na cadeia de métodos da configuração do Spring Security
  */
 public class JwtAuthFilter extends OncePerRequestFilter {
-
+	
 	private final JwtUtil jwtUtil; // Injeta a classe JwtUtil (validador de token)
 	// NOVO: Injete seu UserDetailsService (o qual você já configurou com ROLE_USER)
 	private final UserDetailsService userDetailsService;
@@ -34,8 +35,18 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 		this.userDetailsService = userDetailsService;
 	}
 
-	@Override
-	// método principal que é executado para cada requisição
+	@Override // Sobrescreve o método honônimo de OncePerRequestFilter
+	/*
+	 *  Método mais importante dessa classe e o principal agente na validação do token enviado
+	 *  pelo cliente. O SecurityConfig chama essa método para fazer essa validação e definir
+	 *  se o cliente estará autenticado ou não. Extendemos a classe OncePerRequestFilter para 
+	 *  garantir que esse filtro seja aplicado somente uma vez por requisição.
+	 *  
+	 *  HttpServletRequest: os dados da requisição são representados por uma instância dessa classe
+	 *  HttpServletResponse: Objeto que será retornado
+	 *  FilterChain: É a cadeia de filtros que as requisições precisam passar. É através desses 
+	 *  filtros que o Spring Security aplica as validações de autenticação
+	 */
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 
