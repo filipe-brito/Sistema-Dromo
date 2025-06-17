@@ -1,8 +1,14 @@
-import React, { useState } from "react"; // Importa o React que vai gerenciar esse componente. Importa o hook "useStage"
+import React, { useContext, useState } from "react"; // Importa o React que vai gerenciar esse componente. Importa o hook "useStage"
+import { AuthContext } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
+import api from "../api/api";
 
-const LoginPage = () => { // No React, criamos componentes (ou páginas) usando arrow functions. 
+const LoginPage = () => {
+  // No React, criamos componentes (ou páginas) usando arrow functions.
+  const { login } = useContext(AuthContext);
   const [email, setEmail] = useState(""); // Definimos um hook  useState para uma variável "email"
   const [password, setPassword] = useState(""); // Definimos um hook useState para uma variável "password"
+  const [error, setError] = useState("");
   /*
   Essa é a sintaxe para definir um hook no React. Tomemos o "email" como exemplo
   const: define que a váriável email é imutável
@@ -10,21 +16,40 @@ const LoginPage = () => { // No React, criamos componentes (ou páginas) usando 
   = useState(""): atribuímos o useState à essa variável e definimos uma String vazia como valor inicial 
   */
 
-  const handleSubmit = (e) => { // arrow funciton que será chamado por um button
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    // arrow funciton que será chamado por um button
     e.preventDefault(); // evita que o recarregamento da página quando o evento que chama essa função ocorrer
-    console.log("Email:", email, "Senha:", password); // Por ora, o método só imprime no console
+    try {
+      const response = await api.post("/auth/login", { email, password });
+
+      const { user, token } = response.data; // enviado pelo backend
+      login(user, token); // Salva no Contexto e no localStorage
+
+      // Redirecionar
+      navigate("/home");
+    } catch {
+      console.error("Erro no login: ", error);
+      setError("E-mail ou senha inválidos");
+    }
   };
 
-  return ( // Padrão do React para definir um componente. Deve-se retornar um JSX
+  return (
+    // Padrão do React para definir um componente. Deve-se retornar um JSX
     <div className="flex items-center justify-center h-screen w-screen bg-gray-100">
       <div className="bg-white shadow-lg rounded-lg p-8 w-96">
         <div className="flex justify-center">
           <img src="/images/gamer-logo.png" alt="Login" className="w-30" />
         </div>
 
-        <h2 className="text-center text-3xl font-bold text-gray-800 mt-4">Acesse o seu Dromo!</h2>
+        <h2 className="text-center text-3xl font-bold text-gray-800 mt-4">
+          Acesse o seu Dromo!
+        </h2>
 
-        <form className="mt-6" onSubmit={handleSubmit}> {/* Cria um formulário e define o evento de submissão para ele*/}
+        <form className="mt-6" onSubmit={handleSubmit}>
+          {" "}
+          {/* Cria um formulário e define o evento de submissão para ele*/}
           <div className="mb-4">
             <label className="block text-gray-700">Email</label>
             <div className="relative">
@@ -40,7 +65,6 @@ const LoginPage = () => { // No React, criamos componentes (ou páginas) usando 
               </span>
             </div>
           </div>
-
           <div className="mb-4">
             <label className="block text-gray-700">Password</label>
             <div className="relative">
@@ -53,7 +77,6 @@ const LoginPage = () => { // No React, criamos componentes (ou páginas) usando 
               />
             </div>
           </div>
-
           <button
             type="submit"
             className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition"
