@@ -85,6 +85,7 @@ const CompanyEditPage = () => {
         Object.entries(data).map(([key, value]) => [key, value ?? ""])
       );
       setCompanyData(normalizedData); // Salva os dados no estado
+      console.log("Dados para edição: ", normalizedData);
     };
     fetchData();
   }, [id]);

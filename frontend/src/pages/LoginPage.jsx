@@ -1,42 +1,46 @@
-import React, { useContext, useState } from "react"; // Importa o React que vai gerenciar esse componente. Importa o hook "useStage"
+import { useState, useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import api from "../api/api";
+import { useForm } from "react-hook-form";
+import api from "../api/api"; // Certifique-se que tem o seu api configurado
 
-const LoginPage = () => {
-  // No React, criamos componentes (ou páginas) usando arrow functions.
+const TestPage = () => {
   const { login } = useContext(AuthContext);
-  const [email, setEmail] = useState(""); // Definimos um hook  useState para uma variável "email"
-  const [password, setPassword] = useState(""); // Definimos um hook useState para uma variável "password"
-  const [error, setError] = useState("");
-  /*
-  Essa é a sintaxe para definir um hook no React. Tomemos o "email" como exemplo
-  const: define que a váriável email é imutável
-  [email, setEmail]: email é o nome da variável e setEmail é o método usado para alterar o valor de email
-  = useState(""): atribuímos o useState à essa variável e definimos uma String vazia como valor inicial 
-  */
-
   const navigate = useNavigate();
+  const [apiError, setApiError] = useState("");
 
-  const handleSubmit = async (e) => {
-    // arrow funciton que será chamado por um button
-    e.preventDefault(); // evita que o recarregamento da página quando o evento que chama essa função ocorrer
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm();
+
+  const onSubmit = async (data) => {
+    setApiError(""); // Limpar erro anterior
+
     try {
-      const response = await api.post("/auth/login", { email, password });
+      const response = await api.post("/auth/login", {
+        email: data.email,
+        password: data.password,
+      });
 
-      const { user, token } = response.data; // enviado pelo backend
-      login(user, token); // Salva no Contexto e no localStorage
-
-      // Redirecionar
+      const { user, token } = response.data;
+      login(user, token);
       navigate("/home");
-    } catch {
-      console.error("Erro no login: ", error);
-      setError("E-mail ou senha inválidos");
+    } catch (error) {
+      console.error("Erro no login:", error);
+      if (
+        error.response &&
+        (error.response.status === 401 || error.response.status === 403)
+      ) {
+        setApiError("E-mail ou senha inválidos");
+      } else {
+        setApiError("Ocorreu um erro inesperado. Tente novamente.");
+      }
     }
   };
 
   return (
-    // Padrão do React para definir um componente. Deve-se retornar um JSX
     <div className="flex items-center justify-center h-screen w-screen bg-gray-100">
       <div className="bg-white shadow-lg rounded-lg p-8 w-96">
         <div className="flex justify-center">
@@ -47,41 +51,69 @@ const LoginPage = () => {
           Acesse o seu Dromo!
         </h2>
 
-        <form className="mt-6" onSubmit={handleSubmit}>
-          {" "}
-          {/* Cria um formulário e define o evento de submissão para ele*/}
+        {apiError && (
+          <div className="mb-4 text-red-500 text-center font-semibold">
+            <span>{apiError}</span>
+          </div>
+        )}
+
+        <form id="login" className="mt-6" onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
             <label className="block text-gray-700">Email</label>
             <div className="relative">
               <input
                 type="email"
-                className="w-full p-3 border text-gray-800 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                className={`w-full p-3 border text-gray-800 rounded-md focus:outline-none ${
+                  errors.email
+                    ? "border-red-500 focus:ring-0"
+                    : "border-gray-300 focus:ring-2 focus:ring-blue-500"
+                }`}
+                {...register("email", {
+                  required: "Insira o email",
+                  pattern: {
+                    value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: "Digite um email válido",
+                  },
+                })}
               />
-              <span className="absolute right-3 top-3 text-gray-500">
-                <i className="fa fa-envelope"></i>
-              </span>
+              {errors.email && (
+                <span className="text-red-500 text-sm mt-1">
+                  {errors.email.message}
+                </span>
+              )}
             </div>
           </div>
+
           <div className="mb-4">
-            <label className="block text-gray-700">Password</label>
+            <label className="block text-gray-700">Senha</label>
             <div className="relative">
               <input
                 type="password"
-                className="w-full p-3 border text-gray-800 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Senha"
+                className={`w-full p-3 border text-gray-800 rounded-md focus:outline-none ${
+                  errors.password
+                    ? "border-red-500 focus:ring-0"
+                    : "border-gray-300 focus:ring-2 focus:ring-blue-500"
+                }`}
+                {...register("password", {
+                  required: "Insira a senha",
+                })}
               />
+              {errors.password && (
+                <span className="text-red-500 text-sm mt-1">
+                  {errors.password.message}
+                </span>
+              )}
             </div>
           </div>
+
           <button
             type="submit"
+            disabled={isSubmitting}
             className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition"
           >
-            Login
+            {isSubmitting ? "Entrando..." : "Login"}
           </button>
         </form>
       </div>
@@ -89,4 +121,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default TestPage;

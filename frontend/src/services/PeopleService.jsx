@@ -87,7 +87,8 @@ export const deleteCompany = async (id) => {
 
 export const getCompanyById = async (id) => {
   try {
-    return await api.get(`/records/companies/${id}`);
+    const response = await api.get(`/records/companies/${id}`);
+    return response.data;
   } catch (error) {
     console.error("Erro ao buscar registro: ", error);
     throw new Error("Erro ao buscar registro");
