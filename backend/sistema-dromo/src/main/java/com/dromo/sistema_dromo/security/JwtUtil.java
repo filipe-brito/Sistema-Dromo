@@ -6,6 +6,7 @@ import java.util.function.Function;
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
@@ -31,6 +32,7 @@ public class JwtUtil {
 	 */
 	@Value("${security.jwt.secretkey}")
 	private String SECRET_KEY;
+
 	// Define por quanto tempo o token é válido em milissegundos.
 	// Após esse tempo, o token será considerado inválido e não poderá ser usado.
 	private final long EXPIRATION_TIME_MS = 1000 * 60 * 60 * 10; // 10 horas
