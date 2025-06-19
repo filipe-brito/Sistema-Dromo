@@ -6,7 +6,7 @@ const api = axios.create({
    *Qualquer requisição feita para essa url (inclusive com parâmetro)
    *será implementada as funções de configuração abaixo
    */
-  baseURL: "http://localhost:8080", // URL do seu backend
+  baseURL: "/backend", // URL do seu backend
 });
 
 /*
