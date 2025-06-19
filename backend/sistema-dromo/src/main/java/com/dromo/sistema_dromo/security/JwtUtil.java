@@ -5,6 +5,7 @@ import java.util.function.Function;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
@@ -21,8 +22,15 @@ public class JwtUtil {
 	 * A SECRET_KEY é usada para gerar uma assinatura do token, garantindo
 	 * que ele não foi adulterado. Essa chave deve ser criptografada por um HMAC
 	 * antes que seja gerada a assinatura. Mínimo 32 caracteres
+	 * 
+	 * A anotação @Value buscar um valor em application.properties e atribui 
+	 * esse valor para a variável abaixo. Por padrão, o Spring vai procurar 
+	 * pela propriedade definida dentro dos parênteses primeiramente nas variáveis 
+	 * de ambiente, se não houver, ele procura no arquivo application.properties;
+	 * se não houver em nenhuma das duas, ele dá erro
 	 */
-	private final String SECRET_KEY = "umasecretaextremamenteseguraparagerartokens123";
+	@Value("${security.jwt.secretkey}")
+	private String SECRET_KEY;
 	// Define por quanto tempo o token é válido em milissegundos.
 	// Após esse tempo, o token será considerado inválido e não poderá ser usado.
 	private final long EXPIRATION_TIME_MS = 1000 * 60 * 60 * 10; // 10 horas
