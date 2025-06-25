@@ -73,7 +73,7 @@ export const DropdownButton = ({
   }, [dropdownOpen]);
 
   return (
-    <div ref={dropdownRef}>
+    <div ref={dropdownRef} className="relative">
       <button
         onClick={() => setDropdownOpen(!dropdownOpen)}
         className={buttonStyle}
@@ -82,9 +82,11 @@ export const DropdownButton = ({
       </button>
       {dropdownOpen && (
         // "dropdownStyle" deverá ter o estilo geral do dropdown, como a posição dele em relação ao botão
-        <ul className={dropdownStyle}>
+        <ul className={`absolute ${dropdownStyle}`}>
           {/** Essa prop deverá conter as opções em "li" já estilizadas.*/}
-          {dropdownOptions}
+          {dropdownOptions.map((item) => (
+            <li key={item.name}>{item.value}</li>
+          ))}
         </ul>
       )}
     </div>
