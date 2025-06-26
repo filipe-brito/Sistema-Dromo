@@ -1,5 +1,5 @@
 import React, { useContext, useRef, useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { UserIcon } from "../atoms/icons/UserIcon";
 import { LogoutIcon } from "../atoms/icons/LogoutIcon";
 import { AuthContext } from "../../contexts/AuthContext";

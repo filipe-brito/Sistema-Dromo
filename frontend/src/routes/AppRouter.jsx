@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import LoginPage from "../pages/LoginPage";
 import DashboardPage from "../pages/DashboardPage";
 import PeopleRecords from "../features/records/people/pages/PeopleRecords";
@@ -26,6 +31,7 @@ const AppRouter = () => {
         <Route element={<PrivateRoute />}>
           <Route element={<MainLayout />}>
             {/* Definindo a rota "/home" que aponta para o componente DashboardPage */}
+            <Route path="/" element={<Navigate to="/home" />} />
             <Route path="/home" element={<DashboardPage />} />
             {/* Definindo a rota "/records" que aponta para o componente RecordsPage */}
             <Route path="/records/people" element={<PeopleRecords />} />
