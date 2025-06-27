@@ -70,7 +70,7 @@ public class RecordsController {
     // Métodos para o cadastro de pessoas jurídicas
     @GetMapping("/companies")
     public List<CompanyDTO> listCompanies(
-	    @RequestParam(name = "name", required = false) String companyName,
+	    @RequestParam(name = "companyName", required = false) String companyName,
 	    @RequestParam(required = false) String cnpj) {
 	return companyService.listCompanies(companyName, cnpj);
     }

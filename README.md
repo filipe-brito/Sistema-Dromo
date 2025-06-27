@@ -11,14 +11,17 @@ Dromo inicialmente será um projeto fullstack para aperfeiçoar meu conhecimento
 ## 🔐 Acesso ao projeto
 
 O projeto já está publicado na web. O servidor fica disponível entre **08:00 e 18:00**, fora desse horário o servidor fica desligado.
-O link abaixo redireciona para a página de login. Caso tenha interesse em acessar, por gentileza, entre em contato pelo LinkedIn e solicitar credenciais.
+O link abaixo redireciona para a página de login. Caso tenha interesse em acessar, por gentileza, entre em contato pelo LinkedIn e solicite as credenciais.
 
 - **Acesso ao LinkedIn:** [https://www.linkedin.com/in/filipe-brito-de-morais-799b8613a](https://www.linkedin.com/in/filipe-brito-de-morais-799b8613a)
 - **Link do projeto:** [https://dromo.filipixel.com](https://dromo.filipixel.com)
 
 ## 🤖 Tecnologias Utilizadas
 
-- **Frontend:** JSX com React+Vite e Tailwind CSS -**Backend:** Java com Spring Boot+Maven -**Banco de Dados:** PostgreSQL -**Infraestrutura:** Hospedado em um servidor caseiro configurado com Nginx, GitHub e Cloudflare Tunnel
+- **Frontend:** JSX com React+Vite e Tailwind CSS
+- **Backend:** Java com Spring Boot+Maven
+- **Banco de Dados:** PostgreSQL
+- **Infraestrutura:** Hospedado em um servidor caseiro configurado com Nginx, GitHub e Cloudflare Tunnel
 
 ## 🏗️ Modelo de Arquitetura
 
