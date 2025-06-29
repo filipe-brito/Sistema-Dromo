@@ -1,161 +1,30 @@
-# Sistema Dromo
+<h1 align="center">⭐ Sistema Dromo</h1>
 
-## Descrição
+## 📗 Descrição
+
 Dromo inicialmente será um projeto fullstack para aperfeiçoar meu conhecimento em programação. A ideia, é criar uma solução simples que compreenda todo o fluxo básico do desenvolvimento de um sistema utilizando as principais ferramentas do mercado, que tornarei fixa em meus estudos.
 
-## Tecnologias Utilizadas
-- **Frontend:** Java Script com React, CSS com Bootstrap e HTML 
--**Backend:** Java com Spring Boot
--**Banco de Dados:** PostgreSQL
--**Infraestrutura:** Nginx, GitHub, Cloudflare Tunnel
+## ⚠️ Atenção!
 
-## Modelo de Arquitetura
-- **projeto** Para o projeto em geral, tilizaremos o padrão de Arquiteura de Três Camadas (three-tier architecture)
-- **backend:** Padrão MVC estendido
+**Este projeto foi desenvolvido para uso em desktop. A experiência em dispositivos móveis pode ser limitada.**
 
-## Estrutura do Projeto
-sistema-dromo/
-|   .gitignore
-|   ESTRUTURA.md
-|   project-structure
-|   README.md
-|   
-+---backend
-|   |   .gitkeep
-|   |   
-|   \---sistema-dromo
-|       |   .classpath
-|       |   .gitattributes
-|       |   .gitignore
-|       |   .project
-|       |   HELP.md
-|       |   mvnw
-|       |   mvnw.cmd
-|       |   pom.xml
-|       |   
-|       +---.mvn
-|       |   \---wrapper
-|       |           maven-wrapper.properties
-|       |           
-|       +---.settings
-|       |       org.eclipse.core.resources.prefs
-|       |       org.eclipse.jdt.core.prefs
-|       |       org.eclipse.m2e.core.prefs
-|       |       
-|       +---data
-|       |       testdb.mv.db
-|       |       testdb.trace.db
-|       |       
-|       +---src
-|       |   +---main
-|       |   |   +---java
-|       |   |   |   \---com
-|       |   |   |       \---dromo
-|       |   |   |           \---sistema_dromo
-|       |   |   |               |   SistemaDromoApplication.java
-|       |   |   |               |   
-|       |   |   |               +---config
-|       |   |   |               |       Config.java
-|       |   |   |               |       
-|       |   |   |               +---controller
-|       |   |   |               |       UserController.java
-|       |   |   |               |       
-|       |   |   |               +---dto
-|       |   |   |               |       Dto.java
-|       |   |   |               |       
-|       |   |   |               +---model
-|       |   |   |               |       User.java
-|       |   |   |               |       
-|       |   |   |               +---repository
-|       |   |   |               |       UserRepository.java
-|       |   |   |               |       
-|       |   |   |               \---service
-|       |   |   |                       UserService.java
-|       |   |   |                       
-|       |   |   \---resources
-|       |   |       |   application.properties
-|       |   |       |   
-|       |   |       +---static
-|       |   |       \---templates
-|       |   \---test
-|       |       \---java
-|       |           \---com
-|       |               \---dromo
-|       |                   \---sistema_dromo
-|       \---target
-|           |   sistema-dromo-0.0.1-SNAPSHOT.jar
-|           |   sistema-dromo-0.0.1-SNAPSHOT.jar.original
-|           |   
-|           +---classes
-|           |   |   application.properties
-|           |   |   
-|           |   +---com
-|           |   |   \---dromo
-|           |   |       \---sistema_dromo
-|           |   |           |   SistemaDromoApplication.class
-|           |   |           |   
-|           |   |           +---config
-|           |   |           |       Config.class
-|           |   |           |       
-|           |   |           +---controller
-|           |   |           |       UserController.class
-|           |   |           |       
-|           |   |           +---dto
-|           |   |           |       Dto.class
-|           |   |           |       
-|           |   |           +---model
-|           |   |           |       User.class
-|           |   |           |       
-|           |   |           +---repository
-|           |   |           |       UserRepository.class
-|           |   |           |       
-|           |   |           \---service
-|           |   |                   UserService.class
-|           |   |                   
-|           |   \---META-INF
-|           |       |   MANIFEST.MF
-|           |       |   
-|           |       \---maven
-|           |           \---com.dromo
-|           |               \---sistema-dromo
-|           |                       pom.properties
-|           |                       pom.xml
-|           |                       
-|           +---generated-sources
-|           |   \---annotations
-|           +---generated-test-sources
-|           |   \---test-annotations
-|           +---maven-archiver
-|           |       pom.properties
-|           |       
-|           +---maven-status
-|           |   \---maven-compiler-plugin
-|           |       +---compile
-|           |       |   \---default-compile
-|           |       |           createdFiles.lst
-|           |       |           inputFiles.lst
-|           |       |           
-|           |       \---testCompile
-|           |           \---default-testCompile
-|           |                   createdFiles.lst
-|           |                   inputFiles.lst
-|           |                   
-|           \---test-classes
-+---docs
-|       .gitkeep
-|       
-+---frontend
-|       .gitkeep
-|       
-\---modus_operandi
-    |   ambiente-de-desenvolvimento.txt
-    |   arquitetura-geral-de-projeto.txt
-    |   duvidas.txt
-    |   fluxo-de-versionamento.txt
-    |   plano-de-acao.txt
-    |   
-    \---procedimentos
-            backend.txt
-            banco-de-dados.txt
-            MVC-conceito.txt
-            versionamento.txt
+## 🔐 Acesso ao projeto
+
+O projeto já está publicado na web. O servidor fica disponível entre **08:00 e 18:00**, fora desse horário o servidor fica desligado.
+O link abaixo redireciona para a página de login. Caso tenha interesse em acessar, por gentileza, entre em contato pelo LinkedIn e solicite as credenciais.
+
+- **Acesso ao LinkedIn:** [https://www.linkedin.com/in/filipe-brito-de-morais-799b8613a](https://www.linkedin.com/in/filipe-brito-de-morais-799b8613a)
+- **Link do projeto:** [https://dromo.filipixel.com](https://dromo.filipixel.com)
+
+## 🤖 Tecnologias Utilizadas
+
+- **Frontend:** JSX com React+Vite e Tailwind CSS
+- **Backend:** Java com Spring Boot+Maven
+- **Banco de Dados:** PostgreSQL
+- **Infraestrutura:** Hospedado em um servidor caseiro configurado com Nginx, GitHub e Cloudflare Tunnel
+
+## 🏗️ Modelo de Arquitetura
+
+- **Projeto** Para o projeto em geral, utilizamos o padrão de Arquiteura de Três Camadas (three-tier architecture)
+- **Frontend:** Atomic Design
+- **Backend:** Padrão MVC estendido

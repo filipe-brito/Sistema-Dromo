@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import LoginPage from "../pages/LoginPage";
 import DashboardPage from "../pages/DashboardPage";
 import PeopleRecords from "../features/records/people/pages/PeopleRecords";
@@ -8,6 +13,7 @@ import IndividualCreatePage from "../features/records/people/pages/IndividualCre
 import IndividualEditPage from "../features/records/people/pages/IndividualEditPage";
 import CompanyCreatePage from "../features/records/people/pages/CompanyCreatePage";
 import CompanyEditPage from "../features/records/people/pages/CompanyEditPage";
+import PrivateRoute from "./PrivateRoute";
 
 const AppRouter = () => {
   // AppRouter é uma arrow function
@@ -17,31 +23,36 @@ const AppRouter = () => {
       {/* Organiza o roteador (que define rotas na aplicação). É importado do react-router-dom */}
       <Routes>
         {/* Agrupamento de rotas que vamos definir */}
+
+        {/* Definindo a rota "/login" que aponta para o componente LoginPage */}
         <Route path="/login" element={<LoginPage />} />
-        <Route element={<MainLayout />}>
-          <Route path="/teste" element={<TestPage />} />
-          {/* Definindo a rota "/login" que aponta para o componente LoginPage */}
-          <Route path="/home" element={<DashboardPage />} />
-          {/* Definindo a rota "/home" que aponta para o componente DashboardPage */}
-          <Route path="/records/people" element={<PeopleRecords />} />
-          {/* Definindo a rota "/records" que aponta para o componente RecordsPage */}
-          <Route
-            path="/records/individual/create"
-            element={<IndividualCreatePage />}
-          />
-          <Route
-            path="/records/company/create"
-            element={<CompanyCreatePage />}
-          />
-          <Route
-            path="/records/individual/edit/:id"
-            element={<IndividualEditPage />}
-          />
-          <Route
-            path="/records/company/edit/:id"
-            element={<CompanyEditPage />}
-          />
-          {/* Outras rotas desse layout */}
+        <Route path="/teste" element={<TestPage />} />
+
+        <Route element={<PrivateRoute />}>
+          <Route element={<MainLayout />}>
+            {/* Definindo a rota "/home" que aponta para o componente DashboardPage */}
+            <Route path="/" element={<Navigate to="/home" />} />
+            <Route path="/home" element={<DashboardPage />} />
+            {/* Definindo a rota "/records" que aponta para o componente RecordsPage */}
+            <Route path="/records/people" element={<PeopleRecords />} />
+            <Route
+              path="/records/individual/create"
+              element={<IndividualCreatePage />}
+            />
+            <Route
+              path="/records/company/create"
+              element={<CompanyCreatePage />}
+            />
+            <Route
+              path="/records/individual/edit/:id"
+              element={<IndividualEditPage />}
+            />
+            <Route
+              path="/records/company/edit/:id"
+              element={<CompanyEditPage />}
+            />
+            {/* Outras rotas desse layout */}
+          </Route>
         </Route>
       </Routes>
     </Router>

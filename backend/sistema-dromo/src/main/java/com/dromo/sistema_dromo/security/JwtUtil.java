@@ -5,6 +5,8 @@ import java.util.function.Function;
 
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.Claims;
@@ -20,9 +22,17 @@ public class JwtUtil {
 	/*
 	 * A SECRET_KEY é usada para gerar uma assinatura do token, garantindo
 	 * que ele não foi adulterado. Essa chave deve ser criptografada por um HMAC
-	 * antes que seja gerada a assinatura. mínimo 32 caracteres
+	 * antes que seja gerada a assinatura. Mínimo 32 caracteres
+	 * 
+	 * A anotação @Value buscar um valor em application.properties e atribui 
+	 * esse valor para a variável abaixo. Por padrão, o Spring vai procurar 
+	 * pela propriedade definida dentro dos parênteses primeiramente nas variáveis 
+	 * de ambiente, se não houver, ele procura no arquivo application.properties;
+	 * se não houver em nenhuma das duas, ele dá erro
 	 */
-	private final String SECRET_KEY = "umasecretaextremamenteseguraparagerartokens123";
+	@Value("${security.jwt.secretkey}")
+	private String SECRET_KEY;
+
 	// Define por quanto tempo o token é válido em milissegundos.
 	// Após esse tempo, o token será considerado inválido e não poderá ser usado.
 	private final long EXPIRATION_TIME_MS = 1000 * 60 * 60 * 10; // 10 horas
@@ -50,7 +60,7 @@ public class JwtUtil {
 	 * Jwts é a classe principal da biblioteca JJWT para construir JWTs.
 	 * Para construir um  JWT, vamos passar ao Jwts as seguintes "claims":
 	 * subject (email, no caso): é um identificador do usuário que está solicitando o token;
-	 * iat: momento em que o token foi criado em milissegundos e convertido para Date
+	 * iat: momento em que o token foi criado em milissegundos e convertido para Date;
 	 * exp: momento de expiração do token. Será somado os milissegundos da varíavel
 	 * EXPIRATION_TIME_MS com o currentTimeMillis (momento atual) e convertido em um Date.
 	 * Além das Claims, o Jwts gera uma assinatura no token usando a chave formatada
@@ -69,7 +79,9 @@ public class JwtUtil {
 	
 	/*
 	 * Quarto ponto-chave da autenticação e o mais importante.
-	 * Depois o token é gerado para o cliente, ele deverá ser autenticado por esse token
+	 * Esse método, basicamente extrai todas as claims de um token e os retorna em um objeto
+	 * Claims.
+	 * Depois o token é gerado para o cliente, o usuário deverá ser autenticado por esse token
 	 * em todas as requisições posteriores que ele fizer dentro do sistema.
 	 * O método verifyWith é o responsável por verificar se a assinatura do token corresponde
 	 * com a chave formatada que geramos antes.
@@ -86,25 +98,53 @@ public class JwtUtil {
 				.getPayload(); // Pega todas as claims consolidadas em um objeto Claims
 	}
 	
+	/*
+	 * Aqui estamos aplicando o conceito de Generics no java.
+	 * <T> declara que esse método se trata de um generic, ou seja,
+	 * o tipo do retorno será definido por quem chamar o método.
+	 * claimsResolver é um parâmetro que recebe uma função como valor, cuja a entrada desse função
+	 * deve ser do tipo Claims e a saída será de um tipo ainda não definido.
+	 * .apply é um método da interface Function que simplesmente executa a função.
+	 */
 	private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-		final Claims claims = getAllClaims(token);
-		return claimsResolver.apply(claims);
+		final Claims claims = getAllClaims(token); // Separa todas as claims do token
+		return claimsResolver.apply(claims); // Executa claimsResolver passando as claims como parâmetro
 	}
 	
 	/*
 	 * Extrai o subject (email) do token
-	 * Chama extractClaim, passando dois parâmetros: o token e uma função.
+	 * Chama extractClaim, passando dois parâmetros: o token e a função Claim para extrair o subject.
+	 * getSubject sempre retorna uma String, nesse ponto, definimos que o retorno de extractClaim 
+	 * será uma String também.
+	 * Claims::getSubject se trata de uma referência de método, onde precisamos informar objeto Claim
+	 * como argumento para executar o método getSubject
 	 */
 	public String extractSubject(String token) {
 		return extractClaim(token, Claims::getSubject);
 	}
 
-	// Valida se o token ainda é válido
+	/*
+	 * Método de entrada da classe para validação do token.
+	 * Valida se o token ainda é válido.
+	 * A validação ocorre no método getExpiration de Claims, que extrai a claim exp do token.
+	 * new Date() cria um novo objeto Date com a data atual do sistema.
+	 * O método .after verifica se o Date da claim exp é posterior ao Date com a data atual.
+	 * Caso true, significa que o token não está expirado ainda, caso false, o token já
+	 * expirou e é inválido.
+	 * Se algum erro ocorrer com getAllClaims, será lançada a exceção JwtException ou
+	 * IllegalArgumentException, retornando false.
+	 */
 	public boolean isTokenValid(String token) {
 		try {
+			// Chama getAllClaims para extrair todas as claims do token
 			Claims claims = getAllClaims(token);
 			return claims.getExpiration().after(new Date());
-		} catch (JwtException | IllegalArgumentException e) {
+		} 
+		/*
+		 *  Para capturar múltiplas exceções em um único bloco catch, usamos o multi-catch,
+		 *  bastando separar as exceções por pipes "|"
+		 */
+		catch (JwtException | IllegalArgumentException e) {
 			return false;
 		}
 	}
