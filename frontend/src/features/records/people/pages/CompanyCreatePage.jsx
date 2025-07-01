@@ -68,6 +68,7 @@ const CompanyCreatePage = () => {
   const [triggerValidation, setTriggerValidation] = useState(null);
   // Estado para controlar o modal de confirmação ao submeter o formulário
   const [isConfirmOpen, setConfirmOpen] = useState(false);
+  const [modalResponse, setModalResponse] = useState(null);
   // Estado que alterna quais informações devem aparecer no modal
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
   const [activeTab, setActiveTab] = useState(0);
@@ -80,13 +81,13 @@ const CompanyCreatePage = () => {
     // Sempre envolver requisições em um bloco try-catch
     try {
       const response = await postCompany(data); // Método de chamada à API do backend
-      console.log(response);
       setStatus("success"); // Se não houver erro no envio, altera o status para success
       setTimeout(() => navigate(`/records/company/edit/${response.id}`), 3000); // Redireciona para a edição do novo registro
     } catch (error) {
+      setModalResponse(error.message);
+      console.warn(error.message);
       // Captura erros da requisição
-      console.error("Erro ao buscar empresa: ", error.message); // Imprime o erro no console
-      setStatus("Error"); // Modal de confirmação apresenta o erro
+      setStatus("error"); // Modal de confirmação apresenta o erro
     }
   };
 
@@ -108,7 +109,7 @@ const CompanyCreatePage = () => {
               idle: "Deseja realmente enviar os dados?",
               loading: "Carregando...",
               success: "Cadastro realizado",
-              error: "Erro!",
+              error: modalResponse,
             }}
           />
         )}

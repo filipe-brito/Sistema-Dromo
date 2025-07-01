@@ -46,7 +46,7 @@ const Dashboard = () => {
       <section className="bg-stone-200 p-4 rounded-md shadow mb-2">
         <h3 className="text-xl font-semibold mb-2">
           <Maintenance className="inline h-7 w-7 text-gray-700" /> Últimas
-          implementações
+          atualizações
         </h3>
         <ul className="list-disc list-inside space-y-1 pl-8">
           <li>
@@ -54,6 +54,10 @@ const Dashboard = () => {
           </li>
           <li>
             Redirecionamento automático da raiz para <code>/home</code>.
+          </li>
+          <li>
+            Tratamento de erros ao cadastrar pessoa e empresa: modal agora vai
+            exibir qual campo violou a constraint <code>UNIQUE</code> do Postgre
           </li>
         </ul>
       </section>
@@ -66,10 +70,10 @@ const Dashboard = () => {
         <ul className="list-disc list-inside space-y-1 pl-8">
           <li>Inserção de foto nos cadastros de pessoas</li>
           <li>
-            Redirecionar para a página de login quando retorno 401/403 do
-            backend
+            Criar um <code>input</code> para selecionar uma cidade/estado. Terá
+            de ser implementado uma tabela no Postgre para armazenar essas
+            cidades
           </li>
-          <li>Tratamento de erros nas requisições de cadastros</li>
         </ul>
       </section>
     </div>

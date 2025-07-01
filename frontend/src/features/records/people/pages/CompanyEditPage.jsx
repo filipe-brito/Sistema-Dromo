@@ -70,6 +70,7 @@ const CompanyEditPage = () => {
   // Estado que controla as mudanças de trigger recebido pelo FormBuilder
   const [triggerValidation, setTriggerValidation] = useState(null);
   // Estado para controlar o modal de confirmação ao submeter o formulário
+  const [modalResponse, setModalResponse] = useState(null);
   const [isConfirmOpen, setConfirmOpen] = useState(false);
   // Estado que alterna quais informações devem aparecer no modal
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
@@ -85,7 +86,6 @@ const CompanyEditPage = () => {
         Object.entries(data).map(([key, value]) => [key, value ?? ""])
       );
       setCompanyData(normalizedData); // Salva os dados no estado
-      console.log("Dados para edição: ", normalizedData);
     };
     fetchData();
   }, [id]);
@@ -97,7 +97,7 @@ const CompanyEditPage = () => {
       await updateCompany(id, companyData);
       setStatus("success");
     } catch (error) {
-      console.error("Erro ao atualizar: ", error);
+      setModalResponse(error.message);
       setStatus("error");
     }
   };
@@ -120,7 +120,7 @@ const CompanyEditPage = () => {
               idle: "Deseja realmente enviar os dados?",
               loading: "Carregando...",
               success: "Cadastro atualizado!",
-              error: "Erro!",
+              error: modalResponse,
             }}
           />
         )}
