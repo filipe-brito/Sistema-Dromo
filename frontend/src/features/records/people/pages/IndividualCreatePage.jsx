@@ -92,6 +92,7 @@ const IndividualCreatePage = () => {
   const [triggerValidation, setTriggerValidation] = useState(null);
   // Estado para controlar o modal de confirmação ao submeter o formulário
   const [isConfirmOpen, setConfirmOpen] = useState(false);
+  const [modalResponse, setModalResponse] = useState(null);
   // Estado que alterna quais informações devem aparecer no modal
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
   const [activeTab, setActiveTab] = useState(0);
@@ -111,7 +112,7 @@ const IndividualCreatePage = () => {
       ); // Redireciona para a edição do novo registro
     } catch (error) {
       // Captura erros da requisição
-      console.error("erro ao buscar pessoas físicas: ", error); // Imprime o erro no console
+      setModalResponse(error.message);
       setStatus("error"); // Modal de confirmação apresenta o erro
     }
   };
@@ -134,7 +135,7 @@ const IndividualCreatePage = () => {
               idle: "Deseja realmente enviar os dados?",
               loading: "Carregando...",
               success: "Cadastro realizado",
-              error: "Erro!",
+              error: modalResponse,
             }}
           />
         )}

@@ -10,7 +10,6 @@ export const fetchIndividuals = async (filters = {}) => {
     );
     return response.data; // Retorne a resposta da API
   } catch (error) {
-    console.error("Erro ao buscar dados dos indivíduos", error);
     throw new Error("Erro ao buscar dados dos indivíduos");
   }
 };
@@ -20,8 +19,13 @@ export const postIndividual = async (data) => {
     const response = await api.post("/records/individuals", data);
     return response.data; // retorna o DTO com os dados salvos
   } catch (error) {
-    console.error("Erro ao salvar indivíduo: ", error);
-    throw new Error("Erro ao salvar indivíduo");
+    if (error.response) {
+      const message = error.response.data;
+
+      throw new Error(message);
+    } else {
+      throw new Error("Erro ao salvar indivíduo");
+    }
   }
 };
 
@@ -39,17 +43,21 @@ export const getIndividualById = async (id) => {
     const response = await api.get(`/records/individuals/${id}`);
     return response.data;
   } catch (error) {
-    console.error("Erro ao buscar registro: ", error);
     throw new Error("Erro ao buscar registro");
   }
 };
 
 export const updateIndividual = async (id, data) => {
   try {
-    return await api.put(`/records/individuals/${id}`, data);
+    const response = await api.put(`/records/individuals/${id}`, data);
+    return response.data;
   } catch (error) {
-    console.error("Erro ao atualizar registro: ", error);
-    throw new Error("Erro ao atualizar registro");
+    if (error.response) {
+      const message = error.response.data;
+      throw new Error(message);
+    } else {
+      throw new Error("Erro ao atualizar registro");
+    }
   }
 };
 
@@ -61,7 +69,6 @@ export const fetchCompanies = async (filters = {}) => {
     );
     return response.data;
   } catch (error) {
-    console.error("Erro ao buscar dados de companias: ", error);
     throw new Error("Erro ao buscar dados de companias");
   }
 };
@@ -71,8 +78,12 @@ export const postCompany = async (data) => {
     const response = await api.post("/records/companies", data);
     return response.data;
   } catch (error) {
-    console.error("Erro ao salvar empresa: ", error);
-    throw new Error("Erro ao salvar empresa");
+    if (error.response) {
+      const message = error.response.data;
+      throw new Error(message);
+    } else {
+      throw new Error("Erro ao salvar empresa");
+    }
   }
 };
 
@@ -90,7 +101,6 @@ export const getCompanyById = async (id) => {
     const response = await api.get(`/records/companies/${id}`);
     return response.data;
   } catch (error) {
-    console.error("Erro ao buscar registro: ", error);
     throw new Error("Erro ao buscar registro");
   }
 };
@@ -99,7 +109,10 @@ export const updateCompany = async (id, data) => {
   try {
     const response = await api.put(`/records/companies/${id}`, data);
   } catch (error) {
-    console.error("Erro ao atualizar registro: ", error);
+    if (error.response) {
+      const message = error.response.data;
+      throw new Error(message);
+    }
     throw new Error("Erro ao atualizar registro");
   }
 };

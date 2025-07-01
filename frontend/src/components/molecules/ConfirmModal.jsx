@@ -76,7 +76,8 @@ export const ConfirmModal = ({
       content = (
         <React.Fragment>
           <ErrorIcon className="w-15 h-15 text-red-500" />
-          <p className="text-2xl">{messages.error}</p>
+          <p className="text-2xl">Erro!</p>
+          <p className="text-xl">{messages.error}</p>
           <button
             onClick={() => setConfirmOpen(false)}
             className="px-3 py-1 bg-blue-600 text-white rounded cursor-pointer hover:bg-blue-500"

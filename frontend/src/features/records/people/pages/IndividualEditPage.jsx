@@ -95,6 +95,7 @@ const IndividualEditPage = () => {
   const { id } = useParams();
 
   const [isConfirmOpen, setConfirmOpen] = useState(false);
+  const [modalResponse, setModalResponse] = useState(null);
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
   const [individualData, setIndividualData] = useState(null); // Estado novo para armazenar dados
   const [activeTab, setActiveTab] = useState(0);
@@ -114,12 +115,11 @@ const IndividualEditPage = () => {
 
   const handleSubmitIndividual = async (individualData) => {
     setStatus("loading");
-    console.log("IndividualData", individualData);
     try {
       await updateIndividual(id, individualData);
       setStatus("success");
     } catch (error) {
-      console.error("Erro ao atualizar: ", error);
+      setModalResponse(error.message);
       setStatus("error");
     }
   };
@@ -139,7 +139,7 @@ const IndividualEditPage = () => {
               idle: "Deseja realmente enviar os dados?",
               loading: "Carregando...",
               success: "Cadastro atualizado!",
-              error: "Erro!",
+              error: modalResponse,
             }}
           />
         )}
