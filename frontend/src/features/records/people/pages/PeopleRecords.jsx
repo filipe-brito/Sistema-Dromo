@@ -5,7 +5,7 @@ import {
   deleteCompany,
   fetchCompanies,
   fetchIndividuals,
-} from "../../../../services/PeopleService";
+} from "@features/records/people/services/PeopleService";
 import { Tab } from "@/components/templates/Tabs";
 import { SearchSection } from "@/components/organisms/SearchSection";
 import { EditButton } from "@/components/atoms/EditButton";

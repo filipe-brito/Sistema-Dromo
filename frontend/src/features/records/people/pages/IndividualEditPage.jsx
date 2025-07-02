@@ -1,6 +1,9 @@
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
-import { getIndividualById, updateIndividual } from "@/services/PeopleService";
+import {
+  getIndividualById,
+  updateIndividual,
+} from "@features/records/people/services/PeopleService";
 import React, { useState } from "react";
 import { FormBuilder } from "@/components/organisms/FormBuilder";
 import { Tab } from "@/components/templates/Tabs";

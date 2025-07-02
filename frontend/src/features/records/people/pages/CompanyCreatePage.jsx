@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Tab } from "@/components/templates/Tabs";
-import { postCompany } from "@/services/PeopleService";
+import { postCompany } from "@features/records/people/services/PeopleService";
 import { ConfirmModal } from "@/components/molecules/ConfirmModal";
 import { FormFooter } from "@/components/organisms/Footer";
 import { CompanyIcon } from "@/components/atoms/icons/CompanyIcon";

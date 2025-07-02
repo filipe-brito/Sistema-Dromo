@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FormBuilder } from "@/components/organisms/FormBuilder";
 import { Tab } from "@/components/templates/Tabs";
 import { PersonIcon } from "@/components/atoms/icons/PersonIcon";
-import { postIndividual } from "@/services/PeopleService";
+import { postIndividual } from "@features/records/people/services/PeopleService";
 import { FormFooter } from "@/components/organisms/Footer";
 import { ConfirmModal } from "@/components/molecules/ConfirmModal";
 import { useNavigate } from "react-router-dom";
