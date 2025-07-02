@@ -6,14 +6,10 @@ import {
 } from "react-router-dom";
 import LoginPage from "../pages/LoginPage";
 import DashboardPage from "../pages/DashboardPage";
-import PeopleRecords from "../features/records/people/pages/PeopleRecords";
 import MainLayout from "../layouts/MainLayout";
 import TestPage from "../pages/TestPage";
-import IndividualCreatePage from "../features/records/people/pages/IndividualCreatePage";
-import IndividualEditPage from "../features/records/people/pages/IndividualEditPage";
-import CompanyCreatePage from "../features/records/people/pages/CompanyCreatePage";
-import CompanyEditPage from "../features/records/people/pages/CompanyEditPage";
 import PrivateRoute from "./PrivateRoute";
+import PeopleRecordsRoutes from "@features/records/people/routes/PeopleRecordsRoutes";
 
 const AppRouter = () => {
   // AppRouter é uma arrow function
@@ -34,23 +30,7 @@ const AppRouter = () => {
             <Route path="/" element={<Navigate to="/home" />} />
             <Route path="/home" element={<DashboardPage />} />
             {/* Definindo a rota "/records" que aponta para o componente RecordsPage */}
-            <Route path="/records/people" element={<PeopleRecords />} />
-            <Route
-              path="/records/individual/create"
-              element={<IndividualCreatePage />}
-            />
-            <Route
-              path="/records/company/create"
-              element={<CompanyCreatePage />}
-            />
-            <Route
-              path="/records/individual/edit/:id"
-              element={<IndividualEditPage />}
-            />
-            <Route
-              path="/records/company/edit/:id"
-              element={<CompanyEditPage />}
-            />
+            <Route path="/records/*" element={<PeopleRecordsRoutes />} />
             {/* Outras rotas desse layout */}
           </Route>
         </Route>

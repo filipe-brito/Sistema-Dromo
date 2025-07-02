@@ -1,4 +1,4 @@
-import api from "../api/api";
+import api from "@/api/api";
 
 // Função assíncrona exportada que faz uma chamada à API
 // Recebe como argumento um objeto 'filters'. Se nenhum for passado, usa um objeto vazio por padrão

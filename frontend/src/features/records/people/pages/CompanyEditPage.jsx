@@ -1,6 +1,9 @@
 import { useParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import { getCompanyById, updateCompany } from "@/services/PeopleService";
+import {
+  getCompanyById,
+  updateCompany,
+} from "@features/records/people/services/PeopleService";
 import { Tab } from "@/components/templates/Tabs";
 import { CompanyIcon } from "@/components/atoms/icons/CompanyIcon";
 import { LoadingIcon } from "@/components/atoms/icons/LoadingIcon";
