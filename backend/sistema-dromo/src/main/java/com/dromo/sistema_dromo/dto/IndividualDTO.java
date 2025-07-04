@@ -2,6 +2,8 @@ package com.dromo.sistema_dromo.dto;
 
 import java.time.LocalDate;
 
+import com.dromo.sistema_dromo.model.Cities;
+
 public class IndividualDTO {
 	private int id;
 	private String name;
@@ -14,9 +16,10 @@ public class IndividualDTO {
         private String rg;
         private String rntrc;
         private String email;
+        private Cities birthCity;
     
     // Construtor
-	public IndividualDTO(int id, String name, String cpf, char gender, String maritalStatus, String phone, String cellphone, LocalDate dob, String rg, String rntrc, String email) {
+	public IndividualDTO(int id, String name, String cpf, char gender, String maritalStatus, String phone, String cellphone, LocalDate dob, String rg, String rntrc, String email, Cities birthCity) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -29,6 +32,7 @@ public class IndividualDTO {
 		this.rg = rg;
 		this.rntrc = rntrc;
 		this.email = email;
+		this.birthCity = birthCity;
 	}
 	public IndividualDTO() {
 		
@@ -77,6 +81,10 @@ public class IndividualDTO {
 	public String getEmail() {
 		return email;
 	}
+	
+	public Cities getBirthCity() {
+		return birthCity;
+	}
 
 	public void setId(int id) {
 		this.id = id;
@@ -122,5 +130,7 @@ public class IndividualDTO {
 		this.email = email;
 	}
 	
-	
+	public void setBirthCity(Cities birthCity) {
+		this.birthCity = birthCity;
+	}
 }

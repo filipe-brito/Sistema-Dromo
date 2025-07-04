@@ -29,7 +29,8 @@ public class IndividualService {
 			individual.getDob(), 
 			individual.getRg(),
 			individual.getRntrc(),
-			individual.getEmail()))
+			individual.getEmail(),
+			individual.getBirthCity()))
 		.toList();
     }
     

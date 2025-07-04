@@ -4,9 +4,12 @@ import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
@@ -30,6 +33,18 @@ public class Individual {
 	private String rg;
 	private String rntrc;
 	private String email;
+	/*
+	 * O atributo abaixo será um JOIN com a tabea cities do banco de dados.
+	 * @ManyToOne define como os dados dessa tabela externa serão buscados e a relação 
+	 * entro as duas tabelas (muitos para um). No caso, LAZY define que os dados dessa 
+	 * tabela externa só serão retornados se solicitados explicitamente. Se não forem, 
+	 * será retornado comente o valor de chave estrangeira. 
+	 * 
+	 * @JoinColumn define qual é a coluna que terá um JOIN com uma tabela externa.
+	 */
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "birth_city_id") // nome da coluna FK no banco
+	private Cities birthCity;
 	
 	public int getId() {
 		return id;
@@ -64,7 +79,9 @@ public class Individual {
 	public String getEmail() {
 		return email;
 	}
-	
+	public Cities getBirthCity() {
+		return birthCity;
+	}
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -110,5 +127,7 @@ public class Individual {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
+	public void setBirthCity(Cities birthCity) {
+		this.birthCity = birthCity;
+	}
 }
