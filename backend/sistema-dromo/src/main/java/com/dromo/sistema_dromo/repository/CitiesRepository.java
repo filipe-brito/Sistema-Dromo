@@ -8,5 +8,5 @@ import com.dromo.sistema_dromo.model.Cities;
 
 public interface CitiesRepository extends JpaRepository<Cities, Integer> {
 	// Método para buscar cidades por nome
-	List<Cities> findByNameContainingIgnoreCase(String name);
+	List<Cities> findTop10ByNameContainingIgnoreCaseOrderByNameAsc(String name);
 }

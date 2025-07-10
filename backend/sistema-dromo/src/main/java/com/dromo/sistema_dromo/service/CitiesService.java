@@ -17,7 +17,7 @@ public class CitiesService {
 	private CitiesRepository citiesRepository;
 	
 	public List<CitiesDTO> searchByName (String name) {
-		List<Cities> cities = citiesRepository.findByNameContainingIgnoreCase(name);
+		List<Cities> cities = citiesRepository.findTop10ByNameContainingIgnoreCaseOrderByNameAsc(name);
 		List<CitiesDTO> dtoList = new ArrayList<>();
 		for (Cities city : cities) {
 			dtoList.add(CitiesMapper.toDto(city));
