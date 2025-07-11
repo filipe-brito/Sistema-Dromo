@@ -17,7 +17,7 @@ public class IndividualMapper {
 		individual.setRg(sanitize(dto.getRg()));
 		individual.setRntrc(sanitize(dto.getRntrc()));
 		individual.setEmail(sanitize(dto.getEmail()));
-		individual.setBirthCity(dto.getBirthCity());
+		individual.setBirthCity(CitiesMapper.toEntity(dto.getBirthCity()));
 		return individual;
 	}
 
@@ -34,7 +34,7 @@ public class IndividualMapper {
 		dto.setRg(entity.getRg());
 		dto.setRntrc(entity.getRntrc());
 		dto.setEmail(entity.getEmail());
-		dto.setBirthCity(entity.getBirthCity());
+		dto.setBirthCity(CitiesMapper.toDto(entity.getBirthCity()));
 		return dto;
 	}
 

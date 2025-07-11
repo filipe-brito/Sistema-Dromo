@@ -89,7 +89,7 @@ export const SelectInput = ({
   );
 };
 
-export const AutoCompleteInput = ({ loadOptionsFunction, label }) => {
+export const AutoCompleteInput = ({ loadOptionsFunction, label, value }) => {
   const debounceTimeout = useRef(null);
 
   const loadOptions = (inputValue, callback) => {

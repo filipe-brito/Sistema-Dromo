@@ -16,10 +16,10 @@ public class IndividualDTO {
         private String rg;
         private String rntrc;
         private String email;
-        private Cities birthCity;
+        private CitiesDTO birthCity;
     
     // Construtor
-	public IndividualDTO(int id, String name, String cpf, char gender, String maritalStatus, String phone, String cellphone, LocalDate dob, String rg, String rntrc, String email, Cities birthCity) {
+	public IndividualDTO(int id, String name, String cpf, char gender, String maritalStatus, String phone, String cellphone, LocalDate dob, String rg, String rntrc, String email, CitiesDTO birthCity) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -82,7 +82,7 @@ public class IndividualDTO {
 		return email;
 	}
 	
-	public Cities getBirthCity() {
+	public CitiesDTO getBirthCity() {
 		return birthCity;
 	}
 
@@ -130,7 +130,7 @@ public class IndividualDTO {
 		this.email = email;
 	}
 	
-	public void setBirthCity(Cities birthCity) {
+	public void setBirthCity(CitiesDTO birthCity) {
 		this.birthCity = birthCity;
 	}
 }

@@ -1,6 +1,11 @@
 import { validators } from "../../utils/validators";
 import { useForm, Controller } from "react-hook-form";
-import { DefaultInput, MaskedInput, SelectInput } from "../atoms/Input";
+import {
+  AutoCompleteInput,
+  DefaultInput,
+  MaskedInput,
+  SelectInput,
+} from "../atoms/Input";
 import { useEffect } from "react";
 
 export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
@@ -33,13 +38,23 @@ export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
     if (data) {
       // Aplica máscaras se existir um validador com .mask
       // A máscara não é aplicada no reset, o que quebra o validate.
-      // Vamos formatar os campos antes de inserí-los nos campos
+      // Vamos formatar os dados antes de inserí-los nos campos
       // Object.entries converte objects em array de pares [chave, valor]
       // .reduce itera todos os pares e junta tudo em um novo object (acc)
       // Para cada iteração, o .reduce aplica a máscara ao par
       const formattedData = Object.entries(data).reduce((acc, [key, value]) => {
         const mask = validators[key]?.mask;
-        acc[key] = mask ? mask(value) : value;
+        // 👇 Aqui você intercepta e reformata o campo específico
+        if (key === "birthCity") {
+          acc[key] = {
+            value: value.id,
+            label: value.cityAndState,
+            ...value, // mantém ibgeCode, state, etc
+          };
+        } else {
+          acc[key] = mask ? mask(value) : value;
+        }
+        console.log("Teste teste teste: ", acc);
         return acc;
       }, {});
 
@@ -151,6 +166,37 @@ export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
                         label={input.label}
                         options={input.options}
                         inputStyle={input.inputStyle}
+                      />
+                    )}
+                  />
+                </div>
+              );
+
+            case "autoComplete": // input de auto-complete com sistema de busca de opções
+              return (
+                <div className="flex-col" key={input.name}>
+                  <span>
+                    {errors[input.name] && (
+                      <span className="text-red-500 text-xs">
+                        {errors[input.name].message}
+                      </span>
+                    )}
+                  </span>
+                  <Controller
+                    defaultValue=""
+                    name={input.name}
+                    control={control}
+                    rules={{
+                      required: input?.required,
+                    }}
+                    render={({ field }) => (
+                      <AutoCompleteInput
+                        {...field}
+                        name={input.name}
+                        label={input.label}
+                        options={input.options}
+                        inputStyle={input.inputStyle}
+                        loadOptionsFunction={input.loadOptionsFunction}
                       />
                     )}
                   />

@@ -11,6 +11,7 @@ import { PersonIcon } from "@/components/atoms/icons/PersonIcon";
 import { FormFooter } from "@/components/organisms/Footer";
 import { ConfirmModal } from "@/components/molecules/ConfirmModal";
 import { LoadingIcon } from "../../../../components/atoms/icons/LoadingIcon";
+import { FetchCity } from "../../../../services/UtilsService";
 
 const IndividualEditPage = () => {
   const inputs = [
@@ -89,6 +90,12 @@ const IndividualEditPage = () => {
       type2: "email",
       label: "Email",
       inputStyle: "w-50",
+    },
+    {
+      name: "birthCity",
+      type: "autoComplete",
+      label: "Cidade de nascimento",
+      loadOptionsFunction: FetchCity,
     },
   ];
 

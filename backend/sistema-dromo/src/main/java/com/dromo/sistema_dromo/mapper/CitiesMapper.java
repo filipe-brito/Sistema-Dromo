@@ -15,6 +15,9 @@ public class CitiesMapper {
 	}
 	
 	public static CitiesDTO toDto (Cities entity) {
+		if (entity == null) {
+	        return null;
+	    };
 		CitiesDTO city = new CitiesDTO();
 		city.setId(entity.getId());
 		city.setIbgeCode(entity.getIbgeCode());

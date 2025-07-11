@@ -18,19 +18,7 @@ public class IndividualService {
 
     public List<IndividualDTO> listIndividuals(String fullName, String cpf, String email) {
 	return individualRepository.findByFilters(fullName, cpf, email).stream()
-		.map(individual -> new IndividualDTO(
-			individual.getId(), 
-			individual.getFullName(), 
-			individual.getCpf(),
-			individual.getGender(),
-			individual.getMaritalStatus(),
-			individual.getPhone(),
-			individual.getCellphone(),
-			individual.getDob(), 
-			individual.getRg(),
-			individual.getRntrc(),
-			individual.getEmail(),
-			individual.getBirthCity()))
+		.map(IndividualMapper::toDTO)
 		.toList();
     }
     
