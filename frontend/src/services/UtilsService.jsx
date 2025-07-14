@@ -3,10 +3,11 @@ import api from "@/api/api";
 export const FetchCity = async (city) => {
   try {
     const response = await api.get(`/utils/cities/search?name=${city}`);
-    console.log("Teste: ", response.data);
     return response.data.map((city) => ({
       value: city.id,
       label: city.cityAndState,
+      id: city.id,
+      cityAndState: city.cityAndState,
       ibgeCode: city.ibgeCode,
       name: city.name,
       state: city.state,

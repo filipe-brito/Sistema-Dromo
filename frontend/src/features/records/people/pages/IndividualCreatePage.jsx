@@ -6,88 +6,9 @@ import { postIndividual } from "@features/records/people/services/PeopleService"
 import { FormFooter } from "@/components/organisms/Footer";
 import { ConfirmModal } from "@/components/molecules/ConfirmModal";
 import { useNavigate } from "react-router-dom";
+import { IndividualInputs } from "./PeopleInputs";
 
 const IndividualCreatePage = () => {
-  // Array com as informações principais para criar os inputs do formulário
-  const inputs = [
-    {
-      name: "name",
-      type: "default",
-      label: "Nome",
-      required: "Nome é obrigatório",
-    },
-    {
-      name: "cpf",
-      type: "masked",
-      label: "CPF",
-      required: "CPF é obrigatório",
-      mask: "000.000.000-00",
-      placeholder: "Ex: 999.999.999-99",
-    },
-    {
-      name: "gender",
-      type: "select",
-      label: "Sexo",
-      required: "Sexo é obrigatório",
-      options: [
-        { optionLabel: "masculino", value: "M" },
-        { optionLabel: "feminina", value: "F" },
-      ],
-      inputStyle: "w-25",
-    },
-    {
-      name: "maritalStatus",
-      type: "select",
-      label: "Estado civil",
-      options: [
-        { optionLabel: "Solteiro", value: "solteiro" },
-        { optionLabel: "Casado", value: "casado" },
-      ],
-      inputStyle: "w-25",
-    },
-    {
-      name: "phone",
-      type: "masked",
-      label: "Telefone",
-      mask: "(00) 0000-0000",
-      placeholder: "Ex: (99) 9999-9999",
-    },
-    {
-      name: "cellphone",
-      type: "masked",
-      label: "Celular",
-      mask: "(00) 0 0000-0000",
-      placeholder: "Ex: (99) 9 9999-9999",
-    },
-    {
-      name: "dob",
-      type: "default",
-      type2: "date",
-      label: "Data de nascimento",
-      required: "Data de nascimento é obrigatório",
-      inputStyle: "w-30",
-    },
-    {
-      name: "rg",
-      type: "default",
-      label: "RG",
-      inputStyle: "w-30",
-    },
-    {
-      name: "rntrc",
-      type: "default",
-      label: "RNTRC",
-      inputStyle: "2-30",
-    },
-    {
-      name: "email",
-      type: "default",
-      type2: "email",
-      label: "Email",
-      inputStyle: "w-50",
-    },
-  ];
-
   // Estado que armazena a função trigger do FormBuilder
   const [triggerValidation, setTriggerValidation] = useState(null);
   // Estado para controlar o modal de confirmação ao submeter o formulário
@@ -150,7 +71,7 @@ const IndividualCreatePage = () => {
               content: (
                 <React.Fragment>
                   <FormBuilder // Formulário a ser submetido
-                    inputs={inputs} // Enviamos as informações de campos para o formulário montar os inputs
+                    inputs={IndividualInputs} // Enviamos as informações de campos para o formulário montar os inputs
                     onSubmit={handleSubmitIndividual} // Método que será chamado quando o formulário for submetido
                     // Abaixo, prop que recebe a função trigger para validação dos campos obrigatórios
                     // É uma callback usada pelo componente atual para buscar a função trigger do FormBuilder

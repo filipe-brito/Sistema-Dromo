@@ -61,7 +61,7 @@ export const SelectInput = ({
   name,
   label,
   options,
-  inputStyle,
+  inputWidth,
   value,
   onChange,
 }) => {
@@ -75,7 +75,7 @@ export const SelectInput = ({
         value={value}
         onChange={onChange}
         className={`h-9 px-1 bg-stone-200 rounded border-2 border-stone-400 text-sm ${
-          inputStyle ? inputStyle : "w-40"
+          inputWidth ? inputWidth : "w-40"
         }`}
       >
         <option value="">Selecione...</option>
@@ -89,7 +89,13 @@ export const SelectInput = ({
   );
 };
 
-export const AutoCompleteInput = ({ loadOptionsFunction, label, value }) => {
+export const AutoCompleteInput = ({
+  loadOptionsFunction,
+  label,
+  value,
+  onChange,
+  inputWidth,
+}) => {
   const debounceTimeout = useRef(null);
 
   const loadOptions = (inputValue, callback) => {
@@ -119,6 +125,8 @@ export const AutoCompleteInput = ({ loadOptionsFunction, label, value }) => {
         {label}
       </label>
       <AsyncSelect
+        value={value}
+        onChange={onChange}
         loadOptions={loadOptions}
         noOptionsMessage={({ inputValue: currentInput }) =>
           currentInput.trim().length < 4
@@ -129,11 +137,19 @@ export const AutoCompleteInput = ({ loadOptionsFunction, label, value }) => {
         }
         placeholder="Selecione..."
         loadingMessage={() => "Carregando..."}
+        /**
+         * react-select possui uma forma específica para estilizar.
+         * Estilizar um input do react-select é mais complexo e tem limitações.
+         * Utilizamos a prorpiedade "classNames" e estilizamos cada container separadamente e
+         * sempre assinando com !important para se sobrepor ao estilo nativo
+         */
         classNames={{
           control: (
             state // Estiliza o contêiner principal do input
           ) =>
-            `!h-9 !w-50 !bg-stone-200 !rounded !border-2 !border-stone-400 !text-sm
+            `!h-9 !${
+              inputWidth ? inputWidth : "w-50"
+            } !bg-stone-200 !rounded !border-2 !border-stone-400 !text-sm
                ${state.isFocused ? "!ring-1 !ring-none" : ""}`,
           input: () => "!text-gray-900", // Estiliza o input de texto
           placeholder: () => "!text-black", // Estiliza o placeholder

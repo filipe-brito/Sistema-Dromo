@@ -54,7 +54,6 @@ export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
         } else {
           acc[key] = mask ? mask(value) : value;
         }
-        console.log("Teste teste teste: ", acc);
         return acc;
       }, {});
 
@@ -195,7 +194,7 @@ export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
                         name={input.name}
                         label={input.label}
                         options={input.options}
-                        inputStyle={input.inputStyle}
+                        inputWidth={input.inputWidth}
                         loadOptionsFunction={input.loadOptionsFunction}
                       />
                     )}
