@@ -12,6 +12,7 @@ import { FormFooter } from "@/components/organisms/Footer";
 import { ConfirmModal } from "@/components/molecules/ConfirmModal";
 import { LoadingIcon } from "../../../../components/atoms/icons/LoadingIcon";
 import { IndividualInputs } from "./PeopleInputs";
+import { sanitizeFormData } from "../../../../utils/sanitize";
 
 const IndividualEditPage = () => {
   // Estado que controla as mudanças de trigger recebido pelo FormBuilder
@@ -43,7 +44,8 @@ const IndividualEditPage = () => {
   const handleSubmitIndividual = async (individualData) => {
     setStatus("loading");
     try {
-      await updateIndividual(id, individualData);
+      const formatedData = sanitizeFormData(individualData);
+      await updateIndividual(id, formatedData);
       setStatus("success");
     } catch (error) {
       setModalResponse(error.message);

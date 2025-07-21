@@ -59,6 +59,11 @@ const Dashboard = () => {
             Tratamento de erros ao cadastrar pessoa e empresa: modal agora vai
             exibir qual campo violou a constraint <code>UNIQUE</code> do Postgre
           </li>
+          <li>
+            Criado um <code>autocomplete input</code> que busca as opções em uma
+            api.
+          </li>
+          <li>Campo "cidade de nacimento" no cadastro de pessoas físicas.</li>
         </ul>
       </section>
 
@@ -69,11 +74,7 @@ const Dashboard = () => {
         </h3>
         <ul className="list-disc list-inside space-y-1 pl-8">
           <li>Inserção de foto nos cadastros de pessoas</li>
-          <li>
-            Criar um <code>input</code> para selecionar uma cidade/estado. Terá
-            de ser implementado uma tabela no Postgre para armazenar essas
-            cidades
-          </li>
+          <li>Inserir campo de "data de fundação" no cadastro de empresas.</li>
         </ul>
       </section>
     </div>

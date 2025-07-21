@@ -17,7 +17,11 @@ public class IndividualMapper {
 		individual.setRg(sanitize(dto.getRg()));
 		individual.setRntrc(sanitize(dto.getRntrc()));
 		individual.setEmail(sanitize(dto.getEmail()));
-		individual.setBirthCity(CitiesMapper.toEntity(dto.getBirthCity()));
+		if (dto.getBirthCity() == null) {
+		    individual.setBirthCity(null);
+		} else {
+		    individual.setBirthCity(CitiesMapper.toEntity(dto.getBirthCity()));
+		}
 		return individual;
 	}
 

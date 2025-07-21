@@ -49,6 +49,7 @@ public class GlobalExceptionHandler {
 
 				// Monta uma mensagem amigável
 				String friendlyMessage = String.format("'%s' já está cadastrado.", field.toUpperCase());
+				System.out.println("teste::: " + friendlyMessage);
 				return ResponseEntity.status(HttpStatus.CONFLICT).body(friendlyMessage);
 			}
 		}

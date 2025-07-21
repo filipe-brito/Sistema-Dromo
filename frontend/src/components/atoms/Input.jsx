@@ -1,6 +1,5 @@
-import { useRef } from "react";
+import { useState, useEffect } from "react";
 import { IMaskInput } from "react-imask";
-import AsyncSelect from "react-select/async";
 
 // Input padrão do sistema
 export const DefaultInput = ({
@@ -21,7 +20,7 @@ export const DefaultInput = ({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
-        className={`h-9 px-1 bg-stone-200 rounded border-2 border-stone-400 text-sm ${
+        className={`h-7 px-1 bg-stone-200 rounded border-2 border-stone-400 text-sm ${
           inputStyle ? inputStyle : "w-40"
         }`}
       />
@@ -49,7 +48,7 @@ export const MaskedInput = ({
         placeholder={placeholder} // O texto exibido no campo será o valor da chave 'placeholder'
         value={value} // controla o que está digitado no campo. Os colchetes diz ao React para pegar o valor da chave daquele object
         onChange={onChange} // Executa handleChange a cada evento. React envia o próprio evento como argumento
-        className={`h-9 px-1 bg-stone-200 rounded border-2 border-stone-400 text-sm ${
+        className={`h-7 px-1 bg-stone-200 rounded border-2 border-stone-400 text-sm ${
           inputStyle ? inputStyle : "w-40"
         }`}
       />
@@ -74,7 +73,7 @@ export const SelectInput = ({
         id={name}
         value={value}
         onChange={onChange}
-        className={`h-9 px-1 bg-stone-200 rounded border-2 border-stone-400 text-sm ${
+        className={`h-7 px-1 bg-stone-200 rounded border-2 border-stone-400 text-sm ${
           inputWidth ? inputWidth : "w-40"
         }`}
       >
@@ -90,84 +89,109 @@ export const SelectInput = ({
 };
 
 export const AutoCompleteInput = ({
-  loadOptionsFunction,
   label,
+  inputWidth,
+  fetchOptions,
   value,
   onChange,
-  inputWidth,
+  name,
 }) => {
-  const debounceTimeout = useRef(null);
+  const [activeDropdown, setActiveDropdown] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [listOptions, setListOptions] = useState([]);
 
-  const loadOptions = (inputValue, callback) => {
-    if (debounceTimeout.current) {
-      clearTimeout(debounceTimeout.current);
+  // 💡 Atualiza estado quando value mudar (ex: reset ou edição)
+  useEffect(() => {
+    if (value && typeof value === "object") {
+      setInputValue(value.label || "");
+    } else if (!inputValue || inputValue.trim().length === 0) {
+      setInputValue("");
+    } else {
+      setInputValue("");
     }
+  }, [value]);
 
+  // 👉 Efeito com debounce para buscar dados
+  useEffect(() => {
     if (inputValue.trim().length < 4) {
-      callback([]);
+      setListOptions([]);
       return;
     }
 
-    debounceTimeout.current = setTimeout(async () => {
-      try {
-        const options = await loadOptionsFunction(inputValue);
-        callback(options);
-      } catch (error) {
-        callback([]);
-        console.error(error.message);
-      }
-    }, 2000);
+    setLoading(true);
+    const timeout = setTimeout(() => {
+      fetchOptions(inputValue)
+        .then((results) => setListOptions(results))
+        .catch((err) => console.error("Erro na busca:", err))
+        .finally(() => setLoading(false));
+    }, 500); // debounce de 500ms
+
+    return () => clearTimeout(timeout); // limpa se o usuário continuar digitando
+  }, [inputValue]);
+
+  // 👉 Evento ao clicar numa opção
+  const handleSelect = (option) => {
+    setInputValue(option.label); // mostra no input
+    setActiveDropdown(false);
+    onChange(option); // ← Atualiza o valor no React Hook Form!
   };
 
   return (
-    <div className="flex flex-col">
-      <label htmlFor={label} className="text-sm">
-        {label}
-      </label>
-      <AsyncSelect
-        value={value}
-        onChange={onChange}
-        loadOptions={loadOptions}
-        noOptionsMessage={({ inputValue: currentInput }) =>
-          currentInput.trim().length < 4
-            ? `Digite mais ${
-                4 - currentInput.trim().length
-              } para buscar os dados.`
-            : "Nenhuma opção encontrada."
-        }
-        placeholder="Selecione..."
-        loadingMessage={() => "Carregando..."}
-        /**
-         * react-select possui uma forma específica para estilizar.
-         * Estilizar um input do react-select é mais complexo e tem limitações.
-         * Utilizamos a prorpiedade "classNames" e estilizamos cada container separadamente e
-         * sempre assinando com !important para se sobrepor ao estilo nativo
-         */
-        classNames={{
-          control: (
-            state // Estiliza o contêiner principal do input
-          ) =>
-            `!h-9 !${
-              inputWidth ? inputWidth : "w-50"
-            } !bg-stone-200 !rounded !border-2 !border-stone-400 !text-sm
-               ${state.isFocused ? "!ring-1 !ring-none" : ""}`,
-          input: () => "!text-gray-900", // Estiliza o input de texto
-          placeholder: () => "!text-black", // Estiliza o placeholder
-          menu: () =>
-            "!bg-white !rounded-lg !shadow-lg !border !border-gray-200 mt-2", // Estiliza o menu dropdown
-          option: (
-            state // Estiliza cada opção no menu
-          ) =>
-            `!py-2 !px-3 !cursor-pointer !border-b !border-stone-400 ! ${
-              state.isSelected
-                ? "!bg-blue-100 !text-blue-700"
-                : "!text-gray-900"
-            } ${state.isFocused ? "!bg-stone-300" : ""}`,
-          singleValue: () => "!text-gray-900", // Estiliza o valor selecionado (se não for multi)
-          clearIndicator: () => "!text-gray-500 hover:!text-gray-700", // Estiliza o X de limpar
-          dropdownIndicator: () => "!text-gray-500 hover:!text-gray-700", // Estiliza a setinha
+    <div className="relative flex flex-col">
+      <label className="text-sm">{label}</label>
+      {/* Input visível: sem name */}
+      <input
+        className={`h-7 px-1 bg-stone-200 rounded border-2 border-stone-400 text-sm ${
+          inputWidth ? inputWidth : "w-40"
+        }`}
+        onChange={(e) => {
+          const newValue = e.target.value;
+          setInputValue(newValue);
+
+          // ⚠️ Se o usuário apagar, notifica que é nulo
+          if (newValue.trim() === "") {
+            onChange("");
+          }
         }}
+        onFocus={() => setActiveDropdown(true)}
+        onBlur={() => setActiveDropdown(false)}
+        value={inputValue}
       />
+
+      {/* Input escondido: este é enviado no submit */}
+      <input
+        type="hidden"
+        name={name}
+        value={value?.value || ""} // ou JSON.stringify(value)
+      />
+
+      {activeDropdown && (
+        <ul className="absolute mt-1 p-1 top-full bg-white border w-full rounded">
+          {!loading && inputValue.trim().length < 4 && (
+            <p className="p-2 text-gray-500">
+              Digite mais {4 - inputValue.trim().length} caracteres
+            </p>
+          )}
+          {loading && <li className="p-2 text-gray-500">Carregando...</li>}
+          {!loading &&
+            listOptions.length > 0 &&
+            listOptions.map((opt) => (
+              <li
+                key={opt.value}
+                onMouseDown={() => handleSelect(opt)}
+                className="p-2 hover:bg-gray-100 cursor-pointer"
+              >
+                {opt.label}
+              </li>
+            ))}
+          {!loading &&
+            inputValue.trim().length >= 4 &&
+            listOptions.length === 0 && (
+              <li className="p-2 text-gray-500">Nenhuma opção encontrada</li>
+            )}
+        </ul>
+      )}
     </div>
   );
 };

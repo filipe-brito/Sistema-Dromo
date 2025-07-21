@@ -193,9 +193,8 @@ export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
                         {...field}
                         name={input.name}
                         label={input.label}
-                        options={input.options}
                         inputWidth={input.inputWidth}
-                        loadOptionsFunction={input.loadOptionsFunction}
+                        fetchOptions={input.loadOptionsFunction}
                       />
                     )}
                   />
