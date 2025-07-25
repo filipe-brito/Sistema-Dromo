@@ -70,6 +70,13 @@
 			<artifactId>postgresql</artifactId>
 			<version>42.7.5</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/com.cloudinary/cloudinary-http44 -->
+		<dependency>
+			<groupId>com.cloudinary</groupId>
+			<artifactId>cloudinary-http44</artifactId>
+			<version>1.39.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>

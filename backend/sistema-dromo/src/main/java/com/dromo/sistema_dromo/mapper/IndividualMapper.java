@@ -22,6 +22,7 @@ public class IndividualMapper {
 		} else {
 		    individual.setBirthCity(CitiesMapper.toEntity(dto.getBirthCity()));
 		}
+		individual.setProfileImageUrl(sanitize(dto.getProfileImageUrl()));
 		return individual;
 	}
 
@@ -39,6 +40,7 @@ public class IndividualMapper {
 		dto.setRntrc(entity.getRntrc());
 		dto.setEmail(entity.getEmail());
 		dto.setBirthCity(CitiesMapper.toDto(entity.getBirthCity()));
+		dto.setProfileImageUrl(entity.getProfileImageUrl());
 		return dto;
 	}
 

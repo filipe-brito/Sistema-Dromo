@@ -36,15 +36,17 @@ public class Individual {
 	/*
 	 * O atributo abaixo será um JOIN com a tabea cities do banco de dados.
 	 * @ManyToOne define como os dados dessa tabela externa serão buscados e a relação 
-	 * entro as duas tabelas (muitos para um). No caso, LAZY define que os dados dessa 
+	 * entre as duas tabelas (muitos para um). No caso, LAZY define que os dados dessa 
 	 * tabela externa só serão retornados se solicitados explicitamente. Se não forem, 
-	 * será retornado comente o valor de chave estrangeira. 
+	 * será retornado somente o valor de chave estrangeira. 
 	 * 
 	 * @JoinColumn define qual é a coluna que terá um JOIN com uma tabela externa.
 	 */
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "birth_city_id") // nome da coluna FK no banco
 	private Cities birthCity;
+	@Column(name = "profile_image_url")
+	private String profileImageUrl;
 	
 	public int getId() {
 		return id;
@@ -81,6 +83,9 @@ public class Individual {
 	}
 	public Cities getBirthCity() {
 		return birthCity;
+	}
+	public String getProfileImageUrl() {
+		return profileImageUrl;
 	}
 	public void setId(int id) {
 		this.id = id;
@@ -129,5 +134,8 @@ public class Individual {
 	}
 	public void setBirthCity(Cities birthCity) {
 		this.birthCity = birthCity;
+	}
+	public void setProfileImageUrl(String profileImageUrl) {
+		this.profileImageUrl = profileImageUrl;
 	}
 }

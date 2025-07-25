@@ -17,6 +17,7 @@ public class IndividualDTO {
         private String rntrc;
         private String email;
         private CitiesDTO birthCity;
+        private String profileImageUrl;
     
     // Construtor
 	public IndividualDTO(int id, String name, String cpf, char gender, String maritalStatus, String phone, String cellphone, LocalDate dob, String rg, String rntrc, String email, CitiesDTO birthCity) {
@@ -85,6 +86,10 @@ public class IndividualDTO {
 	public CitiesDTO getBirthCity() {
 		return birthCity;
 	}
+	
+	public String getProfileImageUrl() {
+		return profileImageUrl;
+	}
 
 	public void setId(int id) {
 		this.id = id;
@@ -132,5 +137,9 @@ public class IndividualDTO {
 	
 	public void setBirthCity(CitiesDTO birthCity) {
 		this.birthCity = birthCity;
+	}
+	
+	public void setProfileImageUrl(String profileImageUrl) {
+		this.profileImageUrl = profileImageUrl;
 	}
 }
