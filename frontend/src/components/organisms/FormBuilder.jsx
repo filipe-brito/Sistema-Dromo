@@ -1,5 +1,6 @@
 import { validators } from "../../utils/validators";
 import { useForm, Controller } from "react-hook-form";
+import { useState, useRef } from "react";
 import {
   AutoCompleteInput,
   DefaultInput,
@@ -22,6 +23,10 @@ export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
     // Controla a validação dos campos. Caso true chama handleSubmit,
     // caso false exibe os erros de formState acima dos campos
     trigger,
+    // Função que monitora os campos do formulário
+    watch,
+    // Função para alterar o valor de um campo programaticamente
+    setValue,
   } = useForm(); // Hook do React para formulários
 
   // Efeito colateral para enviar o trigger ao componente pai
@@ -59,6 +64,7 @@ export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
 
       // Executa o reset com os dados como argumento. O reset vai preencher os campos do formulário automaticamente
       // Retornamos o object reformatado pelo redux. Agora, o validate passa normalmente
+      console.warn("formattedData: ", formattedData);
       reset(formattedData);
     }
     // "Sempre declare todas as dependências que você usa dentro do efeito."
@@ -140,7 +146,6 @@ export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
                   />
                 </div>
               );
-
             case "select": // input de seleções
               return (
                 <div className="flex-col" key={input.name}>
@@ -170,7 +175,6 @@ export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
                   />
                 </div>
               );
-
             case "autoComplete": // input de auto-complete com sistema de busca de opções
               return (
                 <div className="flex-col" key={input.name}>
@@ -198,6 +202,131 @@ export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
                       />
                     )}
                   />
+                </div>
+              );
+
+            case "image": // input para submeter arquivos
+              const [selectedImage, setSelectedImage] = useState(null);
+              const [displayedImage, setDisplayedImage] = useState(
+                input.defaultImage
+              );
+              // 1. Receba a ref diretamente do register
+              const { ref: rhfRef, onChange, ...rest } = register("imageFile");
+
+              // 2. Crie a sua própria ref para ter acesso ao elemento
+              const fileInputRef = useRef(null);
+
+              // 3. Crie uma função de callback para combinar as duas refs
+              const setRef = (element) => {
+                rhfRef(element); // A ref do React Hook Form
+                fileInputRef.current = element; // A sua ref
+              };
+
+              // 2. Criamos o handler de mudança que faz tudo
+              const handleCombinedChange = (e) => {
+                // Chama o onChange do React Hook Form primeiro para atualizar o estado
+                onChange(e);
+
+                // E então executa a sua lógica de pré-visualização
+                const file = e.target.files[0];
+                if (file) {
+                  setSelectedImage(file);
+                } else {
+                  setSelectedImage(null);
+                }
+              };
+              // Função do RHF que monitora as mudanças no valor de um input
+              const urlImage = watch("profileImageUrl");
+              // Efeito para criar e limpar a URL de pré-visualização
+              useEffect(() => {
+                // 1. Prioriza a exibição de um arquivo recém-selecionado
+                if (selectedImage) {
+                  const objectUrl = URL.createObjectURL(selectedImage);
+                  setDisplayedImage(objectUrl);
+                  setValue("profileImageUrl", null);
+                  return () => URL.revokeObjectURL(objectUrl);
+                }
+
+                // 2. Se não houver arquivo selecionado, verifica a URL do watch
+                if (urlImage && urlImage !== "REMOVE_IMAGE") {
+                  setDisplayedImage(urlImage);
+                  return; // Não precisa de cleanup aqui, pois é uma URL normal
+                }
+
+                // 3. Caso contrário (urlImage é "REMOVE_IMAGE" ou nulo),
+                // exibe a imagem padrão.
+                setDisplayedImage(input.defaultImage);
+              }, [selectedImage, urlImage]); // Dependência no selectedFile
+
+              /**
+               * Handler para quando o usuário seleciona um arquivo
+               * onChange envia o evento como parâmetro, assim, podemos acessar o arquivo diretamente
+               * pelo "e.target.files[0]" e tratar.
+               */
+
+              const handleRemoveImage = () => {
+                setSelectedImage(null); // Limpa qualquer arquivo selecionado
+                setDisplayedImage(input.defaultImage); // Limpa a pré-visualização
+                // Limpa o valor do input de arquivo para permitir upload do mesmo arquivo novamente
+                if (fileInputRef.current) {
+                  // Os navegadores só permitem string vazia para limpar um input file
+                  fileInputRef.current.value = "";
+                }
+                setValue("profileImageUrl", "REMOVE_IMAGE"); // Envia um sinal para o componente pai remover do BD/Cloudinary
+              };
+
+              // Handler para o botão "Mudar Imagem" (simula o clique no input de arquivo)
+              // Responsável por abrir o dialog de seleção de arquivos no navegador
+              const handleChangeImageClick = () => {
+                fileInputRef.current.click(); // Dispara o clique no input de arquivo oculto
+              };
+
+              return (
+                <div className="flex-col" key={input.name}>
+                  <span>
+                    {errors[input.name] && (
+                      <span className="text-red-500 text-xs">
+                        {errors[input.name].message}
+                      </span>
+                    )}
+                  </span>
+                  <input type="text" name={input.name} className="hidden" />
+                  <input
+                    type="file"
+                    name="imageFile"
+                    onChange={handleCombinedChange}
+                    className={"hidden"}
+                    // Use a função de callback no atributo 'ref'
+                    ref={setRef}
+                    {...rest}
+                  />
+                  {/* Área de exibição da imagem / ícone padrão */}
+                  <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-stone-400 flex items-center justify-center bg-stone-200">
+                    <img
+                      src={displayedImage}
+                      alt="image preview"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+
+                  {/* Botões de Ação */}
+                  <div className="mt-4 flex space-x-2">
+                    <button
+                      type="button"
+                      onClick={handleChangeImageClick}
+                      className="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600"
+                    >
+                      Mudar Imagem
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={handleRemoveImage}
+                      className="px-4 py-2 bg-red-500 text-white text-sm rounded hover:bg-red-600"
+                    >
+                      Remover Imagem
+                    </button>
+                  </div>
                 </div>
               );
           }

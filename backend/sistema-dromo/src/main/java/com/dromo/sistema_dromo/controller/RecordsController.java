@@ -23,6 +23,9 @@ import com.dromo.sistema_dromo.dto.IndividualDTO;
 import com.dromo.sistema_dromo.service.CompanyService;
 import com.dromo.sistema_dromo.service.ImageService;
 import com.dromo.sistema_dromo.service.IndividualService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
 @RequestMapping("/records")
@@ -36,6 +39,8 @@ public class RecordsController {
 	@Autowired // Você pode usar @Autowired em campos, mas a injeção por construtor é
 				// recomendada para campos final
 	private ImageService profileImageService;
+	@Autowired
+	private ObjectMapper objectMapper; // Declaração da sua instância
 
 	@GetMapping("/individuals")
 	public List<IndividualDTO> listIndividuals(
@@ -47,13 +52,15 @@ public class RecordsController {
 	}
 
 	@PostMapping("/individuals")
-	public ResponseEntity<IndividualDTO> create(@RequestPart(name = "individual") IndividualDTO dto,
-			@RequestPart(name = "profile_image", required = false) MultipartFile profileImage) {
-
+	public ResponseEntity<IndividualDTO> create(@RequestPart(name = "individual") String individual,
+			@RequestPart(name = "profile_image", required = false) MultipartFile imageFile)
+			throws JsonMappingException, JsonProcessingException {
+		IndividualDTO dto = objectMapper.readValue(individual, IndividualDTO.class);
 		IndividualDTO saved = individualService.saveIndividual(dto);
-		if (profileImage != null && !profileImage.isEmpty()) {
+		if (imageFile != null && !imageFile.isEmpty()) {
 			try {
-				String imageUrl = profileImageService.uploadImage(profileImage, String.valueOf(saved.getId()));
+				String imageUrl = profileImageService.uploadImage(imageFile, String.valueOf(saved.getId()),
+						"dromo/records/individuals/profile_images", "individual_profile_pic_");
 				saved.setProfileImageUrl(imageUrl);
 				individualService.update(saved.getId(), saved);
 				return ResponseEntity.status(HttpStatus.CREATED).body(saved);
@@ -80,7 +87,11 @@ public class RecordsController {
 	}
 
 	@PutMapping("individuals/{id}")
-	public ResponseEntity<IndividualDTO> updateIndividual(@PathVariable Integer id, @RequestBody IndividualDTO dto) {
+	public ResponseEntity<IndividualDTO> updateIndividual(@PathVariable Integer id, @RequestBody IndividualDTO dto) throws IOException {
+		if (dto.getProfileImageUrl() == "REMOVE_IMAGE") {
+			String publicId = "dromo/records/individuals/profile_images/individual_profile_pic_" + dto.getId();
+			profileImageService.deleteImage(publicId);
+		}
 		IndividualDTO updated = individualService.update(id, dto);
 		return ResponseEntity.ok(updated);
 	}

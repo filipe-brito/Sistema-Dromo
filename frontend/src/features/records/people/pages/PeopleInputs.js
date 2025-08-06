@@ -1,6 +1,13 @@
+import { personIconUrl } from "../../../../components/atoms/icons/PersonIcon";
 import { FetchCity } from "../../../../services/UtilsService";
 
 export const IndividualInputs = [
+  {
+    name: "profileImageUrl",
+    type: "image",
+    label: "Profile Image",
+    defaultImage: personIconUrl,
+  },
   {
     name: "name",
     type: "default",

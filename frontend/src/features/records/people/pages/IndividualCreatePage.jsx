@@ -7,6 +7,7 @@ import { FormFooter } from "@/components/organisms/Footer";
 import { ConfirmModal } from "@/components/molecules/ConfirmModal";
 import { useNavigate } from "react-router-dom";
 import { IndividualInputs } from "./PeopleInputs";
+import { buildFormData } from "../../../../utils/miscellaneous";
 
 const IndividualCreatePage = () => {
   // Estado que armazena a função trigger do FormBuilder
@@ -24,8 +25,22 @@ const IndividualCreatePage = () => {
   const handleSubmitIndividual = async (data) => {
     setStatus("loading"); // Altera o state para rodar o loading enquanto a função não retorna os dados
     // Sempre envolver requisições em um bloco try-catch
+
+    let dataToSubmit = data;
     try {
-      const response = await postIndividual(data); // Método de chamada à API do backend
+      if (data.imageFile && data.imageFile[0]) {
+        const individualData = { ...data };
+        delete individualData.profileImageUrl;
+        delete individualData.imageFile;
+
+        dataToSubmit = buildFormData(
+          "individual",
+          individualData,
+          "profile_image",
+          data.imageFile[0]
+        );
+      }
+      const response = await postIndividual(dataToSubmit); // Método de chamada à API do backend
       setStatus("success"); // Se não houver erro no envio, altera o status para success
       setTimeout(
         () => navigate(`/records/individual/edit/${response.id}`),

@@ -20,12 +20,12 @@ public class ImageService {
     }
 
     // 11. Método principal para upload da imagem
-    public String uploadImage(MultipartFile file, String individualId) throws IOException {
+    public String uploadImage(MultipartFile file, String individualId, String filePath, String publicId) throws IOException {
         try {
             // 12. Prepara os parâmetros para o upload no Cloudinary
             Map uploadParams = ObjectUtils.asMap(
-                "folder", "dromo/records/individuals/profile_images", // A pasta no Cloudinary onde a imagem será salva
-                "public_id", "individual_" + individualId + "_profile_pic", // ID único para a imagem (ex: user_123_profile_pic)
+                "folder", filePath, // A pasta no Cloudinary onde a imagem será salva
+                "public_id", publicId + individualId, // ID único para a imagem (ex: user_123_profile_pic)
                 "overwrite", true // Se já existir uma imagem com o mesmo public_id, ela será substituída
             );
 
@@ -47,6 +47,26 @@ public class ImageService {
             System.err.println("Erro detalhado do Cloudinary: " + e.getMessage()); // Adicione esta linha
             // 16. Trata outros erros gerais do Cloudinary (autenticação, etc.)
             throw new RuntimeException("Falha ao fazer upload da imagem para o Cloudinary.", e);
+        }
+    }
+    
+    /**
+     * Deleta uma imagem do Cloudinary usando o public_id.
+     *
+     * @param individualId O ID do indivíduo para construir o public_id.
+     * @throws IOException Se a exclusão falhar devido a problemas de rede ou permissão.
+     */
+    public void deleteImage(String publicId) throws IOException {
+        try {
+            // Usa o método destroy() do uploader do Cloudinary para excluir a imagem.
+            // O ObjectUtils.emptyMap() é usado para passar um mapa vazio de opções.
+            cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
+        } catch (IOException e) {
+            // Lança uma exceção se a exclusão falhar
+            throw new IOException("Falha ao deletar a imagem do Cloudinary. Public ID: " + publicId, e);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Erro inesperado ao tentar deletar a imagem.", e);
         }
     }
 }
