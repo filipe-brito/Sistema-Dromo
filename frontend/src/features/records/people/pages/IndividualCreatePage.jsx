@@ -8,6 +8,7 @@ import { ConfirmModal } from "@/components/molecules/ConfirmModal";
 import { useNavigate } from "react-router-dom";
 import { IndividualInputs } from "./PeopleInputs";
 import { buildFormData } from "../../../../utils/miscellaneous";
+import { sanitizeFormData } from "../../../../utils/sanitize";
 
 const IndividualCreatePage = () => {
   // Estado que armazena a função trigger do FormBuilder
@@ -26,10 +27,11 @@ const IndividualCreatePage = () => {
     setStatus("loading"); // Altera o state para rodar o loading enquanto a função não retorna os dados
     // Sempre envolver requisições em um bloco try-catch
 
-    let dataToSubmit = data;
+    // Vamos modificar os dados. Então,
+    let dataToSubmit;
     try {
       if (data.imageFile && data.imageFile[0]) {
-        const individualData = { ...data };
+        const individualData = { ...sanitizeFormData(data) };
         delete individualData.profileImageUrl;
         delete individualData.imageFile;
 
@@ -39,6 +41,8 @@ const IndividualCreatePage = () => {
           "profile_image",
           data.imageFile[0]
         );
+      } else {
+        dataToSubmit = sanitizeFormData(data);
       }
       const response = await postIndividual(dataToSubmit); // Método de chamada à API do backend
       setStatus("success"); // Se não houver erro no envio, altera o status para success
@@ -91,6 +95,7 @@ const IndividualCreatePage = () => {
                     // Abaixo, prop que recebe a função trigger para validação dos campos obrigatórios
                     // É uma callback usada pelo componente atual para buscar a função trigger do FormBuilder
                     // Com isso, podemos passar a função trigger para o footer usar, que abrirá o modal somente se trigger for true
+                    formStyle="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end"
                     onTriggerReady={(trigger) =>
                       setTriggerValidation(() => trigger)
                     }

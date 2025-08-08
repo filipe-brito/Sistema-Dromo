@@ -8,8 +8,16 @@ import {
   SelectInput,
 } from "../atoms/Input";
 import { useEffect } from "react";
+import { ImageIcon } from "../atoms/icons/MiscellaneousIcons";
+import { ErrorIcon } from "../atoms/icons/ErrorIcon";
 
-export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
+export const FormBuilder = ({
+  inputs,
+  formStyle,
+  onSubmit,
+  onTriggerReady,
+  data,
+}) => {
   const {
     register, // estado que registra o inputs comuns no formulário
     // handleSubmit função que lida com o envio do formulário.
@@ -64,7 +72,6 @@ export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
 
       // Executa o reset com os dados como argumento. O reset vai preencher os campos do formulário automaticamente
       // Retornamos o object reformatado pelo redux. Agora, o validate passa normalmente
-      console.warn("formattedData: ", formattedData);
       reset(formattedData);
     }
     // "Sempre declare todas as dependências que você usa dentro do efeito."
@@ -76,7 +83,7 @@ export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
       <form
         id="save" // Vincula o onSubmit em qualquer elemente que tenha esse mesmo id
         onSubmit={handleSubmit(onSubmit)} // OI que deverá ser feito ao submeter o formulário
-        className="flex gap-2 flex-wrap items-end"
+        className={formStyle ? formStyle : "flex gap-2 flex-wrap items-end"}
       >
         {/* Iteramos a prop inputs para criar os campos do formulário usando a expressão .map() */}
         {inputs.map((input) => {
@@ -84,7 +91,12 @@ export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
           switch (input.type) {
             case "default": // input padrão que criamos
               return (
-                <div className="flex-col" key={input.name}>
+                <div
+                  className={
+                    input.gridCellStyle ? input.gridCellStyle : "flex-col"
+                  }
+                  key={input.name}
+                >
                   {/** Abaixo há a expressão que verifica se esse campo contém erro.
                    * Se tiver, apresenta a mensagem recebida na prop
                    */}
@@ -109,7 +121,7 @@ export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
                         label={input.label}
                         placeholder={input.placeholder}
                         type={input.type2}
-                        inputStyle={input.inputStyle}
+                        inputWidth={input.inputWidth}
                       />
                     )}
                   />
@@ -117,7 +129,12 @@ export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
               );
             case "masked": // input com máscara
               return (
-                <div className="flex-col" key={input.name}>
+                <div
+                  className={
+                    input.gridCellStyle ? input.gridCellStyle : "flex-col"
+                  }
+                  key={input.name}
+                >
                   <span>
                     {errors[input.name] && (
                       <span className="text-red-500 text-xs">
@@ -148,7 +165,12 @@ export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
               );
             case "select": // input de seleções
               return (
-                <div className="flex-col" key={input.name}>
+                <div
+                  className={
+                    input.gridCellStyle ? input.gridCellStyle : "flex-col"
+                  }
+                  key={input.name}
+                >
                   <span>
                     {errors[input.name] && (
                       <span className="text-red-500 text-xs">
@@ -169,7 +191,7 @@ export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
                         name={input.name}
                         label={input.label}
                         options={input.options}
-                        inputStyle={input.inputStyle}
+                        inputWidth={input.inputStyle}
                       />
                     )}
                   />
@@ -177,7 +199,12 @@ export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
               );
             case "autoComplete": // input de auto-complete com sistema de busca de opções
               return (
-                <div className="flex-col" key={input.name}>
+                <div
+                  className={
+                    input.gridCellStyle ? input.gridCellStyle : "flex-col"
+                  }
+                  key={input.name}
+                >
                   <span>
                     {errors[input.name] && (
                       <span className="text-red-500 text-xs">
@@ -204,7 +231,6 @@ export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
                   />
                 </div>
               );
-
             case "image": // input para submeter arquivos
               const [selectedImage, setSelectedImage] = useState(null);
               const [displayedImage, setDisplayedImage] = useState(
@@ -282,7 +308,14 @@ export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
               };
 
               return (
-                <div className="flex-col" key={input.name}>
+                <div
+                  className={
+                    input.gridCellStyle
+                      ? input.gridCellStyle
+                      : "justify-items-center"
+                  }
+                  key={input.name}
+                >
                   <span>
                     {errors[input.name] && (
                       <span className="text-red-500 text-xs">
@@ -310,21 +343,21 @@ export const FormBuilder = ({ inputs, onSubmit, onTriggerReady, data }) => {
                   </div>
 
                   {/* Botões de Ação */}
-                  <div className="mt-4 flex space-x-2">
+                  <div className="mt-2 flex space-x-2">
                     <button
                       type="button"
                       onClick={handleChangeImageClick}
-                      className="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600"
+                      className="px-2 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 cursor-pointer"
                     >
-                      Mudar Imagem
+                      <ImageIcon className="w-6 h-6 text-white" />
                     </button>
 
                     <button
                       type="button"
                       onClick={handleRemoveImage}
-                      className="px-4 py-2 bg-red-500 text-white text-sm rounded hover:bg-red-600"
+                      className="px-2 py-1 bg-red-500 text-white text-sm rounded hover:bg-red-600 cursor-pointer"
                     >
-                      Remover Imagem
+                      <ErrorIcon className="w-6 h-6 text-white" />
                     </button>
                   </div>
                 </div>

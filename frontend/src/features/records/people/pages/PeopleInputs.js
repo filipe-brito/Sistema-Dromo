@@ -7,12 +7,14 @@ export const IndividualInputs = [
     type: "image",
     label: "Profile Image",
     defaultImage: personIconUrl,
+    gridCellStyle: "justify-items-center self-start row-span-3",
   },
   {
     name: "name",
     type: "default",
     label: "Nome",
     required: "Nome é obrigatório",
+    gridCellStyle: "col-span-2",
   },
   {
     name: "cpf",
@@ -31,7 +33,6 @@ export const IndividualInputs = [
       { optionLabel: "masculino", value: "M" },
       { optionLabel: "feminina", value: "F" },
     ],
-    inputStyle: "w-25",
   },
   {
     name: "maritalStatus",
@@ -41,7 +42,6 @@ export const IndividualInputs = [
       { optionLabel: "Solteiro", value: "solteiro" },
       { optionLabel: "Casado", value: "casado" },
     ],
-    inputStyle: "w-25",
   },
   {
     name: "phone",
@@ -63,32 +63,28 @@ export const IndividualInputs = [
     type2: "date",
     label: "Data de nascimento",
     required: "Data de nascimento é obrigatório",
-    inputStyle: "w-30",
   },
   {
     name: "rg",
     type: "default",
     label: "RG",
-    inputStyle: "w-30",
   },
   {
     name: "rntrc",
     type: "default",
     label: "RNTRC",
-    inputStyle: "w-30",
   },
   {
     name: "email",
     type: "default",
     type2: "email",
     label: "Email",
-    inputStyle: "w-50",
   },
   {
     name: "birthCity",
     type: "autoComplete",
     label: "Cidade de nascimento",
-    inputWidth: "w-60",
     loadOptionsFunction: FetchCity,
+    gridCellStyle: "col-span-2",
   },
 ];

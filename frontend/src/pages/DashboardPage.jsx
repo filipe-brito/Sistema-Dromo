@@ -49,9 +49,7 @@ const Dashboard = () => {
           atualizações
         </h3>
         <ul className="list-disc list-inside space-y-1 pl-8">
-          <li>
-            Correção do comportamento do dropdown: agora fecha ao clicar fora.
-          </li>
+          <li>Imagem de perfil no cadastro de pessoas físicas.</li>
           <li>
             Redirecionamento automático da raiz para <code>/home</code>.
           </li>
@@ -73,8 +71,8 @@ const Dashboard = () => {
           melhorias
         </h3>
         <ul className="list-disc list-inside space-y-1 pl-8">
-          <li>Inserção de foto nos cadastros de pessoas</li>
-          <li>Inserir campo de "data de fundação" no cadastro de empresas.</li>
+          <li>Inserção de foto nos cadastros de empresas</li>
+          <li>Ampliar os formulários de cadastro</li>
         </ul>
       </section>
     </div>

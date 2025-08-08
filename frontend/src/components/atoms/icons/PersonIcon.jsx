@@ -16,12 +16,14 @@ export function PersonIcon(props) {
   );
 }
 
-// Passo 3: Use ReactDOMServer para renderizar o componente como uma string
+// CONVERTER SVG PARA DATA URL
+
+// Passo 1: Use ReactDOMServer para renderizar o componente como uma string
 const personIconString = ReactDOMServer.renderToStaticMarkup(<PersonIcon />);
 
-// Passo 4: Codifique a string para uma Data URL
+// Passo 2: Codifique a string para uma Data URL
 // Usamos encodeURIComponent para garantir que a string seja segura para URLs
 const encodedPersonIcon = encodeURIComponent(personIconString);
 
-// Passo 5: Exporte a URL final
+// Passo 3: Exporte a URL final
 export const personIconUrl = `data:image/svg+xml,${encodedPersonIcon}`;

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { IMaskInput } from "react-imask";
 
 // Input padrão do sistema
@@ -6,7 +6,7 @@ export const DefaultInput = ({
   name,
   label,
   placeholder,
-  inputStyle,
+  inputWidth,
   type,
   value,
   onChange,
@@ -21,7 +21,7 @@ export const DefaultInput = ({
         value={value}
         onChange={onChange}
         className={`h-7 px-1 bg-stone-200 rounded border-2 border-stone-400 text-sm ${
-          inputStyle ? inputStyle : "w-40"
+          inputWidth ? inputWidth : "w-full"
         }`}
       />
     </div>
@@ -36,7 +36,7 @@ export const MaskedInput = ({
   placeholder,
   value,
   onChange,
-  inputStyle,
+  inputWidth,
 }) => {
   return (
     <div className="flex flex-col">
@@ -49,7 +49,7 @@ export const MaskedInput = ({
         value={value} // controla o que está digitado no campo. Os colchetes diz ao React para pegar o valor da chave daquele object
         onChange={onChange} // Executa handleChange a cada evento. React envia o próprio evento como argumento
         className={`h-7 px-1 bg-stone-200 rounded border-2 border-stone-400 text-sm ${
-          inputStyle ? inputStyle : "w-40"
+          inputWidth ? inputWidth : "w-full"
         }`}
       />
     </div>
@@ -74,7 +74,7 @@ export const SelectInput = ({
         value={value}
         onChange={onChange}
         className={`h-7 px-1 bg-stone-200 rounded border-2 border-stone-400 text-sm ${
-          inputWidth ? inputWidth : "w-40"
+          inputWidth ? inputWidth : "w-full"
         }`}
       >
         <option value="">Selecione...</option>
@@ -143,7 +143,7 @@ export const AutoCompleteInput = ({
       {/* Input visível: sem name */}
       <input
         className={`h-7 px-1 bg-stone-200 rounded border-2 border-stone-400 text-sm ${
-          inputWidth ? inputWidth : "w-40"
+          inputWidth ? inputWidth : "w-full"
         }`}
         onChange={(e) => {
           const newValue = e.target.value;

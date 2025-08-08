@@ -13,6 +13,7 @@ import { ConfirmModal } from "@/components/molecules/ConfirmModal";
 import { LoadingIcon } from "../../../../components/atoms/icons/LoadingIcon";
 import { IndividualInputs } from "./PeopleInputs";
 import { sanitizeFormData } from "../../../../utils/sanitize";
+import { buildFormData } from "../../../../utils/miscellaneous";
 
 const IndividualEditPage = () => {
   // Estado que controla as mudanças de trigger recebido pelo FormBuilder
@@ -41,11 +42,24 @@ const IndividualEditPage = () => {
 
   useEffect(() => {}, [individualData]);
 
-  const handleSubmitIndividual = async (individualData) => {
+  const handleSubmitIndividual = async (data) => {
     setStatus("loading");
+    let dataToSubmit;
     try {
-      const formatedData = sanitizeFormData(individualData);
-      await updateIndividual(id, formatedData);
+      if (data.imageFile && data.imageFile[0]) {
+        const individualData = { ...sanitizeFormData(data) };
+        delete individualData.profileImageUrl;
+        delete individualData.imageFile;
+        dataToSubmit = buildFormData(
+          "individual",
+          individualData,
+          "profile_image",
+          data.imageFile[0]
+        );
+      } else {
+        dataToSubmit = sanitizeFormData(data);
+      }
+      await updateIndividual(id, dataToSubmit);
       setStatus("success");
     } catch (error) {
       setModalResponse(error.message);
@@ -84,6 +98,7 @@ const IndividualEditPage = () => {
                   {individualData ? (
                     <FormBuilder
                       inputs={IndividualInputs}
+                      formStyle="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end"
                       onSubmit={handleSubmitIndividual}
                       onTriggerReady={(trigger) =>
                         setTriggerValidation(() => trigger)
