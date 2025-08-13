@@ -6,64 +6,11 @@ import { ConfirmModal } from "@/components/molecules/ConfirmModal";
 import { FormFooter } from "@/components/organisms/Footer";
 import { CompanyIcon } from "@/components/atoms/icons/CompanyIcon";
 import { FormBuilder } from "@/components/organisms/FormBuilder";
+import { companyInputs } from "./PeopleInputs";
+import { sanitizeFormData } from "../../../../utils/sanitize";
+import { buildFormData } from "../../../../utils/miscellaneous";
 
 const CompanyCreatePage = () => {
-  // Array com as informações principais para criar os inputs do formulário
-  const inputs = [
-    {
-      name: "companyName",
-      type: "default",
-      label: "Razão Social",
-      required: "Razão Social é obrigatório",
-      inputStyle: "w-60",
-    },
-    {
-      name: "cnpj",
-      type: "masked",
-      label: "CNPJ",
-      required: "CNPJ é obrigatório",
-      placeholder: "Ex: 99.999.999/9999-99",
-      mask: "00.000.000/0000-00",
-    },
-    {
-      name: "tradeName",
-      type: "default",
-      label: "Nome Fantasia",
-      inputStyle: "w-60",
-    },
-    {
-      name: "doe",
-      type: "default",
-      type2: "date",
-      label: "Data de Fundação",
-      required: "Data de fundação é obrigatório",
-    },
-    {
-      name: "municipalRegistration",
-      type: "default",
-      label: "Inscrição Municipal",
-    },
-    {
-      name: "stateRegistration",
-      type: "default",
-      label: "Inscrição Estadual",
-    },
-    {
-      name: "phone",
-      type: "masked",
-      label: "Telefone",
-      mask: "(00) 0000-0000",
-      placeholder: "Ex: (99) 9999-9999",
-    },
-    {
-      name: "email",
-      type: "default",
-      type2: "email",
-      label: "Email",
-      inputStyle: "w-50",
-    },
-  ];
-
   // Estado que armazena a função trigger do FormBuilder
   const [triggerValidation, setTriggerValidation] = useState(null);
   // Estado para controlar o modal de confirmação ao submeter o formulário
@@ -79,14 +26,30 @@ const CompanyCreatePage = () => {
   const handleSubmitCompany = async (data) => {
     setStatus("loading"); // Altera o state para rodar o loading enquanto a função não retorna os dados
     // Sempre envolver requisições em um bloco try-catch
+
+    // Vamos modificar os dados. Então,
+    let dataToSubmit;
     try {
-      const response = await postCompany(data); // Método de chamada à API do backend
+      if (data.imageFile && data.imageFile[0]) {
+        const companyData = { ...sanitizeFormData(data) };
+        delete companyData.profileImageUrl;
+        delete companyData.imageFile;
+
+        dataToSubmit = buildFormData(
+          "company",
+          companyData,
+          "profile_image",
+          data.imageFile[0]
+        );
+      } else {
+        dataToSubmit = sanitizeFormData(data);
+      }
+      const response = await postCompany(dataToSubmit); // Método de chamada à API do backend
       setStatus("success"); // Se não houver erro no envio, altera o status para success
       setTimeout(() => navigate(`/records/company/edit/${response.id}`), 3000); // Redireciona para a edição do novo registro
     } catch (error) {
-      setModalResponse(error.message);
-      console.warn(error.message);
       // Captura erros da requisição
+      setModalResponse(error.message);
       setStatus("error"); // Modal de confirmação apresenta o erro
     }
   };
@@ -124,7 +87,7 @@ const CompanyCreatePage = () => {
               content: (
                 <React.Fragment>
                   <FormBuilder // Formulário a ser submetido
-                    inputs={inputs} // Enviamos as informações de campos para o formulário montar os inputs
+                    inputs={companyInputs} // Enviamos as informações de campos para o formulário montar os inputs
                     onSubmit={handleSubmitCompany} // Método que será chamado quando o formulário for submetido
                     // Abaixo, prop que recebe a função trigger para validação dos campos obrigatórios
                     // É uma callback usada pelo componente atual para buscar a função trigger do FormBuilder
@@ -132,6 +95,7 @@ const CompanyCreatePage = () => {
                     onTriggerReady={(trigger) =>
                       setTriggerValidation(() => trigger)
                     }
+                    formStyle="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end"
                   />
                 </React.Fragment>
               ),

@@ -1,5 +1,3 @@
-import React from "react";
-import { Link } from "react-router-dom"; // Usado para navegação entre telas
 import { DoneIcon2 } from "../components/atoms/icons/DoneIcon";
 import {
   Calendar,
@@ -49,7 +47,7 @@ const Dashboard = () => {
           atualizações
         </h3>
         <ul className="list-disc list-inside space-y-1 pl-8">
-          <li>Imagem de perfil no cadastro de pessoas físicas.</li>
+          <li>Imagem de perfil no cadastro de pessoas e empresas.</li>
           <li>
             Redirecionamento automático da raiz para <code>/home</code>.
           </li>
@@ -71,7 +69,7 @@ const Dashboard = () => {
           melhorias
         </h3>
         <ul className="list-disc list-inside space-y-1 pl-8">
-          <li>Inserção de foto nos cadastros de empresas</li>
+          <li>Tratamento de erros ao submeter arquivo de imagem inválida</li>
           <li>Ampliar os formulários de cadastro</li>
         </ul>
       </section>

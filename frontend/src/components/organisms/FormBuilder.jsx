@@ -231,29 +231,43 @@ export const FormBuilder = ({
                   />
                 </div>
               );
-            case "image": // input para submeter arquivos
+            case "image": // input para submeter arquivos de imagem
+              // Estado que armazena o arquivo selecionado
               const [selectedImage, setSelectedImage] = useState(null);
+              // Estado que armazena a URL da imagem exibida no front
               const [displayedImage, setDisplayedImage] = useState(
-                input.defaultImage
+                input.defaultImage // URL enviada pelo componente pai
               );
-              // 1. Receba a ref diretamente do register
+              /**
+               * Vamos desestruturar o object "imageFile" capturado pelo register do RHF.
+               * Renomeamos a propriedade ref para rhfRef, é uma boa prática para
+               * evitar conflita com alguma outra ref que possa ser criada futuramente.
+               * Extraímos somente ref e onChange, as outras propriedades serão extraídas
+               * juntas no objeto rest.
+               * Agora que estraímos a referência e o listener de mudança do input de imagem,
+               * poderemos usar essas propriedades em funções.
+               */
               const { ref: rhfRef, onChange, ...rest } = register("imageFile");
 
-              // 2. Crie a sua própria ref para ter acesso ao elemento
+              /**
+               * Para que a referência "rhfRef" possa ser manipulada pelo React Hook Form, precisamos
+               * de um objeto useRef. Vamos criá-lo abaixo e atrelá-lo ao rhfRef com a função setRef.
+               */
               const fileInputRef = useRef(null);
 
-              // 3. Crie uma função de callback para combinar as duas refs
+              // Crie uma função de callback para combinar as duas refs
               const setRef = (element) => {
+                // Ambas referências receberão o mesmo elemento
                 rhfRef(element); // A ref do React Hook Form
                 fileInputRef.current = element; // A sua ref
               };
 
-              // 2. Criamos o handler de mudança que faz tudo
+              // Criamos o handler de mudança
               const handleCombinedChange = (e) => {
                 // Chama o onChange do React Hook Form primeiro para atualizar o estado
                 onChange(e);
 
-                // E então executa a sua lógica de pré-visualização
+                // E então executa a lógica de pré-visualização
                 const file = e.target.files[0];
                 if (file) {
                   setSelectedImage(file);
@@ -269,27 +283,27 @@ export const FormBuilder = ({
                 if (selectedImage) {
                   const objectUrl = URL.createObjectURL(selectedImage);
                   setDisplayedImage(objectUrl);
+                  /**
+                   * setValue é uma função do RHF para alterar o valor de um input.
+                   * Há dois parâmetros. O primeiro é o nome do input e o segundo
+                   * é o novo valor que ele recebe.
+                   */
                   setValue("profileImageUrl", null);
                   return () => URL.revokeObjectURL(objectUrl);
                 }
 
-                // 2. Se não houver arquivo selecionado, verifica a URL do watch
+                // Se não houver arquivo selecionado, verifica a URL do watch
                 if (urlImage && urlImage !== "REMOVE_IMAGE") {
                   setDisplayedImage(urlImage);
                   return; // Não precisa de cleanup aqui, pois é uma URL normal
                 }
 
-                // 3. Caso contrário (urlImage é "REMOVE_IMAGE" ou nulo),
+                // Caso contrário (urlImage é "REMOVE_IMAGE" ou nulo),
                 // exibe a imagem padrão.
                 setDisplayedImage(input.defaultImage);
               }, [selectedImage, urlImage]); // Dependência no selectedFile
 
-              /**
-               * Handler para quando o usuário seleciona um arquivo
-               * onChange envia o evento como parâmetro, assim, podemos acessar o arquivo diretamente
-               * pelo "e.target.files[0]" e tratar.
-               */
-
+              // Handler para o botão "Remover Imagem"
               const handleRemoveImage = () => {
                 setSelectedImage(null); // Limpa qualquer arquivo selecionado
                 setDisplayedImage(input.defaultImage); // Limpa a pré-visualização

@@ -3,7 +3,6 @@ import { Navigate, Outlet } from "react-router-dom";
 // Busca o token no localStorage
 const PrivateRoute = () => {
   const token = localStorage.getItem("token");
-  console.log("Token:", token);
 
   if (!token) {
     /**

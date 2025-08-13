@@ -10,64 +10,11 @@ import { LoadingIcon } from "@/components/atoms/icons/LoadingIcon";
 import { FormFooter } from "@/components/organisms/Footer";
 import { FormBuilder } from "@/components/organisms/FormBuilder";
 import { ConfirmModal } from "@/components/molecules/ConfirmModal";
+import { companyInputs } from "./PeopleInputs";
+import { sanitizeFormData } from "../../../../utils/sanitize";
+import { buildFormData } from "../../../../utils/miscellaneous";
 
 const CompanyEditPage = () => {
-  // Array com as informações principais para criar os inputs do formulário
-  const inputs = [
-    {
-      name: "companyName",
-      type: "default",
-      label: "Razão Social",
-      required: "Razão Social é obrigatório",
-      inputStyle: "w-60",
-    },
-    {
-      name: "cnpj",
-      type: "masked",
-      label: "CNPJ",
-      required: "CNPJ é obrigatório",
-      placeholder: "Ex: 99.999.999/9999-99",
-      mask: "00.000.000/0000-00",
-    },
-    {
-      name: "tradeName",
-      type: "default",
-      label: "Nome Fantasia",
-      inputStyle: "w-60",
-    },
-    {
-      name: "doe",
-      type: "default",
-      type2: "date",
-      label: "Data de Fundação",
-      required: "Data de fundação é obrigatório",
-    },
-    {
-      name: "municipalRegistration",
-      type: "default",
-      label: "Inscrição Municipal",
-    },
-    {
-      name: "stateRegistration",
-      type: "default",
-      label: "Inscrição Estadual",
-    },
-    {
-      name: "phone",
-      type: "masked",
-      label: "Telefone",
-      mask: "(00) 0000-0000",
-      placeholder: "Ex: (99) 9999-9999",
-    },
-    {
-      name: "email",
-      type: "default",
-      type2: "email",
-      label: "Email",
-      inputStyle: "w-50",
-    },
-  ];
-
   // Hook para salvar o id para uma rota dinâmica
   const { id } = useParams();
   // Estado que controla as mudanças de trigger recebido pelo FormBuilder
@@ -94,10 +41,24 @@ const CompanyEditPage = () => {
   }, [id]);
 
   // Função que envia o formulário
-  const handleSubmitCompany = async (companyData) => {
+  const handleSubmitCompany = async (data) => {
     setStatus("loading");
+    let dataToSubmit;
     try {
-      await updateCompany(id, companyData);
+      if (data.imageFile && data.imageFile[0]) {
+        const companyData = { ...sanitizeFormData(data) };
+        delete companyData.profileImageUrl;
+        delete companyData.imageFile;
+        dataToSubmit = buildFormData(
+          "company",
+          companyData,
+          "profile_image",
+          data.imageFile[0]
+        );
+      } else {
+        dataToSubmit = sanitizeFormData(data);
+      }
+      await updateCompany(id, dataToSubmit);
       setStatus("success");
     } catch (error) {
       setModalResponse(error.message);
@@ -139,7 +100,7 @@ const CompanyEditPage = () => {
                 <React.Fragment>
                   {companyData ? (
                     <FormBuilder // Formulário a ser submetido
-                      inputs={inputs} // Enviamos as informações de campos para o formulário montar os inputs
+                      inputs={companyInputs} // Enviamos as informações de campos para o formulário montar os inputs
                       onSubmit={handleSubmitCompany} // Método que será chamado quando o formulário for submetido
                       // Abaixo, prop que recebe a função trigger para validação dos campos obrigatórios
                       // É uma callback usada pelo componente atual para buscar a função trigger do FormBuilder
@@ -147,6 +108,7 @@ const CompanyEditPage = () => {
                       onTriggerReady={(trigger) =>
                         setTriggerValidation(() => trigger)
                       }
+                      formStyle="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end"
                       data={companyData}
                     />
                   ) : (

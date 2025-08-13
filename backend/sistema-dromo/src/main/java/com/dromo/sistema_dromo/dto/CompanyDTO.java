@@ -12,9 +12,10 @@ public class CompanyDTO {
 	private String stateRegistration;
 	private String phone;
 	private String email;
-	
-	
-	public CompanyDTO(int id, String companyName, String cnpj, String tradeName, LocalDate doe, String municipalRegistration, String stateRegistration, String phone, String email) {
+	private String profileImageUrl;
+
+	public CompanyDTO(int id, String companyName, String cnpj, String tradeName, LocalDate doe,
+			String municipalRegistration, String stateRegistration, String phone, String email) {
 		super();
 		this.id = id;
 		this.companyName = companyName;
@@ -26,55 +27,51 @@ public class CompanyDTO {
 		this.phone = phone;
 		this.email = email;
 	}
-	
+
 	public CompanyDTO() {
-		
+
 	}
 
 	public int getId() {
 		return id;
 	}
-	
+
 	public String getCompanyName() {
 		return companyName;
 	}
-
 
 	public String getCnpj() {
 		return cnpj;
 	}
 
-
 	public String getTradeName() {
 		return tradeName;
 	}
-
 
 	public LocalDate getDoe() {
 		return doe;
 	}
 
-
 	public String getMunicipalRegistration() {
 		return municipalRegistration;
 	}
-
 
 	public String getStateRegistration() {
 		return stateRegistration;
 	}
 
-
 	public String getPhone() {
 		return phone;
 	}
-
 
 	public String getEmail() {
 		return email;
 	}
 
-	
+	public String getProfileImageUrl() {
+		return profileImageUrl;
+	}
+
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -110,5 +107,9 @@ public class CompanyDTO {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
+
+	public void setProfileImageUrl(String profileImageUrl) {
+		this.profileImageUrl = profileImageUrl;
+	}
+
 }

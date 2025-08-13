@@ -1,3 +1,4 @@
+import ReactDOMServer from "react-dom/server";
 // Função auxiliar para converter um object simples em um FormData,
 // que é ideal quando há arquivos no formulário
 export function buildFormData(dataName, data, fileName, file) {
@@ -30,4 +31,19 @@ export function buildFormData(dataName, data, fileName, file) {
     }
   }*/
   return formData; // Retorna o formulário multipart para ser submetido
+}
+
+// CONVERTER SVG PARA DATA URL
+
+export function svgToUrl(svg) {
+  // Passo 1: Use ReactDOMServer para renderizar o componente como uma string
+  const personIconString = ReactDOMServer.renderToStaticMarkup(svg);
+
+  // Passo 2: Codifique a string para uma Data URL
+  // Usamos encodeURIComponent para garantir que a string seja segura para URLs
+  const encodedPersonIcon = encodeURIComponent(personIconString);
+
+  // Passo 3: Exporte a URL final
+  const personIconUrl = `data:image/svg+xml,${encodedPersonIcon}`;
+  return personIconUrl;
 }

@@ -15,6 +15,7 @@ public class CompanyMapper {
 		company.setStateRegistration(sanitize(dto.getStateRegistration()));
 		company.setPhone(sanitize(dto.getPhone()));
 		company.setEmail(sanitize(dto.getEmail()));
+		company.setProfileImageUrl(sanitize(dto.getProfileImageUrl()));
 		return company;
 	}
 
@@ -29,6 +30,7 @@ public class CompanyMapper {
 		dto.setStateRegistration(entity.getStateRegistration());
 		dto.setPhone(entity.getPhone());
 		dto.setEmail(entity.getEmail());
+		dto.setProfileImageUrl(entity.getProfileImageUrl());
 		return dto;
 	}
 

@@ -66,7 +66,7 @@ public class RecordsController {
 	 * parâmetro "consumes" da anotação de post
 	 */
 	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, value = "/individuals")
-	public ResponseEntity<IndividualDTO> createWithImage(@RequestPart(name = "individual") String individual,
+	public ResponseEntity<IndividualDTO> createIndividualWithImage(@RequestPart(name = "individual") String individual,
 			@RequestPart(name = "profile_image", required = true) MultipartFile imageFile) {
 		try {
 			IndividualDTO dto = objectMapper.readValue(individual, IndividualDTO.class);
@@ -95,7 +95,9 @@ public class RecordsController {
 	}
 
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, value = "individuals/{id}")
-	public ResponseEntity<IndividualDTO> updateIndividualWithFile (@PathVariable Integer id, @RequestPart(name = "individual", required = true) String individual, @RequestPart(name = "profile_image") MultipartFile imageFile){
+	public ResponseEntity<IndividualDTO> updateIndividualWithFile(@PathVariable Integer id,
+			@RequestPart(name = "individual", required = true) String individual,
+			@RequestPart(name = "profile_image") MultipartFile imageFile) {
 		try {
 			System.out.println("\nA requisição chegou no post formData");
 			IndividualDTO dto = objectMapper.readValue(individual, IndividualDTO.class);
@@ -137,6 +139,30 @@ public class RecordsController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(saved);
 	}
 
+	/*
+	 * Requisição de cadastro para também submeter arquivo de imagem. As imagens são
+	 * armazenadas no Cloudinary, e para integrar, baixamos a respectiva biblioteca
+	 * pelo maven. Como o corpo da requisição também terá um arquivo, é necessário
+	 * configurar o recebimento com multipart/formData. Isso é feito como o
+	 * parâmetro "consumes" da anotação de post
+	 */
+	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, value = "/companies")
+	public ResponseEntity<CompanyDTO> createCompanyWithImage(@RequestPart(name = "company") String company,
+			@RequestPart(name = "profile_image", required = true) MultipartFile imageFile) {
+		try {
+			CompanyDTO dto = objectMapper.readValue(company, CompanyDTO.class);
+			CompanyDTO saved = companyService.saveCompany(dto);
+			String imageUrl = profileImageService.uploadImage(imageFile, String.valueOf(saved.getId()),
+					"dromo/records/companies/profile_images", "company_profile_pic_");
+			saved.setProfileImageUrl(imageUrl);
+			companyService.update(saved.getId(), saved);
+			return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
+	}
+
 	@DeleteMapping("companies/{id}")
 	public ResponseEntity<Void> deleteCompanyById(@PathVariable Integer id) {
 		companyService.deleteById(id);
@@ -147,6 +173,23 @@ public class RecordsController {
 	public ResponseEntity<CompanyDTO> getCompanyById(@PathVariable Integer id) {
 		CompanyDTO dto = companyService.getById(id);
 		return ResponseEntity.ok(dto);
+	}
+
+	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE, value = "companies/{id}")
+	public ResponseEntity<CompanyDTO> updateCompanyWithFile(@PathVariable Integer id,
+			@RequestPart(name = "company", required = true) String company,
+			@RequestPart(name = "profile_image") MultipartFile imageFile) {
+		try {
+			CompanyDTO dto = objectMapper.readValue(company, CompanyDTO.class);
+			String imageUrl = profileImageService.uploadImage(imageFile, String.valueOf(id),
+					"dromo/records/companies/profile_images", "company_profile_pic_");
+			dto.setProfileImageUrl(imageUrl);
+			companyService.update(id, dto);
+			return ResponseEntity.status(HttpStatus.CREATED).body(dto);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+		}
 	}
 
 	@PutMapping("companies/{id}")
