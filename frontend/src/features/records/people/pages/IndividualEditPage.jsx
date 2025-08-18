@@ -14,11 +14,10 @@ import { LoadingIcon } from "../../../../components/atoms/icons/LoadingIcon";
 import { IndividualInputs } from "./PeopleInputs";
 import { sanitizeFormData } from "../../../../utils/sanitize";
 import { buildFormData } from "../../../../utils/miscellaneous";
+import { useForm } from "react-hook-form";
+import { validators } from "../../../../utils/validators";
 
 const IndividualEditPage = () => {
-  // Estado que controla as mudanças de trigger recebido pelo FormBuilder
-  const [triggerValidation, setTriggerValidation] = useState(null);
-
   const { id } = useParams();
 
   const [isConfirmOpen, setConfirmOpen] = useState(false);
@@ -40,24 +39,22 @@ const IndividualEditPage = () => {
     fetchData();
   }, [id]);
 
-  useEffect(() => {}, [individualData]);
-
-  const handleSubmitIndividual = async (data) => {
+  const handleSubmitIndividual = async (individualData) => {
     setStatus("loading");
     let dataToSubmit;
     try {
-      if (data.imageFile && data.imageFile[0]) {
-        const individualData = { ...sanitizeFormData(data) };
-        delete individualData.profileImageUrl;
-        delete individualData.imageFile;
+      if (individualData.imageFile && individualData.imageFile[0]) {
+        const individualJson = { ...sanitizeFormData(individualData) };
+        delete individualJson.profileImageUrl;
+        delete individualJson.imageFile;
         dataToSubmit = buildFormData(
           "individual",
-          individualData,
+          individualJson,
           "profile_image",
-          data.imageFile[0]
+          individualData.imageFile[0]
         );
       } else {
-        dataToSubmit = sanitizeFormData(data);
+        dataToSubmit = sanitizeFormData(individualData);
       }
       await updateIndividual(id, dataToSubmit);
       setStatus("success");
@@ -66,6 +63,60 @@ const IndividualEditPage = () => {
       setStatus("error");
     }
   };
+
+  const {
+    register, // estado que registra o inputs comuns no formulário
+    // handleSubmit função que lida com o envio do formulário.
+    handleSubmit,
+    control, // estado que registra os campos que não são nativos (inputs)
+    // O reset preenche os campos com os dados enviados pelo comnponente de edição de cadastro
+    reset,
+    // formState é objeto com os erros de validação.
+    // A chave seria o nome do campo e o valor seria a mensagem a ser apresentada caso trigger retornar false
+    formState: { errors },
+    // Controla a validação dos campos. Caso true chama handleSubmit,
+    // caso false exibe os erros de formState acima dos campos
+    trigger,
+    // Função que monitora os campos do formulário
+    watch,
+    // Função para alterar o valor de um campo programaticamente
+    setValue,
+  } = useForm(); // Hook do React para formulários
+
+  // Efeito colateral que envia os dados ao reset quando `data` for fornecida (edição)
+  useEffect(() => {
+    // Abaixo, condicional que verifica se a prop data é true
+    if (individualData) {
+      // Aplica máscaras se existir um validador com .mask
+      // A máscara não é aplicada no reset, o que quebra o validate.
+      // Vamos formatar os dados antes de inserí-los nos campos
+      // Object.entries converte objects em array de pares [chave, valor]
+      // .reduce itera todos os pares e junta tudo em um novo object (acc)
+      // Para cada iteração, o .reduce aplica a máscara ao par
+      const formattedData = Object.entries(individualData).reduce(
+        (acc, [key, value]) => {
+          const mask = validators[key]?.mask;
+          // 👇 Aqui você intercepta e reformata o campo específico
+          if (key === "birthCity") {
+            acc[key] = {
+              value: value.id,
+              label: value.cityAndState,
+              ...value, // mantém ibgeCode, state, etc
+            };
+          } else {
+            acc[key] = mask ? mask(value) : value;
+          }
+          return acc;
+        },
+        {}
+      );
+
+      // Executa o reset com os dados como argumento. O reset vai preencher os campos do formulário automaticamente
+      // Retornamos o object reformatado pelo redux. Agora, o validate passa normalmente
+      reset(formattedData);
+    }
+    // "Sempre declare todas as dependências que você usa dentro do efeito."
+  }, [individualData, reset]); // As dependências garantem que o reset será feito sempre que data e reset mudarem
 
   return (
     <React.Fragment>
@@ -96,15 +147,27 @@ const IndividualEditPage = () => {
               content: (
                 <React.Fragment>
                   {individualData ? (
-                    <FormBuilder
-                      inputs={IndividualInputs}
-                      formStyle="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end"
-                      onSubmit={handleSubmitIndividual}
-                      onTriggerReady={(trigger) =>
-                        setTriggerValidation(() => trigger)
-                      }
-                      data={individualData}
-                    />
+                    <form
+                      id="save" // Vincula o onSubmit em qualquer elemente que tenha esse mesmo id
+                      onSubmit={handleSubmit(handleSubmitIndividual)} // OI que deverá ser feito ao submeter o formulário
+                      className="flex flex-col rounded shadow-sm  gap-y-1"
+                    >
+                      <section className="bg-stone-100 p-2 rounded">
+                        <h1 className="font-bold text-2xl mb-2 text-neutral-800">
+                          Dados principais
+                        </h1>
+                        <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end">
+                          <FormBuilder
+                            inputs={IndividualInputs}
+                            control={control}
+                            register={register}
+                            errors={errors}
+                            watch={watch}
+                            setValue={setValue}
+                          />
+                        </div>
+                      </section>
+                    </form>
                   ) : (
                     <div className="flex flex-col items-center p-2 rounded shadow-sm bg-stone-100">
                       <LoadingIcon />
@@ -119,7 +182,7 @@ const IndividualEditPage = () => {
       </div>
       <FormFooter
         setConfirmOpen={setConfirmOpen}
-        onTrigger={triggerValidation}
+        onTrigger={trigger}
         setStatus={setStatus}
       />
     </React.Fragment>

@@ -83,7 +83,14 @@ public class RecordsController {
 	}
 
 	@DeleteMapping("individuals/{id}")
-	public ResponseEntity<Void> deleteIndividualById(@PathVariable Integer id) {
+	public ResponseEntity<Void> deleteIndividualById(@PathVariable Integer id) throws IOException {
+		IndividualDTO dto = individualService.getById(id);
+		String hasImage = dto.getProfileImageUrl();
+		if (hasImage != null && !hasImage.isEmpty()) {
+			String publicId = "dromo/records/individuals/profile_images/individual_profile_pic_" + dto.getId();
+			profileImageService.deleteImage(publicId);
+		}
+		;
 		individualService.deleteById(id);
 		return ResponseEntity.noContent().build();
 	}
@@ -118,7 +125,7 @@ public class RecordsController {
 		System.out.println("\nA requisição chegou no post json");
 		String hasImage = dto.getProfileImageUrl();
 		if (hasImage != null && hasImage.equals("REMOVE_IMAGE")) {
-			String publicId = "dromo/records/individuals/profile_images/individual_profile_pic_" + dto.getId();
+			String publicId = "dromo/records/individuals/profile_images/individual_profile_pic_" + id;
 			profileImageService.deleteImage(publicId);
 			dto.setProfileImageUrl(null);
 		}
@@ -164,7 +171,14 @@ public class RecordsController {
 	}
 
 	@DeleteMapping("companies/{id}")
-	public ResponseEntity<Void> deleteCompanyById(@PathVariable Integer id) {
+	public ResponseEntity<Void> deleteCompanyById(@PathVariable Integer id) throws IOException {
+		CompanyDTO dto = companyService.getById(id);
+		String hasImage = dto.getProfileImageUrl();
+		if (hasImage != null && !hasImage.isEmpty()) {
+			String publicId = "dromo/records/companies/profile_images/company_profile_pic_" + id;
+			profileImageService.deleteImage(publicId);
+			dto.setProfileImageUrl(null);
+		}
 		companyService.deleteById(id);
 		return ResponseEntity.noContent().build();
 	}
@@ -193,7 +207,14 @@ public class RecordsController {
 	}
 
 	@PutMapping("companies/{id}")
-	public ResponseEntity<CompanyDTO> updateCompany(@PathVariable Integer id, @RequestBody CompanyDTO dto) {
+	public ResponseEntity<CompanyDTO> updateCompany(@PathVariable Integer id, @RequestBody CompanyDTO dto)
+			throws IOException {
+		String hasImage = dto.getProfileImageUrl();
+		if (hasImage != null && hasImage.equals("REMOVE_IMAGE")) {
+			String publicId = "dromo/records/companies/profile_images/company_profile_pic_" + id;
+			profileImageService.deleteImage(publicId);
+			dto.setProfileImageUrl(null);
+		}
 		CompanyDTO updated = companyService.update(id, dto);
 		return ResponseEntity.ok(updated);
 	}
