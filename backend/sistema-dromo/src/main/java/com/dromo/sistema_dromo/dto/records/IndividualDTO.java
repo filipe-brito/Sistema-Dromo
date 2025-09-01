@@ -1,27 +1,30 @@
-package com.dromo.sistema_dromo.dto;
+package com.dromo.sistema_dromo.dto.records;
 
 import java.time.LocalDate;
+import java.util.List;
 
-import com.dromo.sistema_dromo.model.Cities;
+import com.dromo.sistema_dromo.dto.utils.CitiesDTO;
 
 public class IndividualDTO {
 	private int id;
 	private String name;
-        private String cpf;
-        private char gender;
-        private String maritalStatus;
-        private String phone;
-        private String cellphone;
-        private LocalDate dob;
-        private String rg;
-        private String rntrc;
-        private String email;
-        private CitiesDTO birthCity;
-        private String profileImageUrl;
-    
-    // Construtor
-	public IndividualDTO(int id, String name, String cpf, char gender, String maritalStatus, String phone, String cellphone, LocalDate dob, String rg, String rntrc, String email, CitiesDTO birthCity) {
-		super();
+	private String cpf;
+	private char gender;
+	private String maritalStatus;
+	private String phone;
+	private String cellphone;
+	private LocalDate dob;
+	private String rg;
+	private String rntrc;
+	private String email;
+	private CitiesDTO birthCity;
+	private String profileImageUrl;
+
+	private List<IndividualAddressDTO> addresses;
+
+	// Construtor
+	public IndividualDTO(int id, String name, String cpf, char gender, String maritalStatus, String phone,
+			String cellphone, LocalDate dob, String rg, String rntrc, String email, CitiesDTO birthCity) {
 		this.id = id;
 		this.name = name;
 		this.cpf = cpf;
@@ -34,9 +37,18 @@ public class IndividualDTO {
 		this.rntrc = rntrc;
 		this.email = email;
 		this.birthCity = birthCity;
+		this.addresses = addresses;
 	}
+
 	public IndividualDTO() {
-		
+
+	}
+	
+	public IndividualDTO(int id, String name, String cpf, String email) {
+		this.id = id;
+		this.name = name;
+		this.cpf = cpf;
+		this.email = email;
 	}
 
 	public int getId() {
@@ -82,13 +94,17 @@ public class IndividualDTO {
 	public String getEmail() {
 		return email;
 	}
-	
+
 	public CitiesDTO getBirthCity() {
 		return birthCity;
 	}
-	
+
 	public String getProfileImageUrl() {
 		return profileImageUrl;
+	}
+
+	public List<IndividualAddressDTO> getAddresses() {
+		return addresses;
 	}
 
 	public void setId(int id) {
@@ -134,12 +150,16 @@ public class IndividualDTO {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
+
 	public void setBirthCity(CitiesDTO birthCity) {
 		this.birthCity = birthCity;
 	}
-	
+
 	public void setProfileImageUrl(String profileImageUrl) {
 		this.profileImageUrl = profileImageUrl;
+	}
+
+	public void setAddresses(List<IndividualAddressDTO> addresses) {
+		this.addresses = addresses;
 	}
 }

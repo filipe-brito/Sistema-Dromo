@@ -26,8 +26,6 @@ const IndividualCreatePage = () => {
     // handleSubmit função que lida com o envio do formulário.
     handleSubmit,
     control, // estado que registra os campos que não são nativos (inputs)
-    // O reset preenche os campos com os dados enviados pelo comnponente de edição de cadastro
-    reset,
     // formState é objeto com os erros de validação.
     // A chave seria o nome do campo e o valor seria a mensagem a ser apresentada caso trigger retornar false
     formState: { errors },

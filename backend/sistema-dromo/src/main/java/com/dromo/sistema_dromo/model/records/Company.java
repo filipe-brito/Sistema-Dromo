@@ -1,12 +1,16 @@
-package com.dromo.sistema_dromo.model;
+package com.dromo.sistema_dromo.model.records;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
@@ -31,6 +35,22 @@ public class Company {
 	private String email;
 	@Column(name = "profile_image_url")
 	private String profileImageUrl;
+
+	/*
+	 * Sempre que o front pedir dados de um Company, devemos retornar todos os
+	 * endereços vinculados a ele. Para isso, definimos uma lista do objeto
+	 * CompanyAddress . A relação aqui é de "um-para-muitos", ou seja, um company
+	 * pode ter muitos endereços.
+	 * 
+	 * Não vinculamos o atributo à uma coluna da tabela companies_addresses do
+	 * Postgre com JoinColumn, afinal, não existe uma coluna de chave estrangeira na
+	 * tabela individuals, mas devemos vincular a um atributo da classe
+	 * CompanyAddress, afinal é essa classe que é a "dona da relação". Essa classe
+	 * possui um atributo individual que está vinculado ao company_id do bd. Para
+	 * fazer esse mapeamento, usamos a propriedade "mappedBy"
+	 */
+	@OneToMany(mappedBy = "company", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<CompanyAddress> addresses;
 
 	public int getId() {
 		return id;
@@ -114,6 +134,14 @@ public class Company {
 
 	public void setProfileImageUrl(String profileImageUrl) {
 		this.profileImageUrl = profileImageUrl;
+	}
+
+	public List<CompanyAddress> getAddresses() {
+		return addresses;
+	}
+
+	public void setAddresses(List<CompanyAddress> addresses) {
+		this.addresses = addresses;
 	}
 
 }

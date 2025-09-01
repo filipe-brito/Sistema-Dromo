@@ -1,7 +1,11 @@
-package com.dromo.sistema_dromo.mapper;
+package com.dromo.sistema_dromo.mapper.records;
 
-import com.dromo.sistema_dromo.dto.CompanyDTO;
-import com.dromo.sistema_dromo.model.Company;
+import java.util.List;
+
+import com.dromo.sistema_dromo.dto.records.CompanyAddressDTO;
+import com.dromo.sistema_dromo.dto.records.CompanyDTO;
+import com.dromo.sistema_dromo.model.records.Company;
+import com.dromo.sistema_dromo.model.records.CompanyAddress;
 
 public class CompanyMapper {
 	public static Company toEntity(CompanyDTO dto) {
@@ -16,6 +20,13 @@ public class CompanyMapper {
 		company.setPhone(sanitize(dto.getPhone()));
 		company.setEmail(sanitize(dto.getEmail()));
 		company.setProfileImageUrl(sanitize(dto.getProfileImageUrl()));
+		/*
+		 * stream é uma forma moderna e "funcional" de percorrer coleções. 
+		 */
+		if (dto.getAddresses() != null) {
+			List<CompanyAddress> entityAddresses = dto.getAddresses().stream().map(AddressMapper::toEntity).toList();
+			company.setAddresses(entityAddresses);
+		}
 		return company;
 	}
 
@@ -31,6 +42,10 @@ public class CompanyMapper {
 		dto.setPhone(entity.getPhone());
 		dto.setEmail(entity.getEmail());
 		dto.setProfileImageUrl(entity.getProfileImageUrl());
+		if (entity.getAddresses() != null) {
+			List<CompanyAddressDTO> DTOAddresses = entity.getAddresses().stream().map(AddressMapper::toDTO).toList();
+			dto.setAddresses(DTOAddresses);
+		}
 		return dto;
 	}
 

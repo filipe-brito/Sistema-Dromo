@@ -1,13 +1,14 @@
-package com.dromo.sistema_dromo.repository;
+package com.dromo.sistema_dromo.repository.records;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.dromo.sistema_dromo.model.Individual;
+import com.dromo.sistema_dromo.dto.records.IndividualSummaryDTO;
+import com.dromo.sistema_dromo.model.records.Individual;
 
 @Repository
 public interface IndividualRepository extends JpaRepository<Individual, Integer>{
@@ -40,15 +41,19 @@ public interface IndividualRepository extends JpaRepository<Individual, Integer>
  //
 
  @Query("""
-     SELECT i FROM Individual i
+     SELECT new com.dromo.sistema_dromo.dto.records.IndividualSummaryDTO(
+ 		    i.id, i.fullName, i.cpf, i.email
+     ) 
+     FROM Individual i
      WHERE ( LOWER(i.fullName) LIKE LOWER(CONCAT('%', :fullName, '%'))   OR :fullName IS NULL )
        AND ( i.cpf            LIKE       CONCAT('%', :cpf, '%')         OR :cpf      IS NULL )
        AND ( LOWER(i.email)    LIKE LOWER(CONCAT('%', :email, '%'))      OR :email    IS NULL )
  """)
- List<Individual> findByFilters(
+ Page<IndividualSummaryDTO> findByFilters(
      @Param("fullName") String fullName,
      @Param("cpf")      String cpf,
-     @Param("email")    String email
+     @Param("email")    String email,
+     Pageable pageable
  );
 
 }

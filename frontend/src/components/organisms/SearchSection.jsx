@@ -7,6 +7,10 @@ export const SearchSection = ({
   // Criamos o componente SearchSection e usamos exportação nomeada
   // Seguem props
   filters, // Array de objects com as informações dos campos da barra de filtro
+  filterValues,
+  setFilterValues,
+  page,
+  setPage,
   columns, // Array de objects com as informações das colunas da barra de resultados
   data, // Dados que serão apresentados na barra de resultados
   loading, // Estado para exibir o ícone de loading enquanto os dados carregam
@@ -23,6 +27,8 @@ export const SearchSection = ({
       <div className="flex p-2 rounded shadow-sm bg-stone-100">
         <FilterBar
           filters={filters} // Passamos a prop recebida com pai para FilterBar
+          filterValues={filterValues}
+          setFilterValues={setFilterValues}
           onSearch={onSearch} // onSearch recebido do pai que será passado como prop ao FilterBar
         />
       </div>
@@ -35,7 +41,13 @@ export const SearchSection = ({
           </div>
         ) : (
           // caso 'false', carrega a barra de resultados
-          <ResultBar columns={columns} data={data} actions={actions} /> // Passamos as colunas e os dados que serão exibidos nessas colunas
+          <ResultBar
+            columns={columns}
+            data={data}
+            actions={actions}
+            page={page}
+            setPage={setPage}
+          /> // Passamos as colunas e os dados que serão exibidos nessas colunas
         )}
       </div>
     </React.Fragment>

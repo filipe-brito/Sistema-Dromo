@@ -1,7 +1,12 @@
-package com.dromo.sistema_dromo.mapper;
+package com.dromo.sistema_dromo.mapper.records;
 
-import com.dromo.sistema_dromo.dto.IndividualDTO;
-import com.dromo.sistema_dromo.model.Individual;
+import java.util.List;
+
+import com.dromo.sistema_dromo.dto.records.IndividualAddressDTO;
+import com.dromo.sistema_dromo.dto.records.IndividualDTO;
+import com.dromo.sistema_dromo.mapper.utils.CitiesMapper;
+import com.dromo.sistema_dromo.model.records.Individual;
+import com.dromo.sistema_dromo.model.records.IndividualAddress;
 
 public class IndividualMapper {
 	public static Individual toEntity(IndividualDTO dto) {
@@ -17,10 +22,17 @@ public class IndividualMapper {
 		individual.setRg(sanitize(dto.getRg()));
 		individual.setRntrc(sanitize(dto.getRntrc()));
 		individual.setEmail(sanitize(dto.getEmail()));
+		/*
+		 * stream é uma forma moderna e "funcional" de percorrer coleções. 
+		 */
+		if (dto.getAddresses() != null) {
+			List<IndividualAddress> entityAddresses = dto.getAddresses().stream().map(AddressMapper::toEntity).toList();
+			individual.setAddresses(entityAddresses);
+		}
 		if (dto.getBirthCity() == null) {
-		    individual.setBirthCity(null);
+			individual.setBirthCity(null);
 		} else {
-		    individual.setBirthCity(CitiesMapper.toEntity(dto.getBirthCity()));
+			individual.setBirthCity(CitiesMapper.toEntity(dto.getBirthCity()));
 		}
 		individual.setProfileImageUrl(sanitize(dto.getProfileImageUrl()));
 		return individual;
@@ -41,6 +53,10 @@ public class IndividualMapper {
 		dto.setEmail(entity.getEmail());
 		dto.setBirthCity(CitiesMapper.toDto(entity.getBirthCity()));
 		dto.setProfileImageUrl(entity.getProfileImageUrl());
+		if (entity.getAddresses() != null) {
+			List<IndividualAddressDTO> DTOAddresses = entity.getAddresses().stream().map(AddressMapper::toDTO).toList();
+			dto.setAddresses(DTOAddresses);
+		}
 		return dto;
 	}
 

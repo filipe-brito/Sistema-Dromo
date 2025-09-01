@@ -1,7 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { IMaskInput } from "react-imask";
-import { ImageIcon } from "./icons/MiscellaneousIcons";
-import { ErrorIcon } from "./icons/ErrorIcon";
 
 // Input padrão do sistema
 export const DefaultInput = ({

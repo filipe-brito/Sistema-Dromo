@@ -2,9 +2,7 @@ import { IMaskInput } from "react-imask";
 import { SearchButton } from "../atoms/SearchButton";
 import React, { useState } from "react";
 
-const FilterBar = ({ filters, onSearch }) => {
-  const [filterValues, setFilterValues] = useState([]);
-
+const FilterBar = ({ filters, onSearch, filterValues, setFilterValues }) => {
   // Criamos o componente FilterBar (barra de filtros para pesquisa)
 
   // Variável que recebe uma função que vai criar um objeto do tipo 'object'.

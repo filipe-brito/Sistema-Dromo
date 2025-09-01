@@ -1,7 +1,12 @@
-package com.dromo.sistema_dromo.model;
+package com.dromo.sistema_dromo.model.records;
 
 import java.time.LocalDate;
+import java.util.List;
 
+import com.dromo.sistema_dromo.dto.utils.CitiesDTO;
+import com.dromo.sistema_dromo.model.utils.Cities;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -10,6 +15,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
@@ -48,6 +54,25 @@ public class Individual {
 	private Cities birthCity;
 	@Column(name = "profile_image_url")
 	private String profileImageUrl;
+
+	/*
+	 * Sempre que o front pedir dados de um Individual, devemos retornar todos os
+	 * endereços vinculados a ele. Para isso, definimos uma lista do objeto
+	 * IndividualAddress . A relação aqui é de "um-para-muitos", ou seja, um
+	 * individual pode ter muitos endereços.
+	 * 
+	 * Não vinculamos o atributo à uma coluna da tabela individuals_addresses do
+	 * Postgre com JoinColumn, afinal, não existe uma coluna de chave estrangeira na
+	 * tabela individuals, mas devemos vincular a um atributo da classe
+	 * IndividualAddress, afinal é essa classe que é a "dona da relação". Essa
+	 * classe possui um atributo individual que está vinculado ao individual_id do
+	 * bd. Para fazer esse mapeamento, usamos a propriedade "mappedBy"
+	 */
+	@OneToMany(mappedBy = "individual", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<IndividualAddress> addresses;
+
+	public Individual() {
+	}
 
 	public int getId() {
 		return id;
@@ -99,6 +124,10 @@ public class Individual {
 
 	public String getProfileImageUrl() {
 		return profileImageUrl;
+	}
+
+	public List<IndividualAddress> getAddresses() {
+		return addresses;
 	}
 
 	public void setId(int id) {
@@ -163,5 +192,9 @@ public class Individual {
 
 	public void setProfileImageUrl(String profileImageUrl) {
 		this.profileImageUrl = profileImageUrl;
+	}
+
+	public void setAddresses(List<IndividualAddress> addresses) {
+		this.addresses = addresses;
 	}
 }

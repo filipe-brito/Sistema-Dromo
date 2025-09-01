@@ -1,38 +1,23 @@
-package com.dromo.sistema_dromo.service;
-
-import java.util.List;
+package com.dromo.sistema_dromo.service.records;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.dromo.sistema_dromo.dto.CompanyDTO;
-import com.dromo.sistema_dromo.dto.IndividualDTO;
-import com.dromo.sistema_dromo.mapper.CompanyMapper;
-import com.dromo.sistema_dromo.mapper.IndividualMapper;
-import com.dromo.sistema_dromo.model.Company;
-import com.dromo.sistema_dromo.model.Individual;
-import com.dromo.sistema_dromo.repository.CompanyRepository;
+import com.dromo.sistema_dromo.dto.records.CompanyDTO;
+import com.dromo.sistema_dromo.dto.records.CompanySummaryDTO;
+import com.dromo.sistema_dromo.mapper.records.CompanyMapper;
+import com.dromo.sistema_dromo.model.records.Company;
+import com.dromo.sistema_dromo.repository.records.CompanyRepository;
 
 @Service
 public class CompanyService {
 	@Autowired
 	private CompanyRepository companyRepository;
 	
-	public List<CompanyDTO> listCompanies(String companyName, String cnpj){
-		return companyRepository.findByFilters(companyName, cnpj)
-			.stream()
-			.map(company -> new CompanyDTO(
-					company.getId(),
-					company.getCompanyName(),
-					company.getCnpj(),
-					company.getTradeName(),
-					company.getDoe(),
-					company.getMunicipalRegistration(),
-					company.getStateRegistration(),
-					company.getPhone(),
-					company.getEmail()
-				))
-			.toList();
+	public Page<CompanySummaryDTO> listCompanies(String companyName, String cnpj, Pageable pageable){
+		return companyRepository.findByFilters(companyName, cnpj, pageable);
 	}
 	
 	public CompanyDTO saveCompany(CompanyDTO dto) {

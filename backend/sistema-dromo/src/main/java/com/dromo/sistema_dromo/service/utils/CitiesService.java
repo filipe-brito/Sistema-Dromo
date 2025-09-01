@@ -1,4 +1,4 @@
-package com.dromo.sistema_dromo.service;
+package com.dromo.sistema_dromo.service.utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,17 +6,17 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.dromo.sistema_dromo.dto.CitiesDTO;
-import com.dromo.sistema_dromo.mapper.CitiesMapper;
-import com.dromo.sistema_dromo.model.Cities;
-import com.dromo.sistema_dromo.repository.CitiesRepository;
+import com.dromo.sistema_dromo.dto.utils.CitiesDTO;
+import com.dromo.sistema_dromo.mapper.utils.CitiesMapper;
+import com.dromo.sistema_dromo.model.utils.Cities;
+import com.dromo.sistema_dromo.repository.utils.CitiesRepository;
 
 @Service
 public class CitiesService {
 	@Autowired
 	private CitiesRepository citiesRepository;
-	
-	public List<CitiesDTO> searchByName (String name) {
+
+	public List<CitiesDTO> searchByName(String name) {
 		List<Cities> cities = citiesRepository.findTop10ByNameContainingIgnoreCaseOrderByNameAsc(name);
 		List<CitiesDTO> dtoList = new ArrayList<>();
 		for (Cities city : cities) {

@@ -1,8 +1,17 @@
-package com.dromo.sistema_dromo.dto;
+package com.dromo.sistema_dromo.model.utils;
 
-public class CitiesDTO {
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "cities", schema = "utils")
+public class Cities {
+	@Id
 	private int id;
-	private int ibgeCode;
+	@Column(name="ibge_code")
+	private int ibgeCode;	
 	private String name;
 	private String state;
 	
@@ -19,10 +28,6 @@ public class CitiesDTO {
 		return state;
 	}
 	
-	public String getCityAndState() {
-		return name + " - " + state;
-	}
-	
 	public void setId(int id) {
 		this.id = id;
 	}
@@ -34,6 +39,6 @@ public class CitiesDTO {
 	}
 	public void setState(String state) {
 		this.state = state;
-	}
+	}	
 	
 }

@@ -19,19 +19,25 @@ import { NewFooter } from "../../../../components/organisms/Footer";
 const PeopleRecords = () => {
   const [loading, setLoading] = useState(true); // Estado booleano para ativar ou desativar a telinha de carregamento
   // Dados e filtros de pessoas físicas
-  const [individualData, setIndividualData] = useState([]); // Estado de array que armazena os dados de PF retornados pelo backend
-  const [companyData, setCompanyData] = useState([]);
+  const [individualData, setIndividualData] = useState({}); // Estado de array que armazena os dados de PF retornados pelo backend
+  const [companyData, setCompanyData] = useState({});
   const [selectedItem, setSelectedItem] = useState(null); // <-- Aqui você guarda o ID a ser deletado
   const [isConfirmOpen, setConfirmOpen] = useState(false);
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
   const [activeTab, setActiveTab] = useState(0); // State para atualizar a guia ativa pelo index
+  // Estados que controlam a página atual do sistema de paginação em ResultBar
+  const [individualPage, setIndividualPage] = useState(0);
+  const [companyPage, setCompanyPage] = useState(0);
 
-  const handleSearchIndividuals = async (filters = {}) => {
+  const [individualFilterValues, setIndividualFilterValues] = useState({});
+  const [companyFilterValues, setCompanyFilterValues] = useState({});
+
+  const handleSearchIndividuals = async (filters, page = 0) => {
     // Variável que recebe uma arrow function. É necessário passar um argumento do tipo object, caso não seja passado, a função considera filter um object vazio
     setLoading(true); // Altera o state setLoading para true quando necessário
     // Sempre envolver requisições em um bloco try-catch
     try {
-      const result = await fetchIndividuals(filters); // Executa a chamada à API e guarda o retorno na variável result. Caso a função receba filters, enviamos os filters para a requisição
+      const result = await fetchIndividuals(filters, page); // Executa a chamada à API e guarda o retorno na variável result. Caso a função receba filters, enviamos os filters para a requisição
       setIndividualData(result); // Atribui ao state individualData o retorno da API guardado em result. Essa atualização vai causar um re-render em PeopleRecords inteiro
     } catch (error) {
       // Captura qualquer retorno de erro
@@ -41,18 +47,28 @@ const PeopleRecords = () => {
       setLoading(false); // Altera o loading para false
     }
   };
+  useEffect(() => {
+    handleSearchIndividuals(individualFilterValues, individualPage);
+  }, [individualPage]);
 
-  const handleSearchCompanies = async (filters = {}) => {
+  const handleSearchCompanies = async (filters, page = 0) => {
     setLoading(true);
     try {
-      const result = await fetchCompanies(filters);
+      const result = await fetchCompanies(filters, page);
       setCompanyData(result);
     } catch (error) {
       console.log("Erro ao buscar empresas: ", error);
-    } finally {
-      setLoading(false);
     }
   };
+  useEffect(() => {
+    handleSearchCompanies(companyFilterValues, companyPage);
+  }, [companyPage]);
+
+  useEffect(() => {
+    if (individualData && companyData) {
+      setLoading(false);
+    }
+  }, [individualData, companyData]);
 
   const openConfirmModal = (id) => {
     setSelectedItem(id);
@@ -168,12 +184,6 @@ const PeopleRecords = () => {
     </div>
   );
 
-  useEffect(() => {
-    if (selectedItem) {
-      console.log("ID selecionado para deletar:", selectedItem);
-    }
-  }, [selectedItem]);
-
   return (
     <React.Fragment>
       <div className="w-8/10 min-h-[92dvh] mx-auto px-4 py-2 bg-stone-800 rounded-b border-x-2 border-b-2 border-stone-700">
@@ -217,6 +227,10 @@ const PeopleRecords = () => {
                   data={individualData} // São os dados retornados pela api. Passamos para o SearchSection montar o ResultBar e apresentar os dados
                   actions={individualsActionsColumn}
                   loading={loading} // O ícone de loading será exibido na barra de resultados, então passamos esse state para o SearchSection passar para ResultBar
+                  filterValues={individualFilterValues}
+                  setFilterValues={setIndividualFilterValues}
+                  page={individualPage}
+                  setPage={setIndividualPage}
                   onSearch={handleSearchIndividuals} // Passamos essa prop para SearchSection passar para Filterbar passar para o botão. É a ação que será executada ao clicar no botão.
                 />
               ),
@@ -230,6 +244,10 @@ const PeopleRecords = () => {
                   columns={companyColumns}
                   data={companyData}
                   loading={loading}
+                  filterValues={companyFilterValues}
+                  setFilterValues={setCompanyFilterValues}
+                  page={companyPage}
+                  setPage={setCompanyPage}
                   onSearch={handleSearchCompanies}
                   actions={companyActionsColumn}
                 />

@@ -1,4 +1,4 @@
-package com.dromo.sistema_dromo.controller;
+package com.dromo.sistema_dromo.controller.utils;
 
 import java.util.List;
 
@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dromo.sistema_dromo.dto.CitiesDTO;
-import com.dromo.sistema_dromo.service.CitiesService;
+import com.dromo.sistema_dromo.dto.utils.CitiesDTO;
+import com.dromo.sistema_dromo.service.utils.CitiesService;
 
 @RestController
 @RequestMapping("/utils/cities")

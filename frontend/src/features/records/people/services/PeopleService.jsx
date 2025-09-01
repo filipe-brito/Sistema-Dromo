@@ -2,11 +2,11 @@ import api from "@/api/api";
 
 // Função assíncrona exportada que faz uma chamada à API
 // Recebe como argumento um objeto 'filters'. Se nenhum for passado, usa um objeto vazio por padrão
-export const fetchIndividuals = async (filters = {}) => {
+export const fetchIndividuals = async (filters, page) => {
   try {
     const query = new URLSearchParams(filters).toString();
     const response = await api.get(
-      `/records/individuals${query ? `?${query}` : ""}`
+      `/records/individuals?page=${page}${query ? `&${query}` : ""}`
     );
     return response.data; // Retorne a resposta da API
   } catch (error) {
@@ -61,11 +61,11 @@ export const updateIndividual = async (id, data) => {
   }
 };
 
-export const fetchCompanies = async (filters = {}) => {
+export const fetchCompanies = async (filters, page) => {
   try {
     const query = new URLSearchParams(filters).toString();
     const response = await api.get(
-      `/records/companies${query ? `?${query}` : ""}`
+      `/records/companies?page${page}${query ? `&${query}` : ""}`
     );
     return response.data;
   } catch (error) {

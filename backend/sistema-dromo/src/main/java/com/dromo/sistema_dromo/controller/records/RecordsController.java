@@ -1,9 +1,10 @@
-package com.dromo.sistema_dromo.controller;
+package com.dromo.sistema_dromo.controller.records;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +20,13 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.dromo.sistema_dromo.dto.CompanyDTO;
-import com.dromo.sistema_dromo.dto.IndividualDTO;
-import com.dromo.sistema_dromo.service.CompanyService;
-import com.dromo.sistema_dromo.service.ImageService;
-import com.dromo.sistema_dromo.service.IndividualService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
+import com.dromo.sistema_dromo.dto.records.CompanyDTO;
+import com.dromo.sistema_dromo.dto.records.CompanySummaryDTO;
+import com.dromo.sistema_dromo.dto.records.IndividualDTO;
+import com.dromo.sistema_dromo.dto.records.IndividualSummaryDTO;
+import com.dromo.sistema_dromo.service.records.CompanyService;
+import com.dromo.sistema_dromo.service.records.IndividualService;
+import com.dromo.sistema_dromo.service.utils.ImageService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
@@ -44,12 +45,12 @@ public class RecordsController {
 	private ObjectMapper objectMapper; // Declaração da sua instância
 
 	@GetMapping("/individuals")
-	public List<IndividualDTO> listIndividuals(
+	public Page<IndividualSummaryDTO> listIndividuals(
 			// @RequestParam define um parâmetro para a requisição
 			// 'required = false' define que esse parâmetro não é obrigatório
 			@RequestParam(name = "name", required = false) String fullName, @RequestParam(required = false) String cpf,
-			@RequestParam(required = false) String email) {
-		return individualService.listIndividuals(fullName, cpf, email);
+			@RequestParam(required = false) String email, Pageable pageable) {
+		return individualService.listIndividuals(fullName, cpf, email, pageable);
 	}
 
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, value = "/individuals")
@@ -135,9 +136,10 @@ public class RecordsController {
 
 	// Métodos para o cadastro de pessoas jurídicas
 	@GetMapping("/companies")
-	public List<CompanyDTO> listCompanies(@RequestParam(name = "companyName", required = false) String companyName,
-			@RequestParam(required = false) String cnpj) {
-		return companyService.listCompanies(companyName, cnpj);
+	public Page<CompanySummaryDTO> listCompanies(
+			@RequestParam(name = "companyName", required = false) String companyName,
+			@RequestParam(required = false) String cnpj, Pageable pageable) {
+		return companyService.listCompanies(companyName, cnpj, pageable);
 	}
 
 	@PostMapping("/companies")

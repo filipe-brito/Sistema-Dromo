@@ -4,7 +4,6 @@ import React, { useState, useRef, useEffect } from "react";
 import {
   AutoCompleteInput,
   DefaultInput,
-  ImageInput,
   MaskedInput,
   SelectInput,
 } from "../atoms/Input";

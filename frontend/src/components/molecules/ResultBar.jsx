@@ -1,17 +1,5 @@
-import { useState } from "react";
-
-const ResultBar = ({ columns, data, actions }) => {
+const ResultBar = ({ columns, data, actions, page, setPage }) => {
   // Criamos um componente ResultBar
-  const [currentPage, setCurrentPage] = useState(1); // Estado que controla a paginação dos dados que serão apresentados.
-  const itemsPerPage = 20; // Variável que guarda a quantidade máxima de itens que devem ser exibidos em uma única página
-
-  const startIndex = (currentPage - 1) * itemsPerPage; // Variável que guarda o index do primeiro item a ser exibido na tabela daquela página
-  const endIndex = startIndex + itemsPerPage; // Variável que guarda o index do último item a ser exdibido na tabela daquela página
-  // O método .slice() é nativo para ser usado em arrays
-  // Passamos os parâmetros (posições inicial e final) e o método extrai do array somente os itens que estão no intervalo dos parâmetros
-  // O parâmetro final é exclusivo
-  const currentItems = data.slice(startIndex, endIndex);
-
   return (
     // Retorna o componente
     <div className="w-full">
@@ -34,7 +22,7 @@ const ResultBar = ({ columns, data, actions }) => {
           </thead>
           <tbody>
             {/* Define o corpo da tabela. Onde os dados reais serão apresentados */}
-            {currentItems.map((item, index) => (
+            {data?.content?.map((item, index) => (
               <tr key={index} className="hover:bg-black/15">
                 {columns.map((column) => (
                   // (table data cell) É uma célula de dados
@@ -62,19 +50,19 @@ const ResultBar = ({ columns, data, actions }) => {
         {/* Botões que controlam a página exibida na paginação. Atualiza o estado que controla a página atual*/}
         <button
           className="px-3 py-1 bg-stone-300 rounded disabled:opacity-50"
-          onClick={() => setCurrentPage((prev) => prev - 1)}
-          disabled={currentPage == 1} // Propriedade HTML que desabilita o botão se a expressão em seu valor retornar 'true'
+          onClick={() => setPage(page - 1)}
+          disabled={data.first} // Propriedade HTML que desabilita o botão se a expressão em seu valor retornar 'true'
         >
           Anterior
         </button>
         {/* span é o elemento inline para aplicar estilo à uma parte isolada de um texto */}
         <span className="text-sm text-neutral-600 flex items-center">
-          Página {currentPage} de {Math.ceil(data.length / itemsPerPage)}
+          Página {page + 1} de {data.totalPages}
         </span>
         <button
           className="px-3 py-1 bg-stone-300 rounded disabled:opacity-50"
-          onClick={() => setCurrentPage((prev) => prev + 1)}
-          disabled={currentPage >= Math.ceil(data.length / itemsPerPage)}
+          onClick={() => setPage(page + 1)}
+          disabled={data.last}
         >
           Próxima
         </button>
