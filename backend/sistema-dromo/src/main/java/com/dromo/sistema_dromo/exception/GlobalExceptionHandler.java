@@ -53,7 +53,8 @@ public class GlobalExceptionHandler {
 				return ResponseEntity.status(HttpStatus.CONFLICT).body(friendlyMessage);
 			}
 		}
-
+		// imprime tudo no log/console
+	    ex.printStackTrace();
 		// Se não conseguimos identificar a causa, retorna genérico
 		return ResponseEntity.status(HttpStatus.CONFLICT).body("Violação de integridade nos dados.");
 	}

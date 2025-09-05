@@ -1,10 +1,11 @@
 package com.dromo.sistema_dromo.model.records;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
-import com.dromo.sistema_dromo.dto.utils.CitiesDTO;
 import com.dromo.sistema_dromo.model.utils.Cities;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -25,7 +26,7 @@ import jakarta.persistence.Table;
 public class Individual {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "individual_seq")
-	private int id;
+	private Integer id;
 	@Column(name = "full_name")
 	private String fullName;
 	private String cpf;
@@ -69,12 +70,23 @@ public class Individual {
 	 * bd. Para fazer esse mapeamento, usamos a propriedade "mappedBy"
 	 */
 	@OneToMany(mappedBy = "individual", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<IndividualAddress> addresses;
+	@JsonManagedReference
+	private List<IndividualAddress> addresses = new ArrayList<>();
+	
+	 // --- Helper ---
+    public void addAddress(IndividualAddress address) {
+        addresses.add(address);       // adiciona na lista do pai
+        address.setIndividual(this);  // seta o pai no lado "ManyToOne"
+    }
 
 	public Individual() {
 	}
+	
+	public Individual(Integer id) {
+		this.id = id;
+	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 

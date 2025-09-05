@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class CompanyDTO {
-	private int id;
+	private Integer id;
 	private String companyName;
 	private String cnpj;
 	private String tradeName;
@@ -16,9 +16,8 @@ public class CompanyDTO {
 	private String profileImageUrl;
 	private List<CompanyAddressDTO> addresses;
 
-	public CompanyDTO(int id, String companyName, String cnpj, String tradeName, LocalDate doe,
+	public CompanyDTO(Integer id, String companyName, String cnpj, String tradeName, LocalDate doe,
 			String municipalRegistration, String stateRegistration, String phone, String email) {
-		super();
 		this.id = id;
 		this.companyName = companyName;
 		this.cnpj = cnpj;
@@ -34,11 +33,11 @@ public class CompanyDTO {
 		
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

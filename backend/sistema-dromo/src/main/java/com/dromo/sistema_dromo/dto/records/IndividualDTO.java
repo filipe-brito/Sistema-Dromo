@@ -6,7 +6,7 @@ import java.util.List;
 import com.dromo.sistema_dromo.dto.utils.CitiesDTO;
 
 public class IndividualDTO {
-	private int id;
+	private Integer id;
 	private String name;
 	private String cpf;
 	private char gender;
@@ -23,7 +23,7 @@ public class IndividualDTO {
 	private List<IndividualAddressDTO> addresses;
 
 	// Construtor
-	public IndividualDTO(int id, String name, String cpf, char gender, String maritalStatus, String phone,
+	public IndividualDTO(Integer id, String name, String cpf, char gender, String maritalStatus, String phone,
 			String cellphone, LocalDate dob, String rg, String rntrc, String email, CitiesDTO birthCity) {
 		this.id = id;
 		this.name = name;
@@ -37,21 +37,20 @@ public class IndividualDTO {
 		this.rntrc = rntrc;
 		this.email = email;
 		this.birthCity = birthCity;
-		this.addresses = addresses;
 	}
 
 	public IndividualDTO() {
 
 	}
 	
-	public IndividualDTO(int id, String name, String cpf, String email) {
+	public IndividualDTO(Integer id, String name, String cpf, String email) {
 		this.id = id;
 		this.name = name;
 		this.cpf = cpf;
 		this.email = email;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
@@ -107,7 +106,7 @@ public class IndividualDTO {
 		return addresses;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

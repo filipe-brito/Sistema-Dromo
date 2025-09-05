@@ -96,16 +96,8 @@ const IndividualEditPage = () => {
       const formattedData = Object.entries(individualData).reduce(
         (acc, [key, value]) => {
           const mask = validators[key]?.mask;
-          // 👇 Aqui você intercepta e reformata o campo específico
-          if (key === "birthCity") {
-            acc[key] = {
-              value: value.id,
-              label: value.cityAndState,
-              ...value, // mantém ibgeCode, state, etc
-            };
-          } else {
-            acc[key] = mask ? mask(value) : value;
-          }
+          acc[key] = mask ? mask(value) : value;
+
           return acc;
         },
         {}
@@ -113,6 +105,7 @@ const IndividualEditPage = () => {
 
       // Executa o reset com os dados como argumento. O reset vai preencher os campos do formulário automaticamente
       // Retornamos o object reformatado pelo redux. Agora, o validate passa normalmente
+      console.log(formattedData);
       reset(formattedData);
     }
     // "Sempre declare todas as dependências que você usa dentro do efeito."
@@ -158,7 +151,22 @@ const IndividualEditPage = () => {
                         </h1>
                         <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end">
                           <FormBuilder
-                            inputs={IndividualInputs}
+                            inputs={IndividualInputs.mainData}
+                            control={control}
+                            register={register}
+                            errors={errors}
+                            watch={watch}
+                            setValue={setValue}
+                          />
+                        </div>
+                      </section>
+                      <section className="bg-stone-100 p-2 rounded">
+                        <h1 className="font-bold text-2xl mb-2 text-neutral-800">
+                          Endereços
+                        </h1>
+                        <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end">
+                          <FormBuilder
+                            inputs={IndividualInputs.addresses}
                             control={control}
                             register={register}
                             errors={errors}

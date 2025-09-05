@@ -115,7 +115,22 @@ const IndividualCreatePage = () => {
                     </h1>
                     <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end">
                       <FormBuilder
-                        inputs={IndividualInputs}
+                        inputs={IndividualInputs.mainData}
+                        control={control}
+                        register={register}
+                        errors={errors}
+                        watch={watch}
+                        setValue={setValue}
+                      />
+                    </div>
+                  </section>
+                  <section className="bg-stone-100 p-2 rounded">
+                    <h1 className="font-bold text-2xl mb-2 text-neutral-800">
+                      Endereço
+                    </h1>
+                    <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end">
+                      <FormBuilder
+                        inputs={IndividualInputs.addresses}
                         control={control}
                         register={register}
                         errors={errors}

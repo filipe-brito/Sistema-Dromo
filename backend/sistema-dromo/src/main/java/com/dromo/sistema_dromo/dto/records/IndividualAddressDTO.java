@@ -9,18 +9,18 @@ public class IndividualAddressDTO {
 	 * Definimos ele como Long para que seja retornado o id ao invés de um objeto
 	 * serializado.
 	 */
-	private Long individual;
+	private Integer individual;
 	private String street;
 	private String streetNumber;
 	private String neighborhood;
 	private String zipCode;
 	private CitiesDTO city;
 
-	public Long getIndividual() {
+	public Integer getIndividual() {
 		return individual;
 	}
 
-	public void setIndividual(Long individual) {
+	public void setIndividual(Integer individual) {
 		this.individual = individual;
 	}
 

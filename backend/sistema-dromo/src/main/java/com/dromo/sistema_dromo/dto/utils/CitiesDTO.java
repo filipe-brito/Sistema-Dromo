@@ -17,13 +17,19 @@ public class CitiesDTO {
 	public String getName() {
 		return name;
 	}
-
+	
+	// Frontend precisa dessa tag para usar no input de autocomplete
 	public String getState() {
 		return state;
 	}
-
-	public String getCityAndState() {
+	
+	// Frontend precisa dessa tag para usar no input de autocomplete
+	public String getLabel() {
 		return name + " - " + state;
+	}
+	
+	public int getValue() {
+		return id;
 	}
 
 	public void setId(int id) {

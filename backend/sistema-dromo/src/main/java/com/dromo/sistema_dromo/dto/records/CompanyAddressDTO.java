@@ -10,7 +10,7 @@ public class CompanyAddressDTO {
 	 * Definimos ele como Long para que seja retornado o id ao invés de um objeto
 	 * serializado.
 	 */
-	private Long company;
+	private Integer company;
 	private String street;
 	private String streetNumber;
 	private String neighborhood;
@@ -23,10 +23,10 @@ public class CompanyAddressDTO {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public Long getCompany() {
+	public Integer getCompany() {
 		return company;
 	}
-	public void setCompany(Long company) {
+	public void setCompany(Integer company) {
 		this.company = company;
 	}
 	public String getStreet() {

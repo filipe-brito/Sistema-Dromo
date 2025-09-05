@@ -4,8 +4,10 @@ import java.util.List;
 
 import com.dromo.sistema_dromo.dto.records.CompanyAddressDTO;
 import com.dromo.sistema_dromo.dto.records.CompanyDTO;
+import com.dromo.sistema_dromo.dto.records.IndividualAddressDTO;
 import com.dromo.sistema_dromo.model.records.Company;
 import com.dromo.sistema_dromo.model.records.CompanyAddress;
+import com.dromo.sistema_dromo.model.records.IndividualAddress;
 
 public class CompanyMapper {
 	public static Company toEntity(CompanyDTO dto) {
@@ -23,9 +25,21 @@ public class CompanyMapper {
 		/*
 		 * stream é uma forma moderna e "funcional" de percorrer coleções. 
 		 */
+		/*
+		 * Vamos verificar se o DTO possui addresses antes de percorrer a lista
+		 * e converter o dto de address para entidade.
+		 * Cada address precisa ter o seu atributo individual preenchido. Então, 
+		 * passamos o próprio individual que está em construção agora, utilizando um 
+		 * helper na classe individual.
+		 */
 		if (dto.getAddresses() != null) {
-			List<CompanyAddress> entityAddresses = dto.getAddresses().stream().map(AddressMapper::toEntity).toList();
-			company.setAddresses(entityAddresses);
+			for (CompanyAddressDTO addrDTO : dto.getAddresses()) {
+				// Converte cada endereço do dto em endereço para a entidade
+				CompanyAddress addr = AddressMapper.toEntity(addrDTO);
+				// Aqui usamos o helper, que garante que addr.setIndividual(individual) seja
+				// chamado
+				company.addAddress(addr);
+			}
 		}
 		return company;
 	}

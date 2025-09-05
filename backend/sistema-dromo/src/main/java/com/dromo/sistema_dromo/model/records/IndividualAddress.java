@@ -1,6 +1,7 @@
 package com.dromo.sistema_dromo.model.records;
 
 import com.dromo.sistema_dromo.model.utils.Cities;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,8 +38,11 @@ public class IndividualAddress {
 	 * em um loop infinito. Sendo assim, alteramos o tipo para "long" e agora esse
 	 * atributo vai guardar somente o id de Individual
 	 */
-	@Column(name = "individual_id")
-	private Long individual;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "individual_id", nullable = false)
+    @JsonBackReference
+    private Individual individual;
 	private String street;
 	@Column(name = "street_number")
 	private String streetNumber;
@@ -49,11 +53,11 @@ public class IndividualAddress {
 	@JoinColumn(name = "city_id")
 	private Cities city;
 
-	public Long getIndividual() {
+	public Individual getIndividual() {
 		return individual;
 	}
 
-	public void setIndividual(Long individual) {
+	public void setIndividual(Individual individual) {
 		this.individual = individual;
 	}
 

@@ -23,11 +23,26 @@ public class IndividualMapper {
 		individual.setRntrc(sanitize(dto.getRntrc()));
 		individual.setEmail(sanitize(dto.getEmail()));
 		/*
-		 * stream é uma forma moderna e "funcional" de percorrer coleções. 
+		 * Vamos verificar se o DTO possui addresses antes de percorrer a lista
+		 * e converter o dto de address para entidade.
+		 * Aqui temos uma relação bidirecional, onde um individual possui um address e 
+		 * cada address possui um individual. Então, para construir os address, passamos para o 
+		 * seu atributo "individual" o próprio individual que está sendo criado por esse mapper.
+		 * Para isso, utilizamos um método helper lá na classe Individual.
 		 */
 		if (dto.getAddresses() != null) {
-			List<IndividualAddress> entityAddresses = dto.getAddresses().stream().map(AddressMapper::toEntity).toList();
-			individual.setAddresses(entityAddresses);
+			for (IndividualAddressDTO addrDTO : dto.getAddresses()) {
+				// Converte cada endereço do dto em endereço para a entidade
+				IndividualAddress addr = AddressMapper.toEntity(addrDTO);
+				/*
+				 * Aqui usamos o helper, que garante que addr.setIndividual(individual) seja
+				 * chamado. Verificamos se ao mapear o addreso retorno é null. Se for null,
+				 * o endereço não entra na lista. 
+				 */
+				if (addr != null) {
+					individual.addAddress(addr);
+				}
+			}
 		}
 		if (dto.getBirthCity() == null) {
 			individual.setBirthCity(null);

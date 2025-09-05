@@ -1,6 +1,7 @@
 package com.dromo.sistema_dromo.model.records;
 
 import com.dromo.sistema_dromo.model.utils.Cities;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,8 +25,10 @@ public class CompanyAddress {
 	 */
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(name = "company_id")
-	private Long company;
+	@ManyToOne(optional = false)
+    @JoinColumn(name = "company_id", nullable = false)
+    @JsonBackReference
+	private Company company;
 	private String street;
 	@Column(name = "street_number")
 	private String streetNumber;
@@ -44,11 +47,11 @@ public class CompanyAddress {
 		this.id = id;
 	}
 
-	public Long getCompany() {
+	public Company getCompany() {
 		return company;
 	}
 
-	public void setCompany(Long company) {
+	public void setCompany(Company company) {
 		this.company = company;
 	}
 

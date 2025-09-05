@@ -52,7 +52,8 @@ public class RecordsController {
 			@RequestParam(required = false) String email, Pageable pageable) {
 		return individualService.listIndividuals(fullName, cpf, email, pageable);
 	}
-
+	
+	// Requisição de cadastro de Individual
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, value = "/individuals")
 	public ResponseEntity<IndividualDTO> create(@RequestBody IndividualDTO dto) {
 		IndividualDTO saved = individualService.saveIndividual(dto);

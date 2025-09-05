@@ -1,7 +1,10 @@
 package com.dromo.sistema_dromo.model.records;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -20,7 +23,7 @@ import jakarta.persistence.Table;
 public class Company {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "company_seq")
-	private int id;
+	private Integer id;
 	@Column(name = "company_name")
 	private String companyName;
 	private String cnpj;
@@ -50,9 +53,16 @@ public class Company {
 	 * fazer esse mapeamento, usamos a propriedade "mappedBy"
 	 */
 	@OneToMany(mappedBy = "company", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	private List<CompanyAddress> addresses;
+	@JsonManagedReference
+	private List<CompanyAddress> addresses = new ArrayList<>();
 
-	public int getId() {
+	// --- Helper ---
+	public void addAddress(CompanyAddress address) {
+		addresses.add(address); // adiciona na lista do pai
+		address.setCompany(this); // seta o pai no lado "ManyToOne"
+	}
+
+	public Integer getId() {
 		return id;
 	}
 
@@ -92,7 +102,7 @@ public class Company {
 		return profileImageUrl;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
