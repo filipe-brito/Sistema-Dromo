@@ -13,23 +13,36 @@
  * elemento seja falso, o retorno da função inteira também será falso.
  */
 export function sanitizeFormData(data) {
-  const sanitized = Object.entries(data).reduce((acc, [key, value]) => {
-    // verifica se o value iterado é do tipo String
-    if (typeof value === "string") {
-      //se estiver vazio, atribui null
-      acc[key] = value.trim() === "" ? null : value;
-    }
-    // verifica se o value iterado é do tipo Object
-    else if (typeof value === "object" && value !== null) {
-      const subValues = Object.values(value);
-      const allUndefined = subValues.every((v) => v === undefined);
+  // Se o valor não for um objeto ou for nulo, retorna como está.
+  if (typeof data !== "object" || data === null) {
+    return data;
+  }
 
-      acc[key] = allUndefined ? null : value;
-    } else {
-      acc[key] = value;
-    }
-    return acc;
-  }, {});
+  // Se for um array, sanitiza cada elemento.
+  if (Array.isArray(data)) {
+    return data.map(sanitizeFormData);
+  }
 
-  return sanitized;
+  const sanitized = {};
+  let isEmptyObject = true;
+
+  // Usa Object.entries para iterar e aplica a lógica em cada chave/valor
+  for (const [key, value] of Object.entries(data)) {
+    // 1. Sanitiza o valor recursivamente
+    const sanitizedValue = sanitizeFormData(value);
+
+    // 2. Verifica se o valor sanitizado deve ser mantido ou ignorado.
+    if (
+      sanitizedValue !== null &&
+      sanitizedValue !== "" &&
+      (typeof sanitizedValue !== "object" ||
+        Object.keys(sanitizedValue).length > 0)
+    ) {
+      sanitized[key] = sanitizedValue;
+      isEmptyObject = false;
+    }
+  }
+
+  // Se o objeto estiver vazio depois de sanitizado, retorna null
+  return isEmptyObject ? null : sanitized;
 }

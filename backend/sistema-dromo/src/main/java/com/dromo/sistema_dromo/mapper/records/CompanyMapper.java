@@ -23,22 +23,28 @@ public class CompanyMapper {
 		company.setEmail(sanitize(dto.getEmail()));
 		company.setProfileImageUrl(sanitize(dto.getProfileImageUrl()));
 		/*
-		 * stream é uma forma moderna e "funcional" de percorrer coleções. 
+		 * stream é uma forma moderna e "funcional" de percorrer coleções.
 		 */
 		/*
-		 * Vamos verificar se o DTO possui addresses antes de percorrer a lista
-		 * e converter o dto de address para entidade.
-		 * Cada address precisa ter o seu atributo individual preenchido. Então, 
-		 * passamos o próprio individual que está em construção agora, utilizando um 
-		 * helper na classe individual.
+		 * Vamos verificar se o DTO possui addresses antes de percorrer a lista e
+		 * converter o dto de address para entidade. Cada address precisa ter o seu
+		 * atributo individual preenchido. Então, passamos o próprio individual que está
+		 * em construção agora, utilizando um helper na classe individual.
 		 */
 		if (dto.getAddresses() != null) {
 			for (CompanyAddressDTO addrDTO : dto.getAddresses()) {
-				// Converte cada endereço do dto em endereço para a entidade
-				CompanyAddress addr = AddressMapper.toEntity(addrDTO);
-				// Aqui usamos o helper, que garante que addr.setIndividual(individual) seja
-				// chamado
-				company.addAddress(addr);
+				if (addrDTO != null) {
+					// Converte cada endereço do dto em endereço para a entidade
+					CompanyAddress addr = AddressMapper.toEntity(addrDTO);
+					/*
+					 * Aqui usamos o helper, que garante que addr.setCompany(company) seja chamado.
+					 * Verificamos se ao mapear o address o retorno é null. Se for null, o endereço
+					 * não entra na lista.
+					 */
+					if (addr != null) {
+						company.addAddress(addr);
+					}
+				}
 			}
 		}
 		return company;

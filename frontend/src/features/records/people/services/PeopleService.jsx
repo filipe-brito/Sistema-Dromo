@@ -50,7 +50,6 @@ export const getIndividualById = async (id) => {
 
 export const updateIndividual = async (id, data) => {
   try {
-    console.log("Testeeeeee: ", data);
     const response = await api.put(`/records/individuals/${id}`, data);
     return response.data;
   } catch (error) {

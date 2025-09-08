@@ -1,16 +1,16 @@
 package com.dromo.sistema_dromo.dto.utils;
 
 public class CitiesDTO {
-	private int id;
-	private int ibgeCode;
+	private Integer id;
+	private Integer ibgeCode;
 	private String name;
 	private String state;
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public int getIbgeCode() {
+	public Integer getIbgeCode() {
 		return ibgeCode;
 	}
 
@@ -32,11 +32,11 @@ public class CitiesDTO {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	public void setIbgeCode(int ibgeCode) {
+	public void setIbgeCode(Integer ibgeCode) {
 		this.ibgeCode = ibgeCode;
 	}
 
@@ -48,4 +48,10 @@ public class CitiesDTO {
 		this.state = state;
 	}
 
+	public boolean validateCity() {
+		if (id != null || ibgeCode != null) {
+			return true;
+		}
+		return false;
+	}
 }

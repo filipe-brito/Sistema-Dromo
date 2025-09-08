@@ -142,7 +142,7 @@ public class Individual {
 		return addresses;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
