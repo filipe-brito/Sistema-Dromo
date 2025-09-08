@@ -24,4 +24,9 @@ public class CitiesService {
 		}
 		return dtoList;
 	}
+	
+	public Cities searchByIbgeCode(Integer ibgeCode) {
+		Cities city = citiesRepository.findByIbgeCode(ibgeCode);
+		return city;
+	}
 }
