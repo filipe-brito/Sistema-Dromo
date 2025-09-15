@@ -2,6 +2,7 @@ import { FetchCity } from "../../../../services/UtilsService";
 import { svgToUrl } from "../../../../utils/miscellaneous";
 import { PersonIcon2 } from "../../../../components/atoms/icons/PersonIcon";
 import { CompanyIcon2 } from "../../../../components/atoms/icons/CompanyIcon";
+import { validators } from "../../../../utils/validators";
 
 const personIconUrl = svgToUrl(<PersonIcon2 fill="#222222" />);
 
@@ -18,14 +19,19 @@ export const IndividualInputs = {
       name: "name",
       type: "default",
       label: "∗ Nome",
-      required: "Nome é obrigatório",
+      rules: {
+        required: "Nome é obrigatório",
+      },
       gridCellStyle: "col-span-2",
     },
     {
       name: "cpf",
       type: "masked",
       label: "∗ CPF",
-      required: "CPF é obrigatório",
+      rules: {
+        required: "CPF é obrigatório",
+        validate: validators.cpf.validator,
+      },
       mask: "000.000.000-00",
       placeholder: "Ex: 999.999.999-99",
     },
@@ -33,7 +39,9 @@ export const IndividualInputs = {
       name: "gender",
       type: "select",
       label: "∗ Sexo",
-      required: "Sexo é obrigatório",
+      rules: {
+        required: "Sexo é obrigatório",
+      },
       options: [
         { optionLabel: "masculino", value: "M" },
         { optionLabel: "feminina", value: "F" },
@@ -53,6 +61,9 @@ export const IndividualInputs = {
       type: "masked",
       label: "Telefone",
       mask: "(00) 0000-0000",
+      rules: {
+        validate: validators.phone.validator,
+      },
       placeholder: "Ex: (99) 9999-9999",
     },
     {
@@ -60,6 +71,9 @@ export const IndividualInputs = {
       type: "masked",
       label: "Celular",
       mask: "(00) 0 0000-0000",
+      rules: {
+        validate: validators.cellphone.validator,
+      },
       placeholder: "Ex: (99) 9 9999-9999",
     },
     {
@@ -67,7 +81,9 @@ export const IndividualInputs = {
       type: "default",
       type2: "date",
       label: "∗ Data de nascimento",
-      required: "Data de nascimento é obrigatório",
+      rules: {
+        required: "Data de nascimento é obrigatório",
+      },
     },
     {
       name: "rg",
@@ -96,24 +112,38 @@ export const IndividualInputs = {
   addresses: [
     {
       name: "addresses[0].zipCode",
-      type: "default",
+      type: "masked",
+      mask: "00000-000",
       label: "CEP",
+      rules: {
+        required: "CEP é obrigatório",
+        validate: validators.zipCode.validator,
+      },
     },
     {
       name: "addresses[0].street",
       type: "default",
       label: "Logradouro",
       gridCellStyle: "col-span-2",
+      rules: {
+        required: "Logradouro é obrigatório",
+      },
     },
     {
       name: "addresses[0].streetNumber",
       type: "default",
       label: "Número",
+      rules: {
+        required: "Número é obrigatório",
+      },
     },
     {
       name: "addresses[0].neighborhood",
       type: "default",
       label: "Bairro",
+      rules: {
+        required: "Bairro é obrigatório",
+      },
     },
     {
       name: "addresses[0].city",
@@ -121,6 +151,9 @@ export const IndividualInputs = {
       label: "Cidade",
       loadOptionsFunction: FetchCity,
       gridCellStyle: "col-span-2",
+      rules: {
+        required: "Cidade é obrigatório",
+      },
     },
   ],
 };
@@ -141,14 +174,19 @@ export const companyInputs = {
       name: "companyName",
       type: "default",
       label: "∗ Razão Social",
-      required: "Razão Social é obrigatório",
+      rules: {
+        required: "Razão Social é obrigatório",
+      },
       gridCellStyle: "col-span-2",
     },
     {
       name: "cnpj",
       type: "masked",
       label: "∗ CNPJ",
-      required: "CNPJ é obrigatório",
+      rules: {
+        required: "CNPJ é obrigatório",
+        validate: validators.cnpj.validator,
+      },
       placeholder: "Ex: 99.999.999/9999-99",
       mask: "00.000.000/0000-00",
     },
@@ -163,7 +201,9 @@ export const companyInputs = {
       type: "default",
       type2: "date",
       label: "∗ Data de Fundação",
-      required: "Data de fundação é obrigatório",
+      rules: {
+        required: "Data de fundação é obrigatório",
+      },
     },
     {
       name: "municipalRegistration",
@@ -179,6 +219,9 @@ export const companyInputs = {
       name: "phone",
       type: "masked",
       label: "Telefone",
+      rules: {
+        validate: validators.phone.validator,
+      },
       mask: "(00) 0000-0000",
       placeholder: "Ex: (99) 9999-9999",
     },
@@ -193,24 +236,38 @@ export const companyInputs = {
   addresses: [
     {
       name: "addresses[0].zipCode",
-      type: "default",
+      type: "masked",
+      mask: "00000-000",
       label: "CEP",
+      rules: {
+        required: "CEP é obrigatório",
+        validate: validators.zipCode.validator,
+      },
     },
     {
       name: "addresses[0].street",
       type: "default",
       label: "Logradouro",
       gridCellStyle: "col-span-2",
+      rules: {
+        required: "Logradouro é obrigatório",
+      },
     },
     {
       name: "addresses[0].streetNumber",
       type: "default",
       label: "Número",
+      rules: {
+        required: "Número é obrigatório",
+      },
     },
     {
       name: "addresses[0].neighborhood",
       type: "default",
       label: "Bairro",
+      rules: {
+        required: "Bairro é obrigatório",
+      },
     },
     {
       name: "addresses[0].city",
@@ -218,6 +275,9 @@ export const companyInputs = {
       label: "Cidade",
       loadOptionsFunction: FetchCity,
       gridCellStyle: "col-span-2",
+      rules: {
+        required: "Cidade é obrigatório",
+      },
     },
   ],
 };

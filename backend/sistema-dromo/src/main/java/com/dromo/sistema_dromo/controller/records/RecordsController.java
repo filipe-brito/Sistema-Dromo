@@ -108,7 +108,6 @@ public class RecordsController {
 			@RequestPart(name = "individual", required = true) String individual,
 			@RequestPart(name = "profile_image") MultipartFile imageFile) {
 		try {
-			System.out.println("\nA requisição chegou no post formData");
 			IndividualDTO dto = objectMapper.readValue(individual, IndividualDTO.class);
 			String imageUrl = profileImageService.uploadImage(imageFile, String.valueOf(id),
 					"dromo/records/individuals/profile_images", "individual_profile_pic_");

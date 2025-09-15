@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import {
   getIndividualById,
   updateIndividual,
@@ -13,6 +13,7 @@ import { ConfirmModal } from "@/components/molecules/ConfirmModal";
 import { LoadingIcon } from "../../../../components/atoms/icons/LoadingIcon";
 import { IndividualInputs } from "./PeopleInputs";
 import { sanitizeFormData } from "../../../../utils/sanitize";
+import { FetchAddressByZipCode } from "../../../../services/UtilsService";
 import { buildFormData } from "../../../../utils/miscellaneous";
 import { useForm } from "react-hook-form";
 import { validators } from "../../../../utils/validators";
@@ -26,6 +27,26 @@ const IndividualEditPage = () => {
   const [individualData, setIndividualData] = useState(null); // Estado novo para armazenar dados
   const [activeTab, setActiveTab] = useState(0);
 
+  const {
+    register, // estado que registra o inputs comuns no formulário
+    // handleSubmit função que lida com o envio do formulário.
+    handleSubmit,
+    control, // estado que registra os campos que não são nativos (inputs)
+    // O reset preenche os campos com os dados enviados pelo comnponente de edição de cadastro
+    reset,
+    // formState é objeto com os erros de validação.
+    // A chave seria o nome do campo e o valor seria a mensagem a ser apresentada caso trigger retornar false
+    formState: { errors },
+    // Controla a validação dos campos. Caso true chama handleSubmit,
+    // caso false exibe os erros de formState acima dos campos
+    trigger,
+    // Função que monitora os campos do formulário
+    watch,
+    // Função para alterar o valor de um campo programaticamente
+    setValue,
+    getValues,
+  } = useForm(); // Hook do React para formulários
+
   useEffect(() => {
     const fetchData = async () => {
       // Busca os dados cadastrados no banco de dados para alterarmos
@@ -38,6 +59,71 @@ const IndividualEditPage = () => {
     };
     fetchData();
   }, [id]);
+
+  // Monitora o valor de CEP e busca o endereço automaticamente
+  const watchCep = watch("addresses[0].zipCode");
+  useEffect(() => {
+    /**
+     * Para que o efeito não substitua os dados que o usuário já tinha preenchido,
+     * verificamos se algum dos campos já tem valor. Se tiver, saímos do effect
+     * sem executar o método de busca de endereço.
+     */
+    if (
+      !!watch("addresses[0].street") ||
+      !!watch("addresses[0].neighborhood") ||
+      !!watch("addresses[0].city")
+    ) {
+      return;
+    }
+    // Abaixo, apenas criamos a função que vai buscar o endereço
+    const fetchAndSet = async () => {
+      // Limpa o CEP para ficar apenas com números
+      const cepLimpo = watchCep ? watchCep.replace(/\D/g, "") : "";
+      if (cepLimpo.length !== 8) {
+        // Sai do effect se o CEP não tiver 8 dígitos
+        return;
+      }
+
+      try {
+        // Vamos chamar a API que retorna o endereço com base no CEP
+        const address = await FetchAddressByZipCode(cepLimpo);
+
+        // Se encontrar o endereço, preenche os campos do formulário
+        if (address) {
+          const currentValues = getValues();
+          reset(
+            {
+              // O reset vai agir no formulário todo, então precisamos manter os valores atuais com o spread
+              ...currentValues,
+              addresses: [
+                {
+                  ...currentValues.addresses?.[0], // mantém os valores atuais do address[0], se houver
+                  street: address.street,
+                  neighborhood: address.neighborhood,
+                  city: address.city,
+                },
+              ],
+            },
+            /**
+             * Por padrão, o reset substitui todo o formulário indicado (addresses),
+             * então precisamos manter os valores que o usuário já tinha preenchido
+             * e os erros de validação.
+             * Para isso usamos essas opções:
+             * keepErrors: true -> mantém os erros de validação já apresentados
+             * keepDirty: true -> mantém os valores que o usuário já tinha preenchido
+             */
+            { keepErrors: true, keepDirty: true }
+          );
+        }
+      } catch (err) {
+        console.warn("Erro ao buscar endereço:", err);
+        // opcional: setError('addresses[0].zipCode', { type: 'manual', message: 'CEP não encontrado' })
+      }
+    };
+
+    // Abaixo, executamos a função que criamos acima
+    fetchAndSet();
+  }, [watchCep]);
 
   const handleSubmitIndividual = async (individualData) => {
     setStatus("loading");
@@ -63,25 +149,6 @@ const IndividualEditPage = () => {
       setStatus("error");
     }
   };
-
-  const {
-    register, // estado que registra o inputs comuns no formulário
-    // handleSubmit função que lida com o envio do formulário.
-    handleSubmit,
-    control, // estado que registra os campos que não são nativos (inputs)
-    // O reset preenche os campos com os dados enviados pelo comnponente de edição de cadastro
-    reset,
-    // formState é objeto com os erros de validação.
-    // A chave seria o nome do campo e o valor seria a mensagem a ser apresentada caso trigger retornar false
-    formState: { errors },
-    // Controla a validação dos campos. Caso true chama handleSubmit,
-    // caso false exibe os erros de formState acima dos campos
-    trigger,
-    // Função que monitora os campos do formulário
-    watch,
-    // Função para alterar o valor de um campo programaticamente
-    setValue,
-  } = useForm(); // Hook do React para formulários
 
   // Efeito colateral que envia os dados ao reset quando `data` for fornecida (edição)
   useEffect(() => {
@@ -172,6 +239,7 @@ const IndividualEditPage = () => {
                             errors={errors}
                             watch={watch}
                             setValue={setValue}
+                            validateGroup={true}
                           />
                         </div>
                       </section>

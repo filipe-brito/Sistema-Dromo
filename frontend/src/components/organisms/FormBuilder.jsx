@@ -1,5 +1,4 @@
-import { validators } from "../../utils/validators";
-import { Controller } from "react-hook-form";
+import { Controller, get } from "react-hook-form";
 import React, { useState, useRef, useEffect } from "react";
 import {
   AutoCompleteInput,
@@ -11,13 +10,57 @@ import { ImageIcon } from "../atoms/icons/MiscellaneousIcons";
 import { ErrorIcon } from "../atoms/icons/ErrorIcon";
 
 export const FormBuilder = ({
-  inputs,
-  control,
-  register,
-  errors,
-  watch,
-  setValue,
+  inputs, // Array com as informações principais para criar os inputs do formulário
+  control, // estado que registra os campos que não são nativos (inputs)
+  register, // estado que registra o inputs comuns no formulário
+  errors, // Objeto que contém as mensagens de erros que serão aplicadas pelo required
+  watch, // Função que monitora os campos do formulário
+  setValue, // Função para alterar o valor de um campo programaticamente
+  validateGroup, // Boolean que indica se deve validar um grupo de campos
 }) => {
+  const fieldNames = inputs.map((input) => input.name); // Array com os nomes dos campos
+
+  // caso validateGroup seja true, monitoramos os campos do grupo
+  const watchFields = validateGroup ? watch(fieldNames) : null;
+
+  /**
+   * Verifica se algum dos campos do grupo está preenchido.
+   * .some é um método de array que faz um teste em cada elemento.
+   * Se algum elemento passar no teste, retorna true. Caso contrário, retorna false.
+   * Nesse caso, o teste verifica se algum campo do grupo foi preenchido.
+   * Isso será importante para aplicar a regra de required condicionalmente.
+   * O double negation (!!) verifica se a variável possui um valor válido.
+   */
+  const isFieldsFilled = validateGroup
+    ? watchFields.some((input) => !!input)
+    : null;
+
+  /**
+   * Vamos extrair as regras de validação e obrigatoriedade de cada campo
+   * e criar um objeto fieldRules onde a chave é o nome do campo e o valor
+   * é um objeto com as regras de validação.
+   * Se validateGroup for true, a regra 'required' será aplicada condicionalmente
+   * com base na variável isFieldsFilled.
+   * Se validateGroup for false, todas as regras serão aplicadas normalmente.
+   */
+  const fieldRules = inputs.reduce((accumulator, input, index) => {
+    if (validateGroup) {
+      accumulator[input.name] = {
+        ...input.rules,
+        // required recebe true ou false de acordo com a verificação isFieldsFilled
+        required: isFieldsFilled ? input.rules.required : false,
+        index: index, // Atribuímos o índice para referência futura
+      };
+      return accumulator;
+    } else {
+      accumulator[input.name] = {
+        ...input.rules,
+        index: index,
+      };
+      return accumulator;
+    }
+  }, {});
+
   return (
     <React.Fragment>
       {/* Iteramos a prop inputs para criar os campos do formulário usando a expressão .map() */}
@@ -34,10 +77,11 @@ export const FormBuilder = ({
               >
                 {/** Abaixo há a expressão que verifica se esse campo contém erro.
                  * Se tiver, apresenta a mensagem recebida na prop
+                 * Usamos o "get" do RHF para acessar propriedades aninhadas de forma segura
                  */}
-                {errors[input.name] && (
+                {get(errors, input.name) && (
                   <span className="text-red-500 text-xs">
-                    {errors[input.name].message}
+                    {get(errors, input.name).message}
                   </span>
                 )}
                 {/**Abaixo, componente que é adicionado à propriedade control do useForm */}
@@ -45,7 +89,7 @@ export const FormBuilder = ({
                   defaultValue="" // Boa prática nunca deixar campos com null ou undefined
                   name={input.name} // Nome do campo. Serve como identificador
                   control={control} // Passa o estado control do useFrom para esse componente via prop. Essa prop é obrigatória
-                  rules={{ required: input.required }} // Regras para validação (required e validate)
+                  rules={fieldRules[input.name]} // Regras para validação (required e validate)
                   // Abaixo, prop obrigatória. É onde passamos o componente customizável para ser gerenciado pelo Controller
                   // O argumento field é um objeto do hook form com
                   // valores gerados automaticamente. É um objeto necessário para vincular o input ao useForm
@@ -71,9 +115,9 @@ export const FormBuilder = ({
                 key={input.name}
               >
                 <span>
-                  {errors[input.name] && (
+                  {get(errors, input.name) && (
                     <span className="text-red-500 text-xs">
-                      {errors[input.name].message}
+                      {get(errors, input.name).message}
                     </span>
                   )}
                 </span>
@@ -81,12 +125,7 @@ export const FormBuilder = ({
                   defaultValue=""
                   name={input.name}
                   control={control}
-                  rules={{
-                    required: input.required,
-                    // É um input com validate. Os formatos são salvos no arquivo validators que criamos
-                    // Caso não exista esse validator no componente, usamos o encadeamento "?" para retornar undefined
-                    validate: validators[input.name]?.validator,
-                  }} // Demais regras. No caso, definimos este um input obrigatório
+                  rules={fieldRules[input.name]} // Demais regras. No caso, definimos este um input obrigatório
                   render={({ field }) => (
                     <MaskedInput
                       {...field}
@@ -107,9 +146,9 @@ export const FormBuilder = ({
                 key={input.name}
               >
                 <span>
-                  {errors[input.name] && (
+                  {get(errors, input.name) && (
                     <span className="text-red-500 text-xs">
-                      {errors[input.name].message}
+                      {get(errors, input.name).message}
                     </span>
                   )}
                 </span>
@@ -117,9 +156,7 @@ export const FormBuilder = ({
                   defaultValue=""
                   name={input.name}
                   control={control}
-                  rules={{
-                    required: input?.required,
-                  }}
+                  rules={fieldRules[input.name]}
                   render={({ field }) => (
                     <SelectInput
                       {...field}
@@ -141,9 +178,9 @@ export const FormBuilder = ({
                 key={input.name}
               >
                 <span>
-                  {errors[input.name] && (
+                  {get(errors, input.name) && (
                     <span className="text-red-500 text-xs">
-                      {errors[input.name].message}
+                      {get(errors, input.name).message}
                     </span>
                   )}
                 </span>
@@ -151,9 +188,7 @@ export const FormBuilder = ({
                   defaultValue=""
                   name={input.name}
                   control={control}
-                  rules={{
-                    required: input?.required,
-                  }}
+                  rules={fieldRules[input.name]}
                   render={({ field }) => (
                     <AutoCompleteInput
                       {...field}

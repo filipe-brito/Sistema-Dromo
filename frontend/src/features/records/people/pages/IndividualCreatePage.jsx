@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import React, { useEffect, useState } from "react";
+import { set, useForm } from "react-hook-form";
 import { FormBuilder } from "@/components/organisms/FormBuilder";
 import { Tab } from "@/components/templates/Tabs";
 import { PersonIcon } from "@/components/atoms/icons/PersonIcon";
@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { IndividualInputs } from "./PeopleInputs";
 import { buildFormData } from "../../../../utils/miscellaneous";
 import { sanitizeFormData } from "../../../../utils/sanitize";
+import { FetchAddressByZipCode } from "../../../../services/UtilsService";
 
 const IndividualCreatePage = () => {
   // Estado para controlar o modal de confirmação ao submeter o formulário
@@ -36,7 +37,74 @@ const IndividualCreatePage = () => {
     watch,
     // Função para alterar o valor de um campo programaticamente
     setValue,
+    reset, // Função que reseta o formulário
+    getValues,
   } = useForm(); // Hook do React para formulários
+
+  // Monitora o valor de CEP e busca o endereço automaticamente
+  const watchCep = watch("addresses[0].zipCode");
+  useEffect(() => {
+    /**
+     * Para que o efeito não substitua os dados que o usuário já tinha preenchido,
+     * verificamos se algum dos campos já tem valor. Se tiver, saímos do effect
+     * sem executar o método de busca de endereço.
+     */
+    if (
+      !!watch("addresses[0].street") ||
+      !!watch("addresses[0].neighborhood") ||
+      !!watch("addresses[0].city")
+    ) {
+      return;
+    }
+    // Abaixo, apenas criamos a função que vai buscar o endereço
+    const fetchAndSet = async () => {
+      // Limpa o CEP para ficar apenas com números
+      const cepLimpo = watchCep ? watchCep.replace(/\D/g, "") : "";
+      if (cepLimpo.length !== 8) {
+        // Sai do effect se o CEP não tiver 8 dígitos
+        return;
+      }
+
+      try {
+        // Vamos chamar a API que retorna o endereço com base no CEP
+        const address = await FetchAddressByZipCode(cepLimpo);
+
+        // Se encontrar o endereço, preenche os campos do formulário
+        if (address) {
+          const currentValues = getValues();
+          reset(
+            {
+              // O reset vai agir no formulário todo, então precisamos manter os valores atuais com o spread
+              ...currentValues,
+              addresses: [
+                {
+                  ...currentValues.addresses?.[0],
+                  street: address.street,
+                  neighborhood: address.neighborhood,
+                  city: address.city,
+                },
+              ],
+            },
+            /**
+             * Por padrão, o reset substitui todo o formulário indicado (addresses),
+             * então precisamos manter os valores que o usuário já tinha preenchido
+             * e os erros de validação.
+             * Para isso usamos essas opções:
+             * keepErrors: true -> mantém os erros de validação já apresentados
+             * keepDirty: true -> mantém os valores que o usuário já tinha preenchido
+             */
+            { keepErrors: true, keepDirty: true }
+          );
+        }
+      } catch (err) {
+        console.warn("Erro ao buscar endereço:", err);
+        // opcional: setError('addresses[0].zipCode', { type: 'manual', message: 'CEP não encontrado' })
+      }
+    };
+
+    // Abaixo, executamos a função que criamos acima
+    fetchAndSet();
+  }, [watchCep]);
 
   // Função que envia o formulário
   const handleSubmitIndividual = async (data) => {
@@ -126,7 +194,7 @@ const IndividualCreatePage = () => {
                   </section>
                   <section className="bg-stone-100 p-2 rounded">
                     <h1 className="font-bold text-2xl mb-2 text-neutral-800">
-                      Endereço
+                      Endereços
                     </h1>
                     <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end">
                       <FormBuilder
@@ -136,6 +204,7 @@ const IndividualCreatePage = () => {
                         errors={errors}
                         watch={watch}
                         setValue={setValue}
+                        validateGroup={true}
                       />
                     </div>
                   </section>
