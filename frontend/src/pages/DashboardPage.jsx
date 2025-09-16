@@ -50,7 +50,7 @@ const Dashboard = () => {
           <li>Seção de endereço no cadastro de pessoas e empresas.</li>
           <li>Busca de endereço na API do ViaCEP ao digitar o CEP:</li>
           <img
-            src="\src\pages\demo-fetch-address.gif"
+            src="/demo-fetch-address.gif"
             alt=""
             className="w-3/4 h-auto rounded-md"
           />
