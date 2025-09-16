@@ -123,7 +123,6 @@ public class RecordsController {
 	@PutMapping(value = "individuals/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<IndividualDTO> updateIndividual(@PathVariable Integer id, @RequestBody IndividualDTO dto)
 			throws IOException {
-		System.out.println("\nA requisição chegou no post json");
 		String hasImage = dto.getProfileImageUrl();
 		if (hasImage != null && hasImage.equals("REMOVE_IMAGE")) {
 			String publicId = "dromo/records/individuals/profile_images/individual_profile_pic_" + id;

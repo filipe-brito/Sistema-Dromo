@@ -46,11 +46,15 @@ const Dashboard = () => {
           <Maintenance className="inline h-7 w-7 text-gray-700" /> Últimas
           atualizações
         </h3>
-        <ul className="list-disc list-inside space-y-1 pl-8">
+        <ul className="list-disc list-inside space-y-1 px-8">
+          <li>Seção de endereço no cadastro de pessoas e empresas.</li>
+          <li>Busca de endereço na API do ViaCEP ao digitar o CEP:</li>
+          <img
+            src="\src\pages\demo-fetch-address.gif"
+            alt=""
+            className="w-3/4 h-auto rounded-md"
+          />
           <li>Imagem de perfil no cadastro de pessoas e empresas.</li>
-          <li>
-            Redirecionamento automático da raiz para <code>/home</code>.
-          </li>
           <li>
             Tratamento de erros ao cadastrar pessoa e empresa: modal agora vai
             exibir qual campo violou a constraint <code>UNIQUE</code> do Postgre

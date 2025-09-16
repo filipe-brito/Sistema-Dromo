@@ -172,7 +172,6 @@ const IndividualEditPage = () => {
 
       // Executa o reset com os dados como argumento. O reset vai preencher os campos do formulário automaticamente
       // Retornamos o object reformatado pelo redux. Agora, o validate passa normalmente
-      console.log(formattedData);
       reset(formattedData);
     }
     // "Sempre declare todas as dependências que você usa dentro do efeito."

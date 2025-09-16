@@ -36,7 +36,6 @@ export const validators = {
   zipCode: {
     mask: (value) => value.replace(/(\d{5})(\d{3})/, "$1-$2"),
     validator: (value) => {
-      console.log("Validando CEP:", value);
       if (!value) return true; // permite valor vazio
       return /^\d{5}-\d{3}$/.test(value) || "CEP inválido";
     },

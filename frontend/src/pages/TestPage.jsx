@@ -1,26 +1,33 @@
-import { useState } from "react";
-
-import { AutoCompleteInput, SelectInput } from "../components/atoms/Input";
-import { FetchCity } from "../services/UtilsService";
+import { IndividualInputs } from "../features/records/people/pages/PeopleInputs";
+import React, { useEffect } from "react";
 
 const TestPage = () => {
-  const [selectedCity, setSelectedCity] = useState(null);
+  const addressInputs = IndividualInputs.addresses;
 
-  const options = [
-    { value: "teste1", optionLabel: "teste1" },
-    { value: "teste2", optionLabel: "teste2" },
-    { value: "teste3", optionLabel: "teste3" },
-  ];
+  console.log(addressInputs);
+
+  const validateGroup = true;
+
+  let rules = IndividualInputs.mainData.map((input, index) => {
+    return {
+      rules: input.rules,
+      name: input.name,
+      index: index,
+    };
+  });
+  console.log("Teste de rules: ", rules);
+
+  useEffect(() => {
+    if (validateGroup) {
+      const inputNames = addressInputs.map((input) => input.name);
+      console.log("Nomes dos campos: ", inputNames);
+    }
+  });
 
   return (
     <div className="font-[Rajdhani] flex flex-col gap-10 items-center justify-center h-screen w-screen bg-stone-900">
-      <SelectInput name="teste" placehoulder="teste" options={options} />
-      <AutoCompleteInput
-        loadOptionsFunction={FetchCity} // Passa a função de busca de cidades
-        onChange={setSelectedCity} // Lida com a seleção final da cidade
-        value={selectedCity}
-        isClearable
-      />
+      <h1 className="text-4xl text-stone-50">Teste</h1>
+      <p>Veja se o console imprimiu os nomes dos campos</p>
     </div>
   );
 };
