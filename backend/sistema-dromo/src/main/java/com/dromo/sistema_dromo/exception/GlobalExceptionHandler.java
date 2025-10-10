@@ -1,19 +1,25 @@
 package com.dromo.sistema_dromo.exception;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /*
  * Classe global para lançar exceções customizadas. 
- * @ControllerAdvice anotação torna essa classe responsável por capturar exceções em toda a aplicação.
+ * @RestControllerAdvice anotação torna essa classe responsável por capturar exceções 
+ * em toda a aplicação e restornar em JSON.
  */
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
 	/*
@@ -57,5 +63,19 @@ public class GlobalExceptionHandler {
 	    ex.printStackTrace();
 		// Se não conseguimos identificar a causa, retorna genérico
 		return ResponseEntity.status(HttpStatus.CONFLICT).body("Violação de integridade nos dados.");
+	}
+	
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+		Map<String, String> errors = new HashMap<>();
+		
+		ex.getBindingResult().getAllErrors().forEach((error) -> {
+			String fieldName = ((FieldError) error).getField();
+			String errorMessage = error.getDefaultMessage();
+			errors.put(fieldName, errorMessage);
+		});
+		
+		return errors;
 	}
 }

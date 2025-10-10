@@ -17,6 +17,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
@@ -62,26 +63,53 @@ public class Individual {
 	 * IndividualAddress . A relação aqui é de "um-para-muitos", ou seja, um
 	 * individual pode ter muitos endereços.
 	 * 
+	 * * FetchType.LAZY diz ao Hibernate para não carregar o registro inteiro de
+	 * individual, mas somente o id. Caso precise de todos os dados de Individual,
+	 * deve chamar um getIndividual explicitamente.
+	 * 
+	 * JoinColumn define que essa coluna guarda uma chave estrangeira
+	 * 
+	 * ============================================================================
+	 * 
 	 * Não vinculamos o atributo à uma coluna da tabela individuals_addresses do
 	 * Postgre com JoinColumn, afinal, não existe uma coluna de chave estrangeira na
 	 * tabela individuals, mas devemos vincular a um atributo da classe
 	 * IndividualAddress, afinal é essa classe que é a "dona da relação". Essa
 	 * classe possui um atributo individual que está vinculado ao individual_id do
 	 * bd. Para fazer esse mapeamento, usamos a propriedade "mappedBy"
+	 * 
+	 * ============================================================================
+	 * 
+	 * A propriedade cascade = CascadeType.ALL é importantíssima para persistir entidades
+	 * aninhadas. A anotação define a persistência ocorra em cascata (sucessiva). No caso
+	 * de Driver, Driver precisa de Individual. Isso o próprio Postgre define. Dessa forma, 
+	 * o Individual deve ser persistido primeiro para obtermos o id, em seguida, Driver é 
+	 * montado e persistido depois.
 	 */
-	@OneToMany(mappedBy = "individual", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-	@JsonManagedReference
+	@OneToMany(
+			mappedBy = "individual", // Atributo de IndividualAddress que guarda a FK de Individual
+			fetch = FetchType.LAZY, // Só carrega os endereços se chamar o getter explicitamente
+			cascade = CascadeType.ALL, // Efeito em cascata ao salvar ou modificar individual
+			orphanRemoval = true // Se Individual for excluído, o JPA também exclui os addresses associados
+			)
 	private List<IndividualAddress> addresses = new ArrayList<>();
-	
-	 // --- Helper ---
-    public void addAddress(IndividualAddress address) {
-        addresses.add(address);       // adiciona na lista do pai
-        address.setIndividual(this);  // seta o pai no lado "ManyToOne"
-    }
+	@OneToOne(
+			mappedBy = "individualId", // Atributo de Driver que guarda a FK de Individual
+			fetch = FetchType.LAZY, // Só carrega os dados de driver se chamar o getter explicitamente
+			cascade = CascadeType.ALL, // Efeito em cascata ao salvar ou modificar individual
+			orphanRemoval = true // Se Individual for excluído, o JPA também exclui o Driver associado
+			)
+	private Driver driver;
+
+	// --- Helper de addresses ---
+	public void addAddress(IndividualAddress address) {
+		addresses.add(address); // adiciona na lista do pai
+		address.setIndividual(this); // seta o pai no lado "ManyToOne"
+	}
 
 	public Individual() {
 	}
-	
+
 	public Individual(Integer id) {
 		this.id = id;
 	}
@@ -140,6 +168,10 @@ public class Individual {
 
 	public List<IndividualAddress> getAddresses() {
 		return addresses;
+	}
+
+	public Driver getDriver() {
+		return driver;
 	}
 
 	public void setId(Integer id) {
@@ -208,5 +240,9 @@ public class Individual {
 
 	public void setAddresses(List<IndividualAddress> addresses) {
 		this.addresses = addresses;
+	}
+
+	public void setDriver(Driver driver) {
+		this.driver = driver;
 	}
 }

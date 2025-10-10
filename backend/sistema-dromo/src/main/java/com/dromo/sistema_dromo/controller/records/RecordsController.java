@@ -29,6 +29,8 @@ import com.dromo.sistema_dromo.service.records.IndividualService;
 import com.dromo.sistema_dromo.service.utils.ImageService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/records")
 public class RecordsController {
@@ -108,6 +110,7 @@ public class RecordsController {
 			@RequestPart(name = "individual", required = true) String individual,
 			@RequestPart(name = "profile_image") MultipartFile imageFile) {
 		try {
+			@Valid
 			IndividualDTO dto = objectMapper.readValue(individual, IndividualDTO.class);
 			String imageUrl = profileImageService.uploadImage(imageFile, String.valueOf(id),
 					"dromo/records/individuals/profile_images", "individual_profile_pic_");
@@ -121,7 +124,7 @@ public class RecordsController {
 	}
 
 	@PutMapping(value = "individuals/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<IndividualDTO> updateIndividual(@PathVariable Integer id, @RequestBody IndividualDTO dto)
+	public ResponseEntity<IndividualDTO> updateIndividual(@PathVariable Integer id, @RequestBody @Valid IndividualDTO dto)
 			throws IOException {
 		String hasImage = dto.getProfileImageUrl();
 		if (hasImage != null && hasImage.equals("REMOVE_IMAGE")) {

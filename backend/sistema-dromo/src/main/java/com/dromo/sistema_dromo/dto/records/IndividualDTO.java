@@ -5,8 +5,12 @@ import java.util.List;
 
 import com.dromo.sistema_dromo.dto.utils.CitiesDTO;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+
 public class IndividualDTO {
 	private Integer id;
+	@NotEmpty(message = "Nome é obrigatório")
 	private String name;
 	private String cpf;
 	private char gender;
@@ -21,34 +25,9 @@ public class IndividualDTO {
 	private String profileImageUrl;
 
 	private List<IndividualAddressDTO> addresses;
-
-	// Construtor
-	public IndividualDTO(Integer id, String name, String cpf, char gender, String maritalStatus, String phone,
-			String cellphone, LocalDate dob, String rg, String rntrc, String email, CitiesDTO birthCity) {
-		this.id = id;
-		this.name = name;
-		this.cpf = cpf;
-		this.gender = gender;
-		this.maritalStatus = maritalStatus;
-		this.phone = phone;
-		this.cellphone = cellphone;
-		this.dob = dob;
-		this.rg = rg;
-		this.rntrc = rntrc;
-		this.email = email;
-		this.birthCity = birthCity;
-	}
-
-	public IndividualDTO() {
-
-	}
 	
-	public IndividualDTO(Integer id, String name, String cpf, String email) {
-		this.id = id;
-		this.name = name;
-		this.cpf = cpf;
-		this.email = email;
-	}
+	@Valid
+	private DriverDTO driver;
 
 	public Integer getId() {
 		return id;
@@ -106,6 +85,10 @@ public class IndividualDTO {
 		return addresses;
 	}
 
+	public DriverDTO getDriver() {
+		return driver;
+	}
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
@@ -160,5 +143,9 @@ public class IndividualDTO {
 
 	public void setAddresses(List<IndividualAddressDTO> addresses) {
 		this.addresses = addresses;
+	}
+
+	public void setDriver(DriverDTO driver) {
+		this.driver = driver;
 	}
 }

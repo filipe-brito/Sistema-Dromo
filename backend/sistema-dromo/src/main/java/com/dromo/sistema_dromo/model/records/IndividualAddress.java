@@ -24,15 +24,6 @@ public class IndividualAddress {
 	 * Relação "muitos-para-um", no caso, muitos IndividualAddresses pertencem a um
 	 * único Individual
 	 * 
-	 * FetchType.LAZY diz ao Hibernate para não carregar o registro inteiro de
-	 * individual, mas somente o id. Caso precise de todos os dados de Individual,
-	 * deve chamar um getIndividual explicitamente.
-	 * 
-	 * JoinColumn define que essa coluna guarda uma chave estrangeira
-	 * 
-	 * =============================================================================
-	 * ==
-	 * 
 	 * Alteramos a lógica acima por causa de uma inconsistência que pode acontecer
 	 * nesse caso, chamada "referência circular". Isso pode fazer o JACKSON entrar
 	 * em um loop infinito. Sendo assim, alteramos o tipo para "long" e agora esse

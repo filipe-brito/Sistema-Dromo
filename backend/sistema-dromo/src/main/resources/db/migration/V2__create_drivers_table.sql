@@ -22,11 +22,13 @@ CREATE TABLE records.drivers (
 
     -- individual_id: chave estrangeira opcional que aponta para a tabela 'individuals'.
     -- Só deve ser preenchida quando person_type = 'individual'.
-    individual_id BIGINT NULL REFERENCES records.individuals(id),
+	-- Se um individual ou company for deletado, os registros drivers associados a eles também serão
+    individual_id BIGINT NULL REFERENCES records.individuals(id) ON DELETE CASCADE,
 
     -- company_id: chave estrangeira opcional que aponta para a tabela 'companies'.
     -- Só deve ser preenchida quando person_type = 'company'.
-    company_id BIGINT NULL REFERENCES records.companies(id),
+	-- Se um individual ou company for deletado, os registros drivers associados a eles também serão
+    company_id BIGINT NULL REFERENCES records.companies(id) ON DELETE CASCADE,
 
     -- license_number: número da CNH ou documento equivalente do motorista.
     -- VARCHAR(50) dá flexibilidade para armazenar diferentes formatos de licenças.

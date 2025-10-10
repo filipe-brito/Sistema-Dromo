@@ -5,6 +5,7 @@ import java.util.List;
 import com.dromo.sistema_dromo.dto.records.IndividualAddressDTO;
 import com.dromo.sistema_dromo.dto.records.IndividualDTO;
 import com.dromo.sistema_dromo.mapper.utils.CitiesMapper;
+import com.dromo.sistema_dromo.model.records.Driver;
 import com.dromo.sistema_dromo.model.records.Individual;
 import com.dromo.sistema_dromo.model.records.IndividualAddress;
 
@@ -22,6 +23,13 @@ public class IndividualMapper {
 		individual.setRg(sanitize(dto.getRg()));
 		individual.setRntrc(sanitize(dto.getRntrc()));
 		individual.setEmail(sanitize(dto.getEmail()));
+
+		if (dto.getBirthCity() == null) {
+			individual.setBirthCity(null);
+		} else {
+			individual.setBirthCity(CitiesMapper.toEntity(dto.getBirthCity()));
+		}
+		individual.setProfileImageUrl(sanitize(dto.getProfileImageUrl()));
 		/*
 		 * Vamos verificar se o DTO possui addresses antes de percorrer a lista e
 		 * converter o dto de address para entidade. Aqui temos uma relação
@@ -30,7 +38,7 @@ public class IndividualMapper {
 		 * "individual" o próprio individual que está sendo criado por esse mapper. Para
 		 * isso, utilizamos um método helper lá na classe Individual.
 		 */
-		if (dto.getAddresses() != null || dto.getAddresses().isEmpty()) {
+		if (dto.getAddresses() != null) {
 			for (IndividualAddressDTO addrDTO : dto.getAddresses()) {
 				if (addrDTO != null) {
 					// Converte cada endereço do dto em endereço para a entidade
@@ -47,12 +55,31 @@ public class IndividualMapper {
 
 			}
 		}
-		if (dto.getBirthCity() == null) {
-			individual.setBirthCity(null);
+		if (dto.getDriver() == null) {
+			individual.setDriver(null);
 		} else {
-			individual.setBirthCity(CitiesMapper.toEntity(dto.getBirthCity()));
+			/*
+			 * Driver possui um relacionamento bidirecional e em "cascade" com Individual.
+			 * No caso, antes de persistir Driver, é necessário persistir os demais
+			 * atributos de Individual para obtermos o seu id. Esse Individual criado em
+			 * tempo de execução e persistência deve ser passado ao atributo individualId de
+			 * Driver. Se não fizermos isso, o Mapper de Driver vai passar um individualId
+			 * vazio criado pelo Bean do Spring. Para que o cascade funcione, precisamos
+			 * passar para o Driver, o Individual que está sendo criado aqui em
+			 * IndividualMapper. Sendo assim, criamos uma instância de Driver aqui, usamos
+			 * seu setter de IndividualId e passar o individual que estamos criando, por
+			 * último, passar essa instância de driver para o individual que estamos
+			 * criando.
+			 */
+			Driver driver = DriverMapper.toEntity(dto.getDriver(), "individual");
+			if (driver == null) {
+				individual.setDriver(null);
+			} else {
+				driver.setIndividualId(individual);
+				individual.setDriver(driver);
+			}
 		}
-		individual.setProfileImageUrl(sanitize(dto.getProfileImageUrl()));
+
 		return individual;
 	}
 
@@ -74,6 +101,11 @@ public class IndividualMapper {
 		if (entity.getAddresses() != null) {
 			List<IndividualAddressDTO> DTOAddresses = entity.getAddresses().stream().map(AddressMapper::toDTO).toList();
 			dto.setAddresses(DTOAddresses);
+		}
+		if (entity.getDriver() == null) {
+			dto.setDriver(null);
+		} else {
+			dto.setDriver(DriverMapper.toDTO(entity.getDriver()));
 		}
 		return dto;
 	}

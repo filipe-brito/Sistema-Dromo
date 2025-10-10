@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import {
   getIndividualById,
   updateIndividual,
@@ -55,6 +55,7 @@ const IndividualEditPage = () => {
       const normalizedData = Object.fromEntries(
         Object.entries(data).map(([key, value]) => [key, value ?? ""])
       );
+      console.log("Dados normalizados:", normalizedData);
       setIndividualData(normalizedData); // Salva os dados no estado
     };
     fetchData();
