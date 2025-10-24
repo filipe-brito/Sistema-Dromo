@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { IMaskInput } from "react-imask";
+import { DoneIcon3 } from "./icons/DoneIcon";
 
 // Input padrão do sistema
 export const DefaultInput = ({
@@ -192,6 +193,35 @@ export const AutoCompleteInput = ({
             )}
         </ul>
       )}
+    </div>
+  );
+};
+
+export const CheckboxInput = ({
+  label,
+  name,
+  value,
+  onChange,
+  color,
+  size,
+}) => {
+  return (
+    <div className="flex flex-col items-center justify-center">
+      {label}
+      <label
+        className={`border-2 rounded w-fit hover:cursor-pointer ${color} `}
+      >
+        <input
+          name={name}
+          value={value}
+          onChange={onChange}
+          type="checkbox"
+          className="hidden peer"
+        />
+        <DoneIcon3
+          className={`opacity-0 peer-checked:opacity-100 transition-opacity ${color} w-${size} h-${size}`}
+        />
+      </label>
     </div>
   );
 };

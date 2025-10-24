@@ -1,10 +1,15 @@
+import React from "react";
 import { FetchCity } from "../../../../services/UtilsService";
 import { svgToUrl } from "../../../../utils/miscellaneous";
-import { PersonIcon2 } from "../../../../components/atoms/icons/PersonIcon";
+import {
+  DriverIcon,
+  PersonIcon2,
+} from "../../../../components/atoms/icons/PersonIcon";
 import { CompanyIcon2 } from "../../../../components/atoms/icons/CompanyIcon";
 import { validators } from "../../../../utils/validators";
 
 const personIconUrl = svgToUrl(<PersonIcon2 fill="#222222" />);
+const driverIconUrl = svgToUrl(<DriverIcon fill="#222222" />);
 
 export const IndividualInputs = {
   mainData: [
@@ -154,6 +159,20 @@ export const IndividualInputs = {
       rules: {
         required: "Cidade é obrigatório",
       },
+    },
+  ],
+  occupations: [
+    {
+      name: "driver",
+      type: "checkbox",
+      label: (
+        <React.Fragment>
+          <label className="font-medium text-lg">Motorista</label>
+          <DriverIcon className="w-20 h-20" />
+        </React.Fragment>
+      ),
+      color: "text-green-700",
+      size: "4",
     },
   ],
 };

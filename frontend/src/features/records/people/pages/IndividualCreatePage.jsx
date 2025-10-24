@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { FormBuilder } from "@/components/organisms/FormBuilder";
 import { Tab } from "@/components/templates/Tabs";
 import { PersonIcon } from "@/components/atoms/icons/PersonIcon";
@@ -8,9 +8,10 @@ import { FormFooter } from "@/components/organisms/Footer";
 import { ConfirmModal } from "@/components/molecules/ConfirmModal";
 import { useNavigate } from "react-router-dom";
 import { IndividualInputs } from "./PeopleInputs";
-import { buildFormData } from "../../../../utils/miscellaneous";
-import { sanitizeFormData } from "../../../../utils/sanitize";
-import { FetchAddressByZipCode } from "../../../../services/UtilsService";
+import { buildFormData } from "@/utils/miscellaneous";
+import { sanitizeFormData } from "@/utils/sanitize";
+import { FetchAddressByZipCode } from "@/services/UtilsService";
+import { DriverIcon } from "@/components/atoms/icons/PersonIcon";
 
 const IndividualCreatePage = () => {
   // Estado para controlar o modal de confirmação ao submeter o formulário
@@ -110,8 +111,6 @@ const IndividualCreatePage = () => {
   const handleSubmitIndividual = async (data) => {
     setStatus("loading"); // Altera o state para rodar o loading enquanto a função não retorna os dados
     // Sempre envolver requisições em um bloco try-catch
-
-    // Vamos modificar os dados. Então,
     let dataToSubmit;
     try {
       if (data.imageFile && data.imageFile[0]) {
@@ -184,6 +183,21 @@ const IndividualCreatePage = () => {
                     <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end">
                       <FormBuilder
                         inputs={IndividualInputs.mainData}
+                        control={control}
+                        register={register}
+                        errors={errors}
+                        watch={watch}
+                        setValue={setValue}
+                      />
+                    </div>
+                  </section>
+                  <section className="bg-stone-100 p-2 rounded">
+                    <h1 className="font-bold text-2xl mb-2 text-neutral-800">
+                      Ocupações
+                    </h1>
+                    <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end">
+                      <FormBuilder
+                        inputs={IndividualInputs.occupations}
                         control={control}
                         register={register}
                         errors={errors}

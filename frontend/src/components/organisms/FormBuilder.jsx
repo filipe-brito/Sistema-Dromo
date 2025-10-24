@@ -5,6 +5,7 @@ import {
   DefaultInput,
   MaskedInput,
   SelectInput,
+  CheckboxInput,
 } from "../atoms/Input";
 import { ImageIcon } from "../atoms/icons/MiscellaneousIcons";
 import { ErrorIcon } from "../atoms/icons/ErrorIcon";
@@ -196,6 +197,36 @@ export const FormBuilder = ({
                       label={input.label}
                       inputWidth={input.inputWidth}
                       fetchOptions={input.loadOptionsFunction}
+                    />
+                  )}
+                />
+              </div>
+            );
+          case "checkbox":
+            return (
+              <div
+                className={
+                  input.gridCellStyle ? input.gridCellStyle : "flex-col"
+                }
+                key={input.name}
+              >
+                <span>
+                  {get(errors, input.name) && (
+                    <span className="text-red-500 text-xs">
+                      {get(errors, input.name).message}
+                    </span>
+                  )}
+                </span>
+                <Controller
+                  defaultValue={false}
+                  name={input.name}
+                  control={control}
+                  render={({ field }) => (
+                    <CheckboxInput
+                      {...field}
+                      label={input.label}
+                      color={input.color}
+                      size={input.size}
                     />
                   )}
                 />
