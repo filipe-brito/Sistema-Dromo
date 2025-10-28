@@ -218,12 +218,14 @@ export const FormBuilder = ({
                   )}
                 </span>
                 <Controller
-                  defaultValue={false}
+                  defaultValue=""
                   name={input.name}
                   control={control}
+                  rules={fieldRules[input.name]} // Regras para validação (required e validate)
                   render={({ field }) => (
                     <CheckboxInput
                       {...field}
+                      checked={field.value}
                       label={input.label}
                       color={input.color}
                       size={input.size}

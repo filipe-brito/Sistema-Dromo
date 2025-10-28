@@ -9,7 +9,6 @@ import { CompanyIcon2 } from "../../../../components/atoms/icons/CompanyIcon";
 import { validators } from "../../../../utils/validators";
 
 const personIconUrl = svgToUrl(<PersonIcon2 fill="#222222" />);
-const driverIconUrl = svgToUrl(<DriverIcon fill="#222222" />);
 
 export const IndividualInputs = {
   mainData: [
@@ -163,7 +162,7 @@ export const IndividualInputs = {
   ],
   occupations: [
     {
-      name: "driver",
+      name: "occupations.driver",
       type: "checkbox",
       label: (
         <React.Fragment>
@@ -173,6 +172,37 @@ export const IndividualInputs = {
       ),
       color: "text-green-700",
       size: "4",
+    },
+  ],
+  driver: [
+    {
+      name: "driver.licenseNumber",
+      type: "default",
+      label: "∗CNH",
+      rules: {
+        required: "CNH é obrigatória",
+      },
+      gridCellStyle: "col-span-3",
+    },
+    {
+      name: "driver.licenseType",
+      type: "select",
+      label: "∗Tipo de habilitação",
+      rules: {
+        required: "Tipo de habilitação é obrigatório",
+      },
+
+      options: [
+        { optionLabel: "A", value: "A" },
+        { optionLabel: "AB", value: "AB" },
+        { optionLabel: "AC", value: "AC" },
+        { optionLabel: "AD", value: "AD" },
+        { optionLabel: "AE", value: "AE" },
+        { optionLabel: "B", value: "B" },
+        { optionLabel: "C", value: "C" },
+        { optionLabel: "D", value: "D" },
+        { optionLabel: "E", value: "E" },
+      ],
     },
   ],
 };

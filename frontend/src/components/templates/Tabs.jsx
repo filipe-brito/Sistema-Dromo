@@ -13,6 +13,7 @@ export const Tab = ({ tabs, activeTab, setActiveTab }) => {
           ) => (
             //Dentro da arrow function, está a função que deverá ser executada a cada iteração
             <button // Criamos um botão para selecionar a aba
+              type="button" // Necessário declarar para não submeter formulários indevidamente
               key={index} // key é uma propriedade nativa do React para rastrear elementos renderizados dinamicamente como no .map
               onClick={() => setActiveTab(index)} // onClick é a ação a ser executada ao clicar no botão. No caso, altera o estado de activeTab para alternar a aba ativa
               className={`px-1 rounded-t-md font-semibold border cursor-pointer flex gap-2 items-center ${
@@ -31,8 +32,18 @@ export const Tab = ({ tabs, activeTab, setActiveTab }) => {
       </div>
       {/* 🔹 Conteúdo com borda total */}
       <div className="p-1 border-2 border-green-700 rounded-md">
-        {tabs[activeTab].content}{" "}
-        {/* Exibimos o object content da prop tabs. Como tabs é um array, selecionamos o elemento na posição do estado activeTab */}
+        {/* Mapeamos todos os conteúdos */}
+        {tabs.map((tab, index) => (
+          <div
+            key={index}
+            // 💡 A mágica do Tailwind:
+            // Aplica a classe 'block' se for a aba ativa
+            // Aplica a classe 'hidden' se NÃO for a aba ativa
+            className={index === activeTab ? "block" : "hidden"}
+          >
+            {tab.content}
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -55,6 +66,7 @@ export const Tab2 = ({ tabs, activeTab, setActiveTab }) => {
                   index // map é um método js para percorrer listas. tab é o item analisado e index é a posição do item no array
                 ) => (
                   <button // Criamos um botão para selecionar a aba
+                    type="button"
                     key={index} // key é uma propriedade nativa do React para rastrear elementos renderizados dinamicamente como no .map
                     onClick={() => setActiveTab(index)} // onClick é a ação a ser executada ao clicar no botão. No caso, altera o estado de activeTab para alternar a aba ativa
                     className={`p-2 border-2 rounded-full h-30 w-30 border-green-700 bg-stone-800 font-semibold cursor-pointer flex flex-col items-center justify-center transform duration-300 ease-in-out ${
@@ -73,9 +85,19 @@ export const Tab2 = ({ tabs, activeTab, setActiveTab }) => {
         </div>
       </div>
       {/* 🔹 Conteúdo com borda total */}
-      <div className="p-1 pt-10 border-2 border-green-700 rounded-md">
-        {tabs[activeTab].content}{" "}
-        {/* Exibimos o object content da prop tabs. Como tabs é um array, selecionamos o elemento na posição do estado activeTab */}
+      <div className="p-1 border-2 border-green-700 rounded-md">
+        {/* Mapeamos todos os conteúdos */}
+        {tabs.map((tab, index) => (
+          <div
+            key={index}
+            // 💡 A mágica do Tailwind:
+            // Aplica a classe 'block' se for a aba ativa
+            // Aplica a classe 'hidden' se NÃO for a aba ativa
+            className={index === activeTab ? "block" : "hidden"}
+          >
+            {tab.content}
+          </div>
+        ))}
       </div>
     </div>
   );

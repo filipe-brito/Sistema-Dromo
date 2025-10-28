@@ -6,7 +6,7 @@ import {
 } from "@features/records/people/services/PeopleService";
 import React, { useState } from "react";
 import { FormBuilder } from "@/components/organisms/FormBuilder";
-import { Tab } from "@/components/templates/Tabs";
+import { Tab2 } from "@/components/templates/Tabs";
 import { PersonIcon } from "@/components/atoms/icons/PersonIcon";
 import { FormFooter } from "@/components/organisms/Footer";
 import { ConfirmModal } from "@/components/molecules/ConfirmModal";
@@ -15,8 +15,9 @@ import { IndividualInputs } from "./PeopleInputs";
 import { sanitizeFormData } from "../../../../utils/sanitize";
 import { FetchAddressByZipCode } from "../../../../services/UtilsService";
 import { buildFormData } from "../../../../utils/miscellaneous";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { validators } from "../../../../utils/validators";
+import { DriverIcon } from "../../../../components/atoms/icons/PersonIcon";
 
 const IndividualEditPage = () => {
   const { id } = useParams();
@@ -47,6 +48,38 @@ const IndividualEditPage = () => {
     getValues,
   } = useForm(); // Hook do React para formulários
 
+  // Monitora o valor das checkboxes de occupations para mostrar ou esconder
+  // os inputs dos formulários correspondentes
+  const [isDriver] = useWatch({ control, name: ["occupations.driver"] });
+
+  const driverTab = isDriver
+    ? [
+        {
+          icon: <DriverIcon className="w-16 h-16" />, // Ícone da tab
+          label: "Dados de motorista", // Descrição da tab
+          content: (
+            <div className="flex flex-col gap-y-1">
+              <section className="bg-stone-100 p-2 rounded">
+                <h1 className="font-bold text-2xl mb-2 text-neutral-800">
+                  Dados de motorista
+                </h1>
+                <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end">
+                  <FormBuilder
+                    inputs={IndividualInputs.driver}
+                    control={control}
+                    register={register}
+                    errors={errors}
+                    watch={watch}
+                    setValue={setValue}
+                  />
+                </div>
+              </section>
+            </div>
+          ),
+        },
+      ]
+    : [];
+
   useEffect(() => {
     const fetchData = async () => {
       // Busca os dados cadastrados no banco de dados para alterarmos
@@ -55,7 +88,6 @@ const IndividualEditPage = () => {
       const normalizedData = Object.fromEntries(
         Object.entries(data).map(([key, value]) => [key, value ?? ""])
       );
-      console.log("Dados normalizados:", normalizedData);
       setIndividualData(normalizedData); // Salva os dados no estado
     };
     fetchData();
@@ -143,6 +175,9 @@ const IndividualEditPage = () => {
       } else {
         dataToSubmit = sanitizeFormData(individualData);
       }
+      if (!dataToSubmit.occupations.driver) {
+        delete dataToSubmit.driver;
+      }
       await updateIndividual(id, dataToSubmit);
       setStatus("success");
     } catch (error) {
@@ -197,64 +232,81 @@ const IndividualEditPage = () => {
             }}
           />
         )}
-        <Tab
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          tabs={[
-            {
-              icon: <PersonIcon className="w-4 h-4" />,
-              label: "Dados pessoais",
-              content: (
-                <React.Fragment>
-                  {individualData ? (
-                    <form
-                      id="save" // Vincula o onSubmit em qualquer elemente que tenha esse mesmo id
-                      onSubmit={handleSubmit(handleSubmitIndividual)} // OI que deverá ser feito ao submeter o formulário
-                      className="flex flex-col rounded shadow-sm  gap-y-1"
-                    >
-                      <section className="bg-stone-100 p-2 rounded">
-                        <h1 className="font-bold text-2xl mb-2 text-neutral-800">
-                          Dados principais
-                        </h1>
-                        <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end">
-                          <FormBuilder
-                            inputs={IndividualInputs.mainData}
-                            control={control}
-                            register={register}
-                            errors={errors}
-                            watch={watch}
-                            setValue={setValue}
-                          />
-                        </div>
-                      </section>
-                      <section className="bg-stone-100 p-2 rounded">
-                        <h1 className="font-bold text-2xl mb-2 text-neutral-800">
-                          Endereços
-                        </h1>
-                        <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end">
-                          <FormBuilder
-                            inputs={IndividualInputs.addresses}
-                            control={control}
-                            register={register}
-                            errors={errors}
-                            watch={watch}
-                            setValue={setValue}
-                            validateGroup={true}
-                          />
-                        </div>
-                      </section>
-                    </form>
-                  ) : (
-                    <div className="flex flex-col items-center p-2 rounded shadow-sm bg-stone-100">
-                      <LoadingIcon />
-                      <p>Carregando dados...</p>
-                    </div>
-                  )}
-                </React.Fragment>
-              ),
-            },
-          ]}
-        />
+        <form
+          id="save" // Vincula o onSubmit em qualquer elemente que tenha esse mesmo id
+          onSubmit={handleSubmit(handleSubmitIndividual)} // OI que deverá ser feito ao submeter o formulário
+        >
+          <Tab2
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            tabs={[
+              {
+                icon: <PersonIcon className="w-16 h-16" />,
+                label: "Dados pessoais",
+                content: (
+                  <React.Fragment>
+                    {individualData ? (
+                      <div className="flex flex-col gap-y-1">
+                        <section className="bg-stone-100 p-2 rounded">
+                          <h1 className="font-bold text-2xl mb-2 text-neutral-800">
+                            Dados principais
+                          </h1>
+                          <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end">
+                            <FormBuilder
+                              inputs={IndividualInputs.mainData}
+                              control={control}
+                              register={register}
+                              errors={errors}
+                              watch={watch}
+                              setValue={setValue}
+                            />
+                          </div>
+                        </section>
+                        <section className="bg-stone-100 p-2 rounded">
+                          <h1 className="font-bold text-2xl mb-2 text-neutral-800">
+                            Ocupações
+                          </h1>
+                          <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end">
+                            <FormBuilder
+                              inputs={IndividualInputs.occupations}
+                              control={control}
+                              register={register}
+                              errors={errors}
+                              watch={watch}
+                              setValue={setValue}
+                            />
+                          </div>
+                        </section>
+                        <section className="bg-stone-100 p-2 rounded">
+                          <h1 className="font-bold text-2xl mb-2 text-neutral-800">
+                            Endereços
+                          </h1>
+                          <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end">
+                            <FormBuilder
+                              inputs={IndividualInputs.addresses}
+                              control={control}
+                              register={register}
+                              errors={errors}
+                              watch={watch}
+                              setValue={setValue}
+                              validateGroup={true}
+                            />
+                          </div>
+                        </section>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center p-2 rounded shadow-sm bg-stone-100">
+                        <LoadingIcon />
+                        <p>Carregando dados...</p>
+                      </div>
+                    )}
+                  </React.Fragment>
+                ),
+              },
+              ...driverTab,
+            ]}
+          />
+        </form>
       </div>
       <FormFooter
         setConfirmOpen={setConfirmOpen}

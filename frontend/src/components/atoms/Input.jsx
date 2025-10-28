@@ -200,10 +200,10 @@ export const AutoCompleteInput = ({
 export const CheckboxInput = ({
   label,
   name,
-  value,
   onChange,
   color,
   size,
+  checked,
 }) => {
   return (
     <div className="flex flex-col items-center justify-center">
@@ -213,7 +213,7 @@ export const CheckboxInput = ({
       >
         <input
           name={name}
-          value={value}
+          checked={checked}
           onChange={onChange}
           type="checkbox"
           className="hidden peer"

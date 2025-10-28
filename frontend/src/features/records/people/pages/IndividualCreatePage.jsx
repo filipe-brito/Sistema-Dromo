@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { FormBuilder } from "@/components/organisms/FormBuilder";
-import { Tab } from "@/components/templates/Tabs";
+import { Tab2 } from "@/components/templates/Tabs";
 import { PersonIcon } from "@/components/atoms/icons/PersonIcon";
 import { postIndividual } from "@features/records/people/services/PeopleService";
 import { FormFooter } from "@/components/organisms/Footer";
@@ -11,7 +11,7 @@ import { IndividualInputs } from "./PeopleInputs";
 import { buildFormData } from "@/utils/miscellaneous";
 import { sanitizeFormData } from "@/utils/sanitize";
 import { FetchAddressByZipCode } from "@/services/UtilsService";
-import { DriverIcon } from "@/components/atoms/icons/PersonIcon";
+import { DriverIcon } from "../../../../components/atoms/icons/PersonIcon";
 
 const IndividualCreatePage = () => {
   // Estado para controlar o modal de confirmação ao submeter o formulário
@@ -42,8 +42,41 @@ const IndividualCreatePage = () => {
     getValues,
   } = useForm(); // Hook do React para formulários
 
+  // Monitora o valor das checkboxes de occupations para mostrar ou esconder
+  // os inputs dos formulários correspondentes
+  const [isDriver] = useWatch({ control, name: ["occupations.driver"] });
+
+  const driverTab = isDriver
+    ? [
+        {
+          icon: <DriverIcon className="w-16 h-16" />, // Ícone da tab
+          label: "Dados de motorista", // Descrição da tab
+          content: (
+            <div className="flex flex-col gap-y-1">
+              <section className="bg-stone-100 p-2 rounded">
+                <h1 className="font-bold text-2xl mb-2 text-neutral-800">
+                  Dados de motorista
+                </h1>
+                <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end">
+                  <FormBuilder
+                    inputs={IndividualInputs.driver}
+                    control={control}
+                    register={register}
+                    errors={errors}
+                    watch={watch}
+                    setValue={setValue}
+                  />
+                </div>
+              </section>
+            </div>
+          ),
+        },
+      ]
+    : [];
+
   // Monitora o valor de CEP e busca o endereço automaticamente
   const watchCep = watch("addresses[0].zipCode");
+
   useEffect(() => {
     /**
      * Para que o efeito não substitua os dados que o usuário já tinha preenchido,
@@ -127,6 +160,9 @@ const IndividualCreatePage = () => {
       } else {
         dataToSubmit = sanitizeFormData(data);
       }
+      if (!dataToSubmit.occupations.driver) {
+        delete dataToSubmit.driver;
+      }
       const response = await postIndividual(dataToSubmit); // Método de chamada à API do backend
       setStatus("success"); // Se não houver erro no envio, altera o status para success
       setTimeout(
@@ -162,71 +198,73 @@ const IndividualCreatePage = () => {
             }}
           />
         )}
-        <Tab // Componente que apresenta os dados em uma tab
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          tabs={[
-            {
-              icon: <PersonIcon className="w-4 h-4" />, // Ícone da tab
-              label: "Dados pessoais", // Descrição da tab
-              // Conteúdo principal da tab
-              content: (
-                <form
-                  id="save" // Vincula o onSubmit em qualquer elemente que tenha esse mesmo id
-                  onSubmit={handleSubmit(handleSubmitIndividual)} // OI que deverá ser feito ao submeter o formulário
-                  className="flex flex-col rounded shadow-sm  gap-y-1"
-                >
-                  <section className="bg-stone-100 p-2 rounded">
-                    <h1 className="font-bold text-2xl mb-2 text-neutral-800">
-                      Dados principais
-                    </h1>
-                    <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end">
-                      <FormBuilder
-                        inputs={IndividualInputs.mainData}
-                        control={control}
-                        register={register}
-                        errors={errors}
-                        watch={watch}
-                        setValue={setValue}
-                      />
-                    </div>
-                  </section>
-                  <section className="bg-stone-100 p-2 rounded">
-                    <h1 className="font-bold text-2xl mb-2 text-neutral-800">
-                      Ocupações
-                    </h1>
-                    <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end">
-                      <FormBuilder
-                        inputs={IndividualInputs.occupations}
-                        control={control}
-                        register={register}
-                        errors={errors}
-                        watch={watch}
-                        setValue={setValue}
-                      />
-                    </div>
-                  </section>
-                  <section className="bg-stone-100 p-2 rounded">
-                    <h1 className="font-bold text-2xl mb-2 text-neutral-800">
-                      Endereços
-                    </h1>
-                    <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end">
-                      <FormBuilder
-                        inputs={IndividualInputs.addresses}
-                        control={control}
-                        register={register}
-                        errors={errors}
-                        watch={watch}
-                        setValue={setValue}
-                        validateGroup={true}
-                      />
-                    </div>
-                  </section>
-                </form>
-              ),
-            },
-          ]}
-        />
+        <form
+          id="save" // Vincula o onSubmit em qualquer elemente que tenha esse mesmo id
+          onSubmit={handleSubmit(handleSubmitIndividual)} // OI que deverá ser feito ao submeter o formulário
+        >
+          <Tab2 // Componente que apresenta os dados em uma tab
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            tabs={[
+              {
+                icon: <PersonIcon className="w-16 h-16" />, // Ícone da tab
+                label: "Dados pessoais", // Descrição da tab
+                // Conteúdo principal da tab
+                content: (
+                  <div className="flex flex-col gap-y-1">
+                    <section className="bg-stone-100 p-2 rounded">
+                      <h1 className="font-bold text-2xl mb-2 text-neutral-800">
+                        Dados principais
+                      </h1>
+                      <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end">
+                        <FormBuilder
+                          inputs={IndividualInputs.mainData}
+                          control={control}
+                          register={register}
+                          errors={errors}
+                          watch={watch}
+                          setValue={setValue}
+                        />
+                      </div>
+                    </section>
+                    <section className="bg-stone-100 p-2 rounded">
+                      <h1 className="font-bold text-2xl mb-2 text-neutral-800">
+                        Ocupações
+                      </h1>
+                      <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end">
+                        <FormBuilder
+                          inputs={IndividualInputs.occupations}
+                          control={control}
+                          register={register}
+                          errors={errors}
+                          watch={watch}
+                          setValue={setValue}
+                        />
+                      </div>
+                    </section>
+                    <section className="bg-stone-100 p-2 rounded">
+                      <h1 className="font-bold text-2xl mb-2 text-neutral-800">
+                        Endereços
+                      </h1>
+                      <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end">
+                        <FormBuilder
+                          inputs={IndividualInputs.addresses}
+                          control={control}
+                          register={register}
+                          errors={errors}
+                          watch={watch}
+                          setValue={setValue}
+                          validateGroup={true}
+                        />
+                      </div>
+                    </section>
+                  </div>
+                ),
+              },
+              ...driverTab,
+            ]}
+          />
+        </form>
       </div>
       <FormFooter // Rodapé
         setConfirmOpen={setConfirmOpen} // enviado para que o botão de salvar abra o modal
