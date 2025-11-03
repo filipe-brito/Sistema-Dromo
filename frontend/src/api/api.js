@@ -6,7 +6,7 @@ const api = axios.create({
    *Qualquer requisição feita para essa url (inclusive com parâmetro)
    *será implementada as funções de configuração abaixo
    */
-  baseURL: "http://localhost:8080", // URL do seu backend
+  baseURL: "/backend", // URL do seu backend
 });
 
 /*
@@ -49,7 +49,10 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response && error.response.status === 401) {
+    if (
+      (error.response && error.response.status === 401) ||
+      error.response.status === 403
+    ) {
       console.warn("Usuário não autorizado. Redirecionando para login...");
       // Exemplo: limpar token e forçar logout
       localStorage.removeItem("token");

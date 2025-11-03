@@ -7,7 +7,6 @@ import {
 import LoginPage from "../pages/LoginPage";
 import DashboardPage from "../pages/DashboardPage";
 import MainLayout from "../layouts/MainLayout";
-import TestPage from "../pages/TestPage";
 import PrivateRoute from "./PrivateRoute";
 import PeopleRecordsRoutes from "@features/records/people/routes/PeopleRecordsRoutes";
 
@@ -22,7 +21,6 @@ const AppRouter = () => {
 
         {/* Definindo a rota "/login" que aponta para o componente LoginPage */}
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/teste" element={<TestPage />} />
 
         <Route element={<PrivateRoute />}>
           <Route element={<MainLayout />}>
