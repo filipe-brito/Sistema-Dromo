@@ -4,7 +4,7 @@ import {
   getCompanyById,
   updateCompany,
 } from "@features/records/people/services/PeopleService";
-import { Tab } from "@/components/templates/Tabs";
+import { Tab2 } from "@/components/templates/Tabs";
 import { CompanyIcon } from "@/components/atoms/icons/CompanyIcon";
 import { LoadingIcon } from "@/components/atoms/icons/LoadingIcon";
 import { FormFooter } from "@/components/organisms/Footer";
@@ -209,65 +209,66 @@ const CompanyEditPage = () => {
             }}
           />
         )}
-        <Tab // Componente que apresenta os dados em uma tab
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          tabs={[
-            {
-              icon: <CompanyIcon className="w-4 h-4" />, // Ícone da tab
-              label: "Dados de empresa", // Descrição da tab
-              // Conteúdo principal da tab
-              content: (
-                <React.Fragment>
-                  {companyData ? (
-                    <form
-                      id="save" // Vincula o onSubmit em qualquer elemente que tenha esse mesmo id
-                      onSubmit={handleSubmit(handleSubmitCompany)} // OI que deverá ser feito ao submeter o formulário
-                      className="flex flex-col rounded shadow-sm  gap-y-1"
-                    >
-                      <section className="bg-stone-100 p-2 rounded">
-                        <h1 className="font-bold text-2xl mb-2 text-neutral-800">
-                          Dados principais
-                        </h1>
-                        <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end">
-                          <FormBuilder
-                            inputs={companyInputs.mainData}
-                            control={control}
-                            register={register}
-                            errors={errors}
-                            watch={watch}
-                            setValue={setValue}
-                          />
-                        </div>
-                      </section>
-                      <section className="bg-stone-100 p-2 rounded">
-                        <h1 className="font-bold text-2xl mb-2 text-neutral-800">
-                          Endereços
-                        </h1>
-                        <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end">
-                          <FormBuilder
-                            inputs={companyInputs.addresses}
-                            control={control}
-                            register={register}
-                            errors={errors}
-                            watch={watch}
-                            setValue={setValue}
-                            validateGroup={true}
-                          />
-                        </div>
-                      </section>
-                    </form>
-                  ) : (
-                    <div className="flex flex-col items-center p-2 rounded shadow-sm bg-stone-100">
-                      <LoadingIcon />
-                      <p>Carregando dados...</p>
-                    </div>
-                  )}
-                </React.Fragment>
-              ),
-            },
-          ]}
-        />
+        <form
+          id="save" // Vincula o onSubmit em qualquer elemente que tenha esse mesmo id
+          onSubmit={handleSubmit(handleSubmitCompany)} // OI que deverá ser feito ao submeter o formulário
+        >
+          <Tab2 // Componente que apresenta os dados em uma tab
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            tabs={[
+              {
+                icon: <CompanyIcon className="w-16 h-16" />, // Ícone da tab
+                label: "Dados de empresa", // Descrição da tab
+                // Conteúdo principal da tab
+                content: (
+                  <React.Fragment>
+                    {companyData ? (
+                      <div className="flex flex-col gap-y-1">
+                        <section className="bg-stone-100 p-2 pt-10 rounded">
+                          <h1 className="font-bold text-2xl mb-2 text-neutral-800">
+                            Dados principais
+                          </h1>
+                          <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end">
+                            <FormBuilder
+                              inputs={companyInputs.mainData}
+                              control={control}
+                              register={register}
+                              errors={errors}
+                              watch={watch}
+                              setValue={setValue}
+                            />
+                          </div>
+                        </section>
+                        <section className="bg-stone-100 p-2 rounded">
+                          <h1 className="font-bold text-2xl mb-2 text-neutral-800">
+                            Endereços
+                          </h1>
+                          <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end">
+                            <FormBuilder
+                              inputs={companyInputs.addresses}
+                              control={control}
+                              register={register}
+                              errors={errors}
+                              watch={watch}
+                              setValue={setValue}
+                              validateGroup={true}
+                            />
+                          </div>
+                        </section>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col items-center p-2 rounded shadow-sm bg-stone-100">
+                        <LoadingIcon />
+                        <p>Carregando dados...</p>
+                      </div>
+                    )}
+                  </React.Fragment>
+                ),
+              },
+            ]}
+          />
+        </form>
       </div>
       <FormFooter // Rodapé flutuante
         setConfirmOpen={setConfirmOpen} // enviado para que o botão de salvar abra o modal

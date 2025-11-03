@@ -62,6 +62,5 @@ public class DriverDTO {
 
 	public void setLicenseType(String licenseType) {
 		this.licenseType = licenseType;
-	}
-		
+	}		
 }

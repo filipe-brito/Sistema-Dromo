@@ -47,6 +47,10 @@ const Dashboard = () => {
           atualizações
         </h3>
         <ul className="list-disc list-inside space-y-1 px-8">
+          <li>
+            Implementada a ocupação de "motorista" no cadastro de pessoas
+            físicas
+          </li>
           <li>Seção de endereço no cadastro de pessoas e empresas.</li>
           <li>Busca de endereço na API do ViaCEP ao digitar o CEP:</li>
           <img

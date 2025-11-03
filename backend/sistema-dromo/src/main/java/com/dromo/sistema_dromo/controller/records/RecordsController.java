@@ -145,7 +145,7 @@ public class RecordsController {
 	}
 
 	@PostMapping("/companies")
-	public ResponseEntity<CompanyDTO> create(@RequestBody CompanyDTO dto) {
+	public ResponseEntity<CompanyDTO> create(@RequestBody @Valid CompanyDTO dto) {
 		CompanyDTO saved = companyService.saveCompany(dto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(saved);
 	}
@@ -161,6 +161,7 @@ public class RecordsController {
 	public ResponseEntity<CompanyDTO> createCompanyWithImage(@RequestPart(name = "company") String company,
 			@RequestPart(name = "profile_image", required = true) MultipartFile imageFile) {
 		try {
+			@Valid
 			CompanyDTO dto = objectMapper.readValue(company, CompanyDTO.class);
 			CompanyDTO saved = companyService.saveCompany(dto);
 			String imageUrl = profileImageService.uploadImage(imageFile, String.valueOf(saved.getId()),

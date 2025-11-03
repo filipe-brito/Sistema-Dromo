@@ -65,9 +65,9 @@ public class IndividualMapper {
 			 * tempo de execução e persistência deve ser passado ao atributo individualId de
 			 * Driver. Se não fizermos isso, o Mapper de Driver vai passar um individualId
 			 * vazio criado pelo Bean do Spring. Para que o cascade funcione, precisamos
-			 * passar para o Driver, o Individual que está sendo criado aqui em
+			 * passar para o Driver o Individual que está sendo criado aqui em
 			 * IndividualMapper. Sendo assim, criamos uma instância de Driver aqui, usamos
-			 * seu setter de IndividualId e passar o individual que estamos criando, por
+			 * seu setter de IndividualId para passar o individual que estamos criando. Por
 			 * último, passar essa instância de driver para o individual que estamos
 			 * criando.
 			 */

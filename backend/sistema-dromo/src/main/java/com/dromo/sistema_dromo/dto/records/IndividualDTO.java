@@ -1,9 +1,12 @@
 package com.dromo.sistema_dromo.dto.records;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.dromo.sistema_dromo.dto.utils.CitiesDTO;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
@@ -12,6 +15,7 @@ public class IndividualDTO {
 	private Integer id;
 	@NotEmpty(message = "Nome é obrigatório")
 	private String name;
+	@NotEmpty(message = "CPF é obrigatório")
 	private String cpf;
 	private char gender;
 	private String maritalStatus;
@@ -87,6 +91,24 @@ public class IndividualDTO {
 
 	public DriverDTO getDriver() {
 		return driver;
+	}
+	
+	/*
+	 * Apesar de não haver um atributo "ocuppations", o JACKSON reconhece
+	 * automaticamente os métodos que começam com "get" como propriedades 
+	 * serializáveis.
+	 * 
+	 * Esse array armazena pares chave-valor, definindo true ou false para 
+	 * as ocupações (propriedades) que não estiverem nulas
+	 * 
+	 * driver != null é um teste lógico. Retorna true se driver não for nulo
+	 * e false se driver for nulo
+	 */
+	@JsonProperty("occupations")
+	public Map<String, Boolean> getOccupations(){
+		Map<String, Boolean> occupations = new HashMap<>();
+		occupations.put("driver", driver != null);
+		return occupations;
 	}
 
 	public void setId(Integer id) {

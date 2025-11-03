@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { Tab } from "@/components/templates/Tabs";
+import { Tab2 } from "@/components/templates/Tabs";
 import { postCompany } from "@features/records/people/services/PeopleService";
 import { ConfirmModal } from "@/components/molecules/ConfirmModal";
 import { FormFooter } from "@/components/organisms/Footer";
@@ -161,56 +161,58 @@ const CompanyCreatePage = () => {
             }}
           />
         )}
-        <Tab // Componente que apresenta os dados em uma tab
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          tabs={[
-            {
-              icon: <CompanyIcon className="w-4 h-4" />, // Ícone da tab
-              label: "Dados de empresa", // Descrição da tab
-              // Conteúdo principal da tab
-              content: (
-                <form
-                  id="save" // Vincula o onSubmit em qualquer elemente que tenha esse mesmo id
-                  onSubmit={handleSubmit(handleSubmitCompany)} // OI que deverá ser feito ao submeter o formulário
-                  className="flex flex-col rounded shadow-sm  gap-y-1"
-                >
-                  <section className="bg-stone-100 p-2 rounded">
-                    <h1 className="font-bold text-2xl mb-2 text-neutral-800">
-                      Dados principais
-                    </h1>
-                    <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end">
-                      <FormBuilder
-                        inputs={companyInputs.mainData}
-                        control={control}
-                        register={register}
-                        errors={errors}
-                        watch={watch}
-                        setValue={setValue}
-                      />
-                    </div>
-                  </section>
-                  <section className="bg-stone-100 p-2 rounded">
-                    <h1 className="font-bold text-2xl mb-2 text-neutral-800">
-                      Endereços
-                    </h1>
-                    <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end">
-                      <FormBuilder
-                        inputs={companyInputs.addresses}
-                        control={control}
-                        register={register}
-                        errors={errors}
-                        watch={watch}
-                        setValue={setValue}
-                        validateGroup={true}
-                      />
-                    </div>
-                  </section>
-                </form>
-              ),
-            },
-          ]}
-        />
+        <form
+          id="save" // Vincula o onSubmit em qualquer elemente que tenha esse mesmo id
+          onSubmit={handleSubmit(handleSubmitCompany)} // OI que deverá ser feito ao submeter o formulário
+          className="flex flex-col rounded shadow-sm  gap-y-1"
+        >
+          <Tab2 // Componente que apresenta os dados em uma tab
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            tabs={[
+              {
+                icon: <CompanyIcon className="w-16 h-16" />, // Ícone da tab
+                label: "Dados de empresa", // Descrição da tab
+                // Conteúdo principal da tab
+                content: (
+                  <div className="flex flex-col gap-y-1">
+                    <section className="bg-stone-100 p-2 pt-10 rounded">
+                      <h1 className="font-bold text-2xl mb-2 text-neutral-800">
+                        Dados principais
+                      </h1>
+                      <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end">
+                        <FormBuilder
+                          inputs={companyInputs.mainData}
+                          control={control}
+                          register={register}
+                          errors={errors}
+                          watch={watch}
+                          setValue={setValue}
+                        />
+                      </div>
+                    </section>
+                    <section className="bg-stone-100 p-2 rounded">
+                      <h1 className="font-bold text-2xl mb-2 text-neutral-800">
+                        Endereços
+                      </h1>
+                      <div className="grid w-full grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-2 items-end">
+                        <FormBuilder
+                          inputs={companyInputs.addresses}
+                          control={control}
+                          register={register}
+                          errors={errors}
+                          watch={watch}
+                          setValue={setValue}
+                          validateGroup={true}
+                        />
+                      </div>
+                    </section>
+                  </div>
+                ),
+              },
+            ]}
+          />
+        </form>
       </div>
       <FormFooter // Rodapé flutuante
         setConfirmOpen={setConfirmOpen} // enviado para que o botão de salvar abra o modal

@@ -182,7 +182,6 @@ export const IndividualInputs = {
       rules: {
         required: "CNH é obrigatória",
       },
-      gridCellStyle: "col-span-3",
     },
     {
       name: "driver.licenseType",

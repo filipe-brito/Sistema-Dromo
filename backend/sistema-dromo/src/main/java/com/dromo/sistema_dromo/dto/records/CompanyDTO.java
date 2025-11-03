@@ -3,11 +3,17 @@ package com.dromo.sistema_dromo.dto.records;
 import java.time.LocalDate;
 import java.util.List;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
 public class CompanyDTO {
 	private Integer id;
+	@NotEmpty(message = "Razão social é obrigatória")
 	private String companyName;
+	@NotEmpty(message = "CNPJ é obrigatório")
 	private String cnpj;
 	private String tradeName;
+	@NotNull(message = "Data de fundação é obrigatória")
 	private LocalDate doe;
 	private String municipalRegistration;
 	private String stateRegistration;
@@ -15,23 +21,6 @@ public class CompanyDTO {
 	private String email;
 	private String profileImageUrl;
 	private List<CompanyAddressDTO> addresses;
-
-	public CompanyDTO(Integer id, String companyName, String cnpj, String tradeName, LocalDate doe,
-			String municipalRegistration, String stateRegistration, String phone, String email) {
-		this.id = id;
-		this.companyName = companyName;
-		this.cnpj = cnpj;
-		this.tradeName = tradeName;
-		this.doe = doe;
-		this.municipalRegistration = municipalRegistration;
-		this.stateRegistration = stateRegistration;
-		this.phone = phone;
-		this.email = email;
-	}
-	
-	public CompanyDTO() {
-		
-	}
 
 	public Integer getId() {
 		return id;

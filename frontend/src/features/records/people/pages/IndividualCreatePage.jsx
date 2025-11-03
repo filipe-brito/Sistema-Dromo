@@ -212,7 +212,7 @@ const IndividualCreatePage = () => {
                 // Conteúdo principal da tab
                 content: (
                   <div className="flex flex-col gap-y-1">
-                    <section className="bg-stone-100 p-2 rounded">
+                    <section className="bg-stone-100 p-2 pt-10 rounded">
                       <h1 className="font-bold text-2xl mb-2 text-neutral-800">
                         Dados principais
                       </h1>
